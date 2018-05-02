@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>请您注册</title>
+    <link type="text/css" rel="stylesheet" href="/css/index.css" >
+    <script type="text/javascript" src="/jars/jquery-3.3.1.js" ></script>
+    <script type="text/javascript" src="/js/index.js" ></script>
+</head>
+<body>
+<div class="login-page">
+    <div class="main-box clearfix">
+        <div class="login-box fn-right">
+            <h3 class="title">用户登录</h3>
+            <div id="registerForm" class="login-form">
+                <input type="hidden" id="uId" name="uid" value="${user.uid!''}" >
+                <input name="username"  type="hidden" value="${user.username!''}" />
+                <ul class="login-fileds list-unstyled">
+                    <li class="login-user">
+                        <input placeholder="请输真实性名" name="uname" autocomplete="off" class="form-control"   type="text" size="25" validate="required" maxlength="50"
+                               value="${user.uname!''}" message='{"required":"真实性名不能为空"}' />
+                    </li>
+                    <li class="login-password">
+                        <input placeholder="请输入密码" name="password" autocomplete="new-password" class="form-control"  type="text" size="25"
+                               value="${user.password!''}" message='{"required":"密码不能为空"}' />
+                    </li>
+                    <li class="login-password">
+                        <input placeholder="请输入性别" name="sex" autocomplete="new-password" class="form-control"  type="text" size="25"
+                               value="${user.sex!''}" message='{"required":"性别不能为空"}' />
+                    </li>
+                    <li class="login-password">
+                        <input placeholder="请输入年龄" name="age" autocomplete="new-password" class="form-control"  type="text" size="25"
+                               value="${user.age!''}" message='{"required":"年龄不能为空"}' />
+                    </li>
+                    <li class="login-password">
+                        <input placeholder="请输入住址" name="address" autocomplete="new-password" class="form-control"  type="text" size="25"
+                               value="${user.address!''}" message='{"required":"住址不能为空"}' />
+                    </li>
+                </ul>
+                <input type="button"   class="btn" value="去修改" id="updateBtn" onclick="updateUser()"/>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

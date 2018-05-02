@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>请您登陆</title>
+    <link type="text/css" rel="stylesheet" href="/css/index.css" >
+    <script type="text/javascript" src="/jars/jquery-3.3.1.js" ></script>
+    <script type="text/javascript" src="/js/index.js" ></script>
+</head>
+<body>
+<div class="login-page">
+    <div class="main-box clearfix">
+        <div class="login-box fn-right">
+            <h3 class="title">用户登录</h3>
+            <div id="loginForm" class="login-form">
+                <ul class="login-fileds list-unstyled">
+                    <li class="login-user">
+                        <input placeholder="请输入帐户" name="accountNo" autocomplete="off" class="form-control"   type="text" size="25" validate="required" maxlength="50"
+                               message='{"required":"帐户不能为空"}' value="${user.username}" />
+                    </li>
+                    <li class="login-password">
+                        <input type="password" style="display:none">
+                        <input placeholder="请输入密码" name="password" autocomplete="new-password" class="form-control"  type="password" size="25"
+                               message='{"required":"密码不能为空"}' />
+                    </li>
+                    <li class="getpwd">
+                        <label class="check-box">
+                            <input type="checkbox" class="aotoLogin" name="rememberMe" id="rememberMe" value="true" />
+                            <div class="check-box-icon"></div>
+                            记住帐号
+                        </label>
+                        <div class="font-style">${token}</div>
+                        <div class="font-style">${user.sex}</div>
+                        <div class="font-style">${user.age}</div>
+
+                        <div class="fn-right forget-pw-safe">
+                            <a class="text-primary" href="/user/toRegister">免费注册</a>
+                            <a class="text-primary" href="/user/toUpdate">修改</a>
+                        </div>
+
+                    </li>
+                </ul>
+                <input type="button"   class="btn btn-block btn-success btn-round login-btn" value="立即登录" id="loginBtn" onclick="toLogin()"/>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
