@@ -2,13 +2,28 @@
 <html lang="en" >
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>用户列表</title>
     <link type="text/css" rel="stylesheet" href="/css/index.css" >
+    <link type="text/css" rel="stylesheet" href="/static/jars/bootstrap-table/bootstrap-table.css" >
     <script type="text/javascript" src="/jars/jquery-3.3.1.js" ></script>
     <script type="text/javascript" src="/js/index.js" ></script>
+    <script type="text/javascript" src="/static/jars/bootstrap-table/bootstrap-table.js" ></script>
+    <script type="text/javascript" src="/static/jars/bootstrap-table/bootstrap-table-locale-all.js" ></script>
 </head>
 <body>
-    <h3>thymeleaf</h3>
-    <div class="font-style">${username}</div>
+    <div>
+        <table data-toggle="table" data-url="/user/queryData">
+            <thead>
+            <tr>
+                <th data-field="uid">用户ID</th>
+                <th data-field="uname">用户名称</th>
+                <th data-field="username">账号</th>
+                <th data-field="sex">性别</th>
+                <th data-field="age">年龄</th>
+                <th data-field="address">住址</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 </body>
 </html>
