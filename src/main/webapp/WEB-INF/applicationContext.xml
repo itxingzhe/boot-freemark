@@ -15,7 +15,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-
+<beans></beans>
+<!--
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
     xmlns:amq="http://activemq.apache.org/schema/core" xmlns:camel="http://camel.apache.org/schema/spring"
@@ -32,10 +33,10 @@
             <amq:amqPersistenceAdapter syncOnWrite="false"
                 directory="${activemq.base}/data" maxFileLength="20 mb" />
         </amq:persistenceAdapter>
-        <!--
+        &lt;!&ndash;
             The maximum about of space the broker will use before slowing down
             producers
-        -->
+        &ndash;&gt;
         <amq:systemUsage>
             <amq:systemUsage>
                 <amq:memoryUsage>
@@ -50,7 +51,7 @@
             </amq:systemUsage>
         </amq:systemUsage>
 
-        <!-- The transport connectors ActiveMQ will listen to -->
+        &lt;!&ndash; The transport connectors ActiveMQ will listen to &ndash;&gt;
         <amq:transportConnectors>
             <amq:transportConnector code="openwire"
                 uri="tcp://localhost:61616" />
@@ -59,24 +60,24 @@
         </amq:transportConnectors>
     </amq:broker>
 
-    <!--
+    &lt;!&ndash;
         configure the camel activemq component to use the current broker
-    -->
-        <!-- create the activemq component so that we can use the activemq uri -->
+    &ndash;&gt;
+        &lt;!&ndash; create the activemq component so that we can use the activemq uri &ndash;&gt;
     <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent"
         p:brokerURL="vm://localhost?create=false&amp;waitForStart=10000" />
 
-    <!--
+    &lt;!&ndash;
         Here is a sample which processes the input files (leaving them in
         place - see the 'noop' flag), and sends them on a JMS queue. This
         queue is watched by another route which then performs content based
         routing on the messages using XPath.
-    -->
+    &ndash;&gt;
     <camel:camelContext>
         <camel:package>cn.wyb</camel:package>
         <camel:route>
             <camel:from uri="file:src/data?noop=true" />
-            <!-- Print the message to standard out, just as a test -->
+            &lt;!&ndash; Print the message to standard out, just as a test &ndash;&gt;
             <camel:convertBodyTo type="java.lang.String" />
             <camel:to uri="stream:out" />
             <camel:to uri="activemq:personnel.records" />
@@ -96,4 +97,4 @@
         </camel:route>
     </camel:camelContext>
 
-</beans>
+</beans>-->
