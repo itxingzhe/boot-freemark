@@ -42,7 +42,7 @@
                     <amq:memoryUsage limit="20 mb" />
                 </amq:memoryUsage>
                 <amq:storeUsage>
-                    <amq:storeUsage limit="1 gb" name="foo" />
+                    <amq:storeUsage limit="1 gb" code="foo" />
                 </amq:storeUsage>
                 <amq:tempUsage>
                     <amq:tempUsage limit="100 mb" />
@@ -52,9 +52,9 @@
 
         <!-- The transport connectors ActiveMQ will listen to -->
         <amq:transportConnectors>
-            <amq:transportConnector name="openwire"
+            <amq:transportConnector code="openwire"
                 uri="tcp://localhost:61616" />
-            <amq:transportConnector name="stomp"
+            <amq:transportConnector code="stomp"
                 uri="stomp://localhost:61613" />
         </amq:transportConnectors>
     </amq:broker>
