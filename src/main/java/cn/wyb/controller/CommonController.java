@@ -21,6 +21,11 @@ public class CommonController {
 		return "index";
 	}
 
+	@RequestMapping("common/amap")
+	public String toMap() {
+		return "/map/amap";
+	}
+
 	@RequestMapping("common/ajaxFileUpload")
 	@ResponseBody
 	public CommResponse ajaxFileUpload(@RequestParam(value = "uploadFile") MultipartFile uploadFile) {

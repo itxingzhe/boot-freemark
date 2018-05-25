@@ -61,7 +61,7 @@
         </table>
     </div>
     <div>
-        <form id="fileupload" action="common/fileUpload" method="POST" enctype="multipart/form-data">
+        <form id="fileupload" action="/common/fileUpload" method="POST" enctype="multipart/form-data">
             <div class="row fileupload-buttonbar">
                 <div class="col-lg-7">
                     <span class="btn btn-success fileinput-button">
@@ -97,6 +97,9 @@
     <div>
         <input id="uploadFile" type="file" name="uploadFile">
         <button class="file_upload">上传</button>
+    </div>
+    <div>
+        <a href="/common/amap">查看地图</a>
     </div>
     <script id="template-upload" type="text/x-tmpl">
         {% for (var i=0, file; file=o.files[i]; i++) { %}
