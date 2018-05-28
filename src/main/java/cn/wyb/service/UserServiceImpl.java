@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
 		result.setData(data);
 		String uname = param.getUname();
 		StringUtils.isNotBlank(uname);
+
 		//uname.trim();
 //		List names = Arrays.stream(uname.split(",")).filter( a -> StringUtils.isEmpty(a)).map(a -> {
 //			return a;

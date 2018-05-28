@@ -12,7 +12,6 @@
     <result column="address" property="address" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-
     uid, uname, username, password, age, sex, address
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
