@@ -115,6 +115,7 @@
         map.openInfoWindow(infoWindow, point);
     }
 
+    //打开信息框BOX
     function openInfoBox(map, point) {
         var html = ["<div><div><strong>当前地址坐标是：</strong><br><input name='lng' ><input name='lat' ></div>",
             "</div>"];
@@ -139,7 +140,8 @@
         //
         // })
     }
-    
+
+    //获取浏览器定位信息
     function getLocalization(map) {
         //浏览器定位
         var geolocation = new BMap.Geolocation();
@@ -155,6 +157,7 @@
         })
     }
 
+    //获取IP定位信息
     function getLocalizationById() {
         var myCity = new BMap.LocalCity();
         myCity.get(myFun);
@@ -165,6 +168,7 @@
         map.setCenter(cityName);
 
     }
+
     //解析地址
     function getPoint(address) {
         var myGeo = new BMap.Geocoder();
@@ -177,6 +181,7 @@
 
     }
 
+    //根据坐标解析出地址
     function getAddress(pt) {
         var geoc = new BMap.Geocoder();
         geoc.getLocation(pt, function(rs){
@@ -184,7 +189,8 @@
             alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
         });
     }
-    
+
+    //展示信息
     function showPoint(pt) {
         //添加gps marker和label
         var markergg = new BMap.Marker(pt);
@@ -199,7 +205,8 @@
 
         })
     }
-    
+
+
     function openSearch(pt) {
         var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
                 '<input name="lng" /><br/><input name="lat" >'+
