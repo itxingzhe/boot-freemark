@@ -1,4 +1,4 @@
-package cn.wyb.common;
+package cn.wyb.model.vo;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

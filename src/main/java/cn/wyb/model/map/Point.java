@@ -6,13 +6,13 @@ public class Point {
 
 	public Point(){}
 
-	public Point(Double lng,Double lat){
+	public Point(Float lng, Float lat) {
 		this.lng = lng;
-		this.rat = rat;
+		this.lat = this.lat;
 	}
 
-	private Double lng;
-	private Double rat;
+	private Float lng;//经度值
+	private Float lat;//纬度值
 
 	@Override
 	public boolean equals(Object o) {
@@ -20,28 +20,28 @@ public class Point {
 		if (o == null || getClass() != o.getClass()) return false;
 		Point point = (Point) o;
 		return Objects.equals(lng, point.lng) &&
-				Objects.equals(rat, point.rat);
+				Objects.equals(lat, point.lat);
 	}
 
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(lng, rat);
+		return Objects.hash(lng, lat);
 	}
 
-	public Double getLng() {
+	public Float getLng() {
 		return lng;
 	}
 
-	public void setLng(Double lng) {
+	public void setLng(Float lng) {
 		this.lng = lng;
 	}
 
-	public Double getRat() {
-		return rat;
+	public Float getLat() {
+		return lat;
 	}
 
-	public void setRat(Double rat) {
-		this.rat = rat;
+	public void setLat(Float lat) {
+		this.lat = lat;
 	}
 }
