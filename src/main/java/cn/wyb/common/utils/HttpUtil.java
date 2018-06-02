@@ -120,7 +120,7 @@ public final class HttpUtil {
 	 * @param map 参数
 	 * @return
 	 */
-	public static String sendGet(String url, Map<String, Object> map) {
+	public static String sendGet(String url, Map<String, String> map) {
 		String paramStr = toString(assembleParam(map, ContentType.APPLICATION_FORM_URLENCODED));
 		if (url.indexOf("?") >= 0 && StringUtils.isNotBlank(paramStr)) {
 			url += "&" + paramStr;
@@ -151,7 +151,7 @@ public final class HttpUtil {
 	 * @param map
 	 * @return
 	 */
-	public static String sendPost(String url, Map<String, Object> map) {
+	public static String sendPost(String url, Map<String, String> map) {
 		return sendPost(url, map, ContentType.APPLICATION_FORM_URLENCODED);
 	}
 
@@ -194,7 +194,7 @@ public final class HttpUtil {
 	 * @param contentType 请求类型
 	 * @return
 	 */
-	public static String sendPost(String url, Map<String, Object> map, ContentType contentType) {
+	public static String sendPost(String url, Map<String, String> map, ContentType contentType) {
 		HttpPost httppost = new HttpPost(url);
 		assembleHeader(httppost, contentType);
 		httppost.setEntity(assembleParam(map, contentType));
@@ -234,16 +234,15 @@ public final class HttpUtil {
 	 * @param contentType 参数类型
 	 * @return
 	 */
-	private static StringEntity assembleParam(Map<String, Object> map, ContentType contentType) {
+	private static StringEntity assembleParam(Map<String, String> map, ContentType contentType) {
 		StringEntity stringEntity = null;
-
 		if (ContentType.APPLICATION_JSON.equals(contentType)) {
 			stringEntity = new StringEntity(JSON.toJSONString(map), "UTF-8");
 			stringEntity.setContentType("application/json");
 		} else {
 			List<NameValuePair> formparams = new ArrayList<NameValuePair>();
-			for (Map.Entry<String, Object> entry : map.entrySet()) {
-				formparams.add(new BasicNameValuePair(entry.getKey(), entry.getValue().toString().trim()));
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+				formparams.add(new BasicNameValuePair(entry.getKey(), entry.getValue().trim()));
 			}
 			stringEntity = new UrlEncodedFormEntity(formparams, Consts.UTF_8);
 		}

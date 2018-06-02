@@ -7,10 +7,11 @@ import cn.wyb.model.vo.AMapResponse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class AMapUtil {
 
@@ -20,13 +21,34 @@ public class AMapUtil {
 	private static final String POINT_SEARCH = "/search";
 	private static final String POINT_DETAIL = "/detail";
 
-	public static Map<String, Object> getParamMap(AMapApiBaseParam param) {
-		Map<String, Object> map = (Map<String, Object>) BeanConvertor.objectToMap(param);
-		String output = (String) map.get("output");
+	public static Map<String, String> getParamMap(AMapApiBaseParam param) {
+
+		HashMap<String, String> map = Maps.newHashMap();
+		Class clazz = param.getClass();
+		List<Field> fieldList = new ArrayList<>();
+		while (clazz != Object.class) {
+			fieldList.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
+			clazz = clazz.getSuperclass();
+		}
+		for (Field field : fieldList) {
+			field.setAccessible(true);
+			String name = field.getName();
+			if (StringUtils.isNotBlank(name)) {
+				try {
+					Object o = field.get(param);
+					if (o != null && StringUtils.isNotBlank(o.toString())) {
+						map.put(name, o.toString());
+					}
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		String output = param.getOutput();
 		if (StringUtils.isBlank(output)) {
 			output = "json";
 		}
-		output = "json".equals(output.toLowerCase()) ? "json" : "xml";
+		output = "xml".equals(output.toLowerCase()) ? "xml" : "json";
 		map.put("output", output);
 		map.put("ak", AMAP_AK);
 		return map;
@@ -36,7 +58,7 @@ public class AMapUtil {
 		if (param == null) {
 			return null;
 		}
-		Map<String, Object> map = getParamMap(param);
+		Map<String, String> map = getParamMap(param);
 		String s = HttpUtil.sendGet(url, map);
 		System.out.println(s);
 		if (StringUtils.isAllBlank(s)) {
@@ -48,7 +70,7 @@ public class AMapUtil {
 	public static AMapResponse<AMapPlaceAbroadResultVO> getSearchResponse(String port, AMapApiBaseParam param) {
 		String url = AMAP_ROOT_URL + AMAP_PLACE_ABROAD_PORT + port;
 		JSONObject jsonObject = getAMapAPIResponse(url, param);
-		AMapResponse<AMapPlaceAbroadResultVO> response = jsonObject.toJavaObject(AMapResponse.class);
+		AMapResponse response = jsonObject.toJavaObject(AMapResponse.class);
 		if (AMapApiStatusCodeEnum.OK.getCode() == response.getStatus()) {
 			JSONArray results = jsonObject.getJSONArray("results");
 			if (results != null) {
@@ -88,14 +110,32 @@ public class AMapUtil {
 
 
 	public static void main(String[] args) {
+
 		AMapSearchRegionalismParam param = new AMapSearchRegionalismParam();
 		param.setQuery("华尔街");
 		param.setRegion("纽约");
+
+
+		//AMapSearchCircumParam param = new AMapSearchCircumParam();
+		//param.setQuery("寿司");
+		//param.setLocation("35.711343,139.767111");
+
+		//AMapSearchRectangleParam param = new AMapSearchRectangleParam();
+		//param.setQuery("美食");
+		//param.setBounds("35.66597,139.797339,35.677669,139.813544");
+
 		param.setScope("2");
-		AMapResponse<AMapPlaceAbroadResultVO> searchResponse = searchRegionalism(param);
-		String message = searchResponse.getMessage();
-		Integer status = searchResponse.getStatus();
-		List<AMapPlaceAbroadResultVO> results = searchResponse.getResults();
+//		param.setPage_num(1);
+//		param.setPage_size(10);
+
+		AMapResponse<AMapPlaceAbroadResultVO> response = searchRegionalism(param);
+		//AMapResponse<AMapPlaceAbroadResultVO> response = searchCircum(param);
+		//AMapResponse<AMapPlaceAbroadResultVO> response = searchRectangle(param);
+
+
+		String message = response.getMessage();
+		Integer status = response.getStatus();
+		List<AMapPlaceAbroadResultVO> results = response.getResults();
 		String uid = results.get(3).getUid();
 		AMapPlaceDetailParam detailParam = new AMapPlaceDetailParam();
 		detailParam.setUid(uid);
@@ -104,6 +144,7 @@ public class AMapUtil {
 		AMapResponse<AMapPlaceAbroadResultVO> detailResponse = searchPlaceDetail(detailParam);
 		detailResponse.getStatus();
 		detailResponse.getMessage();
+
 	}
 
 }

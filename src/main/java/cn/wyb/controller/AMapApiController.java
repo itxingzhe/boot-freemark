@@ -9,26 +9,32 @@ import cn.wyb.model.vo.AMapResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@RequestMapping("amap")
 public class AMapApiController {
 
-	@RequestMapping(value = "searchRegionalism", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchRegionalism", method = RequestMethod.GET)
+	@ResponseBody
 	public AMapResponse getSearchRegionalism(AMapSearchRegionalismParam param) {
 		return AMapUtil.searchRegionalism(param);
 	}
 
-	@RequestMapping(value = "searchCircum", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchCircum", method = RequestMethod.GET)
+	@ResponseBody
 	public AMapResponse getSearchCircum(AMapSearchCircumParam param) {
 		return AMapUtil.searchCircum(param);
 	}
 
-	@RequestMapping(value = "SearchRectangle", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchRectangle", method = RequestMethod.GET)
+	@ResponseBody
 	public AMapResponse getSearchRectangle(AMapSearchRectangleParam param) {
 		return AMapUtil.searchRectangle(param);
 	}
 
-	@RequestMapping(value = "SearchPlaceDetail", method = RequestMethod.GET)
+	@RequestMapping(value = "/searchPlaceDetail", method = RequestMethod.GET)
+	@ResponseBody
 	public AMapResponse getSearchRegionalism(AMapPlaceDetailParam param) {
 		return AMapUtil.searchPlaceDetail(param);
 	}

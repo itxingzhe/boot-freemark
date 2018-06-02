@@ -1,35 +1,35 @@
 package cn.wyb.model.map;
 
-import java.util.List;
+import com.alibaba.fastjson.JSONArray;
 
 public class AMapPlaceDetailInfo {
-	private Integer distance;        //距离中心点的距离，圆形区域检索时返回
-	private String type;        //所属分类，如’hotel’、’cater’。
-	private String tag;            //标签
-	private String detail_url;            //poi的详情页
-	private String price;            //poi商户的价格
-	private String shop_hours;            //营业时间
-	private String overall_rating;            //总体评分
-	private String taste_rating;        //口味评分
-	private String service_rating;            //服务评分
-	private String environment_rating;        //环境评分
-	private String facility_rating;        //星级（设备）评分
-	private String hygiene_rating;        //卫生评分
-	private String technology_rating;        //技术评分
-	private Integer image_num;        //图片数
-	private Integer groupon_num;        //团购数
-	private Integer discount_num;    //优惠数
-	private Integer comment_num;        //评论数
-	private Integer favorite_num;    //收藏数
-	private Integer checkin_num;        //签到数
-	private String image;
-	private List di_review_keyword;
+	private Long distance;//	距离中心点的距离，圆形区域检索时返回
+	private String type;//	所属分类，如’hotel’、’cater’。
+	private String tag;//	标签
+	private String detail_url;//	poi的详情页
+	private String price;//	poi商户的价格
+	private String shop_hours;//	营业时间
+	private String overall_rating;//	总体评分
+	private String taste_rating;//	口味评分
+	private String service_rating;//	服务评分
+	private String environment_rating;//	环境评分
+	private String facility_rating;//	星级（设备）评分
+	private String hygiene_rating;//	卫生评分
+	private String technology_rating;//	技术评分
+	private String image_num;//	图片数
+	private Integer groupon_num;//团购数
+	private Integer discount_num;//优惠数
+	private String comment_num;//	评论数
+	private String favorite_num;//	收藏数
+	private String checkin_num;//	签到数
+	private String image;//图片地址
+	private JSONArray di_review_keyword;
 
-	public Integer getDistance() {
+	public Long getDistance() {
 		return distance;
 	}
 
-	public void setDistance(Integer distance) {
+	public void setDistance(Long distance) {
 		this.distance = distance;
 	}
 
@@ -129,11 +129,11 @@ public class AMapPlaceDetailInfo {
 		this.technology_rating = technology_rating;
 	}
 
-	public Integer getImage_num() {
+	public String getImage_num() {
 		return image_num;
 	}
 
-	public void setImage_num(Integer image_num) {
+	public void setImage_num(String image_num) {
 		this.image_num = image_num;
 	}
 
@@ -153,27 +153,27 @@ public class AMapPlaceDetailInfo {
 		this.discount_num = discount_num;
 	}
 
-	public Integer getComment_num() {
+	public String getComment_num() {
 		return comment_num;
 	}
 
-	public void setComment_num(Integer comment_num) {
+	public void setComment_num(String comment_num) {
 		this.comment_num = comment_num;
 	}
 
-	public Integer getFavorite_num() {
+	public String getFavorite_num() {
 		return favorite_num;
 	}
 
-	public void setFavorite_num(Integer favorite_num) {
+	public void setFavorite_num(String favorite_num) {
 		this.favorite_num = favorite_num;
 	}
 
-	public Integer getCheckin_num() {
+	public String getCheckin_num() {
 		return checkin_num;
 	}
 
-	public void setCheckin_num(Integer checkin_num) {
+	public void setCheckin_num(String checkin_num) {
 		this.checkin_num = checkin_num;
 	}
 
@@ -185,11 +185,11 @@ public class AMapPlaceDetailInfo {
 		this.image = image;
 	}
 
-	public List getDi_review_keyword() {
+	public JSONArray getDi_review_keyword() {
 		return di_review_keyword;
 	}
 
-	public void setDi_review_keyword(List di_review_keyword) {
+	public void setDi_review_keyword(JSONArray di_review_keyword) {
 		this.di_review_keyword = di_review_keyword;
 	}
 }
