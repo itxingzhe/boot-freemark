@@ -1,9 +1,10 @@
 package cn.wyb.common.utils;
 
-import org.apache.http.HttpHost;
-import org.apache.http.NameValuePair;
-import org.apache.http.NoHttpResponseException;
+import org.apache.http.*;
 import org.apache.http.client.HttpRequestRetryHandler;
+import org.apache.http.client.ServiceUnavailableRetryStrategy;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.config.ConnectionConfig;
 import org.apache.http.config.Registry;
@@ -15,10 +16,12 @@ import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLHandshakeException;
@@ -32,6 +35,51 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class HttpClientUtil {
+
+	public static void main(String[] args) {
+		CloseableHttpClient httpClient = getHttpClient();
+		HttpGet get = new HttpGet("http://192.168.26.198:8080/common/httpCollectTest");
+		try {
+			CloseableHttpResponse execute = httpClient.execute(get);
+			HttpEntity entity = execute.getEntity();
+			System.out.println(EntityUtils.toString(entity));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	//获取httpClient 设置重试逻辑
+	public static CloseableHttpClient getHttpClient() {
+		ServiceUnavailableRetryStrategy serviceUnavailableRetryStrategy = new ServiceUnavailableRetryStrategy() {
+			/**
+			 * retry逻辑
+			 */
+			@Override
+			public boolean retryRequest(HttpResponse response, int executionCount, HttpContext context) {
+				/**
+				 * 连接失败重试3次
+				 */
+				if (executionCount < 3)
+					return true;
+				else
+					return false;
+			}
+
+			/**
+			 * retry间隔时间
+			 */
+			@Override
+			public long getRetryInterval() {
+				return 3000;
+			}
+		};
+		PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager();
+		cm.setMaxTotal(10);
+		cm.setDefaultMaxPerRoute(2);
+		CloseableHttpClient httpClient = HttpClients.custom().setRetryHandler(new DefaultHttpRequestRetryHandler())
+				.setConnectionManager(cm).setServiceUnavailableRetryStrategy(serviceUnavailableRetryStrategy).build();
+		return httpClient;
+	}
 
 	public static URI buildURI(String target, Map<String, String> queries) throws IOException, URISyntaxException {
 		List<NameValuePair> nameValuePairs = queries.entrySet().stream()

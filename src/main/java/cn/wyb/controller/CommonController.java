@@ -64,4 +64,12 @@ public class CommonController {
 		return mv;
 
 	}
+
+	@RequestMapping("common/httpCollectTest")
+	public String httpCollectTest() {
+		System.out.println("连接了一次");
+		int a = 1 / 0;
+		return "" + a;
+	}
+
 }
