@@ -5,7 +5,7 @@ import java.io.Serializable;
 public abstract class AMapApiBaseParam implements Serializable {
 
 	private String output;
-	private String scope;
+	private String ak;
 
 	public String getOutput() {
 		return output;
@@ -15,11 +15,11 @@ public abstract class AMapApiBaseParam implements Serializable {
 		this.output = output;
 	}
 
-	public String getScope() {
-		return scope;
+	public String getAk() {
+		return ak;
 	}
 
-	public void setScope(String scope) {
-		this.scope = scope;
+	public void setAk(String ak) {
+		this.ak = ak;
 	}
 }

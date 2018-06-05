@@ -38,7 +38,7 @@ public final class HttpClientUtil {
 
 	public static void main(String[] args) {
 		CloseableHttpClient httpClient = getHttpClient();
-		HttpGet get = new HttpGet("http://192.168.26.198:8080/common/httpCollectTest");
+		HttpGet get = new HttpGet("http://192.168.26.198:8089/common/httpCollectTest");
 		try {
 			CloseableHttpResponse execute = httpClient.execute(get);
 			HttpEntity entity = execute.getEntity();

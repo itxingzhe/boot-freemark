@@ -1,6 +1,8 @@
 package cn.wyb.model.param;
 
 public abstract class AMapSearchBaseParam extends AMapApiBaseParam {
+
+	private String scope;//检索结果详细程度。
 	private String query;//检索关键字，周边检索和矩形区域内检索支持多个关键字并集检索，不同关键字间以$符号分隔，最多支持10个关键字检索。如:”银行$酒店”。检索词支持中英文。(45)东京塔,必选
 	private String tag;//	检索分类，与query组合进行检索，多个分类以","分隔 POI分类）(50),美食,可选
 	private String ret_coordtype;//可选参数，添加后POI返回国测局经纬度坐标（港澳台有效） 坐标详细说明,50)gcj02ll	可选
@@ -45,5 +47,13 @@ public abstract class AMapSearchBaseParam extends AMapApiBaseParam {
 
 	public void setPage_num(Integer page_num) {
 		this.page_num = page_num;
+	}
+
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
 }

@@ -23,6 +23,8 @@
 <div>详细地址：<input type="text" id="detailedAddress" name="detailedAddress"/>
     <input type="button" value="搜索"/>
 </div>
+<div>全球检索输入提示：<input type="text" id="suggestion" onblur="getSuggestion(this)" name="suggestion"/>
+</div>
 <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
 <div id="allmap"></div>
 </body>
@@ -294,4 +296,29 @@
         driving.search(departure, destination);
     }
 
+    function getSuggestion(obj) {
+        var query = $(obj).val();
+        if (query && query.length > 1) {
+            $.ajax({
+                type: 'get',
+                data: {"query": query},
+                url: '/v1/amap/searchSuggestion',
+                success: function (data) {
+                    var r = data.data;
+                    var html = '<select id="suggestionResult" onchange="setInputValue(this)"></select>';
+
+                    $(obj).after(html);
+                    for (var i = 0; i < r.length; i++) {
+                        var opt = '<option value="' + r[i].name + '">' + r[i].name + '</option>'
+                        $("#suggestionResult").append(opt);
+                    }
+                }
+            });
+        }
+    }
+
+    function setInputValue(obj) {
+        var v = $(obj).val();
+        $("#suggestion").val(v);
+    }
 </script>

@@ -13,6 +13,9 @@ public class AMapPlaceAbroadResultVO {
 	private String street_id;        //街景图id
 	private String detail;        //是否有详情页：1有，0没有
 	private AMapPlaceDetailInfo detail_info;        //poi的扩展信息，仅当scope=2时，显示该字段，不同的poi类型，显示的detail_info字段不同。
+	private String city;//城市
+	private String district;//区县
+	private String tag;//poi分类
 
 	public String getName() {
 		return name;
@@ -76,5 +79,29 @@ public class AMapPlaceAbroadResultVO {
 
 	public void setDetail_info(AMapPlaceDetailInfo detail_info) {
 		this.detail_info = detail_info;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 }
