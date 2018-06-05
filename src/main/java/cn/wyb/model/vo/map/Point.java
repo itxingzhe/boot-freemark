@@ -1,4 +1,4 @@
-package cn.wyb.model.map;
+package cn.wyb.model.vo.map;
 
 import java.util.Objects;
 

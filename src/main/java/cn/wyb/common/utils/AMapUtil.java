@@ -1,10 +1,10 @@
 package cn.wyb.common.utils;
 
 import cn.wyb.common.enums.AMapApiStatusCodeEnum;
+import cn.wyb.common.result.AMapLocationResponse;
 import cn.wyb.common.result.AMapResponse;
 import cn.wyb.model.param.*;
-import cn.wyb.model.vo.AMapPlaceAbroadResultVO;
-import com.alibaba.fastjson.JSON;
+import cn.wyb.model.vo.map.AMapPlaceAbroadResultVO;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -18,33 +18,44 @@ public class AMapUtil {
 	private static final String AMAP_AK = "ev82Imq86gQmRRZT5Chobk35KKPPh3NB";
 	private static final String AMAP_ROOT_URL = "http://api.map.baidu.com";
 	private static final String AMAP_PLACE_ABROAD_PORT = "/place_abroad/v1";
+	private static final String AMAP_LOCATION_IP_PORT = "/location/ip";
 	private static final String POINT_SEARCH = "/search";
 	private static final String POINT_DETAIL = "/detail";
 	private static final String POINT_SUGGESTION = "/suggestion";
 
-	public static Map<String, String> getParamMap(AMapApiBaseParam param) {
+	/**
+	 * @param param
+	 * @return
+	 * @Param2Map : param转Map
+	 * @author wangyibin
+	 * @date 2018/6/5 16:39
+	 **/
+	public static Map<String, String> Param2Map(AMapApiBaseParam param) {
 		HashMap<String, String> map = Maps.newHashMap();
-		Class clazz = param.getClass();
-		List<Field> fieldList = new ArrayList<>();
-		while (clazz != Object.class) {
-			fieldList.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
-			clazz = clazz.getSuperclass();
-		}
-		for (Field field : fieldList) {
-			field.setAccessible(true);
-			String name = field.getName();
-			if (StringUtils.isNotBlank(name)) {
-				try {
-					Object o = field.get(param);
-					if (o != null && StringUtils.isNotBlank(o.toString())) {
-						map.put(name, o.toString());
+		String output = null;
+		if (param != null) {
+			Class clazz = param.getClass();
+			List<Field> fieldList = new ArrayList<>();
+			while (clazz != Object.class) {
+				fieldList.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
+				clazz = clazz.getSuperclass();
+			}
+			for (Field field : fieldList) {
+				field.setAccessible(true);
+				String name = field.getName();
+				if (StringUtils.isNotBlank(name)) {
+					try {
+						Object o = field.get(param);
+						if (o != null && StringUtils.isNotBlank(o.toString())) {
+							map.put(name, o.toString());
+						}
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
 					}
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
 				}
 			}
+			output = param.getOutput();
 		}
-		String output = param.getOutput();
 		if (StringUtils.isBlank(output)) {
 			output = "json";
 		}
@@ -54,22 +65,40 @@ public class AMapUtil {
 		return map;
 	}
 
-	public static JSONObject getAMapAPIResponse(String url, AMapApiBaseParam param) {
-		if (param == null) {
-			return null;
-		}
-		Map<String, String> map = getParamMap(param);
+	/**
+	 * @param url
+	 * @param param
+	 * @return
+	 * @getAMapAPIResponse : 获取百度地图API响应
+	 * @author wangyibin
+	 * @date 2018/6/5 16:40
+	 **/
+	public static String getAMapAPIResponse(String url, AMapApiBaseParam param) {
+		Map<String, String> map = Param2Map(param);
 		String s = HttpUtil.sendGet(url, map);
 		System.out.println(s);
-		if (StringUtils.isAllBlank(s)) {
+		if (StringUtils.isBlank(s)) {
 			return null;
 		}
-		return JSON.parseObject(s);
+		return s;
 	}
 
+	public static JSONObject getAMapAPIJsonResponse(String url, AMapApiBaseParam param) {
+		return JSONObject.parseObject(getAMapAPIResponse(url, param));
+	}
+
+	/**
+	 * @getSearchResponse : 获取搜索结果
+	 *
+	 * @author wangyibin
+	 * @date 2018/6/5 16:42
+	 * @param port
+	 * @param param
+	 * @return
+	 **/
 	public static AMapResponse<AMapPlaceAbroadResultVO> getSearchResponse(String port, AMapApiBaseParam param) {
 		String url = AMAP_ROOT_URL + AMAP_PLACE_ABROAD_PORT + port;
-		JSONObject jsonObject = getAMapAPIResponse(url, param);
+		JSONObject jsonObject = getAMapAPIJsonResponse(url, param);
 		AMapResponse<AMapPlaceAbroadResultVO> response = jsonObject.toJavaObject(AMapResponse.class);
 		if (AMapApiStatusCodeEnum.OK.getCode() == response.getStatus()) {
 			JSONArray results = jsonObject.getJSONArray("result");
@@ -85,36 +114,92 @@ public class AMapUtil {
 		return response;
 	}
 
-	// 地点检索查询
+	/**
+	 * @getSearchPlaceResponse : 地点检索查询
+	 *
+	 * @author wangyibin
+	 * @date 2018/6/5 16:45
+	 * @param param
+	 * @return
+	 **/
 	public static AMapResponse<AMapPlaceAbroadResultVO> getSearchPlaceResponse(AMapSearchBaseParam param) {
 		AMapResponse<AMapPlaceAbroadResultVO> response = getSearchResponse(POINT_SEARCH, param);
 		return response;
 	}
 
-	// 地点详情检索
+	/**
+	 * @searchPlaceDetail : 地点详情检索
+	 *
+	 * @author wangyibin
+	 * @date 2018/6/5 16:45
+	 * @param param
+	 * @return
+	 **/
 	public static AMapResponse<AMapPlaceAbroadResultVO> searchPlaceDetail(AMapPlaceDetailParam param) {
 		AMapResponse<AMapPlaceAbroadResultVO> response = getSearchResponse(POINT_DETAIL, param);
 		return response;
 	}
 
-	// 行政区划区域检索
+	/**
+	 * @searchRegionalism : 行政区划区域检索
+	 *
+	 * @author wangyibin
+	 * @date 2018/6/5 16:45
+	 * @param param
+	 * @return
+	 **/
 	public static AMapResponse<AMapPlaceAbroadResultVO> searchRegionalism(AMapSearchRegionalismParam param) {
 		return getSearchPlaceResponse(param);
 	}
 
-	// 周边检索
+	/**
+	 * @searchCircum : 周边检索
+	 *
+	 * @author wangyibin
+	 * @date 2018/6/5 16:45
+	 * @param param
+	 * @return
+	 **/
 	public static AMapResponse<AMapPlaceAbroadResultVO> searchCircum(AMapSearchCircumParam param) {
 		return getSearchPlaceResponse(param);
 	}
 
-	// 矩形区域检索
+	/**
+	 * @searchRectangle : 矩形区域检索
+	 *
+	 * @author wangyibin
+	 * @date 2018/6/5 16:45
+	 * @param param
+	 * @return
+	 **/
 	public static AMapResponse<AMapPlaceAbroadResultVO> searchRectangle(AMapSearchRectangleParam param) {
 		return getSearchPlaceResponse(param);
 	}
 
-	// 地点输入提示
+	/**
+	 * @searchSuggestion : 地点输入提示
+	 *
+	 * @author wangyibin
+	 * @date 2018/6/5 16:44
+	 * @param param
+	 * @return
+	 **/
 	public static AMapResponse<AMapPlaceAbroadResultVO> searchSuggestion(AMapSearchSuggestionParam param) {
 		return getSearchResponse(POINT_SUGGESTION, param);
+	}
+
+	/**
+	 * @param param
+	 * @return
+	 * @searchLocationById : IP定位
+	 * @author wangyibin
+	 * @date 2018/6/5 16:44
+	 **/
+	public static AMapLocationResponse searchLocationById(AMapLocationParam param) {
+		String url = AMAP_ROOT_URL + AMAP_LOCATION_IP_PORT;
+		JSONObject jsonObject = getAMapAPIJsonResponse(url, param);
+		AMapLocationResponse response = jsonObject.toJavaObject(AMapLocationResponse.class);
+		return response;
 	}
 
 
@@ -154,13 +239,16 @@ public class AMapUtil {
 //		detailResponse.getStatus();
 //		detailResponse.getMessage();
 
-		AMapSearchRegionalismParam param = new AMapSearchRegionalismParam();
+		/*AMapSearchRegionalismParam param = new AMapSearchRegionalismParam();
 		param.setQuery("首尔");
 		param.setRegion("首尔");
 		String url = AMAP_ROOT_URL + AMAP_PLACE_ABROAD_PORT + POINT_SUGGESTION;
 		JSONObject jsonObject = getAMapAPIResponse(url, param);
 		String s = jsonObject.toJSONString();
-		System.out.println(s);
+		System.out.println(s);*/
+		AMapLocationResponse response = searchLocationById(null);
+		System.out.printf(response.getAddress());
+		System.out.println(response.getContent());
 
 	}
 

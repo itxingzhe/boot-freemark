@@ -1,4 +1,6 @@
-package cn.wyb.model.map;
+package cn.wyb.model.vo;
+
+import cn.wyb.model.vo.map.Point;
 
 public class GeolocationResult {
 

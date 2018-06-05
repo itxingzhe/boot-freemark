@@ -3,7 +3,7 @@ package cn.wyb.controller;
 import cn.wyb.common.result.AMapResponse;
 import cn.wyb.common.utils.AMapUtil;
 import cn.wyb.model.param.*;
-import cn.wyb.model.vo.AMapPlaceAbroadResultVO;
+import cn.wyb.model.vo.map.AMapPlaceAbroadResultVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;

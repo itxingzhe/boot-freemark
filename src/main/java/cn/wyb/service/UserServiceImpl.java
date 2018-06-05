@@ -1,9 +1,9 @@
 package cn.wyb.service;
 
+import cn.wyb.common.result.PageResult;
 import cn.wyb.dao.UserPOMapper;
 import cn.wyb.model.param.UserParam;
 import cn.wyb.model.po.UserPO;
-import cn.wyb.model.vo.PageResult;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang3.StringUtils;

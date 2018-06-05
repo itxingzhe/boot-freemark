@@ -100,7 +100,7 @@
     map.addEventListener("click", function (m) {
         //openMessageWindow(map, 200, 100, "Hello", "你想到这里去吗？", m.point);
         // openInfoBox(map, m.point);
-        // $("input[name=lng]").val(m.point.lng);
+        // $("input[name=x]").val(m.point.x);
         // $("input[name=lat]").val(m.point.lat);
         //getLocalization(map);
         //getLocalizationById();
@@ -157,7 +157,7 @@
 
     //打开信息框BOX
     function openInfoBox(map, point) {
-        var html = ["<div><div><strong>当前地址坐标是：</strong><br><input name='lng' ><input name='lat' ></div>",
+        var html = ["<div><div><strong>当前地址坐标是：</strong><br><input name='x' ><input name='lat' ></div>",
             "</div>"];
         var infoBox = new BMapLib.InfoBox(map, html.join(""), {
             boxStyle: {
@@ -189,7 +189,7 @@
         geolocation.enableSDKLocation();
         geolocation.getCurrentPosition(function (position) {
             if(this.getStatus() == BMAP_STATUS_SUCCESS){
-                //alert('您的位置：'+position.point.lng+','+position.point.lat);
+                //alert('您的位置：'+position.point.x+','+position.point.lat);
                 map.setCenter(position.point);
             } else {
 
@@ -216,7 +216,7 @@
             if(point){
                 //map.centerAndZoom(point,16);
                 //map.addOverlay(new BMap.Marker(point));
-                alert(point.lng + "," + point.lat);
+                alert(point.x + "," + point.lat);
             }
         });
 
@@ -238,7 +238,7 @@
         map.centerAndZoom(pt, 18);
         markergg.enableDragging();
         map.addOverlay(markergg); //添加GPS marker
-        var m = "你当前标记的位置是经度:" + pt.lng + ",纬度:" + pt.lat;
+        var m = "你当前标记的位置是经度:" + pt.x + ",纬度:" + pt.lat;
         var labelgg = new BMap.Label(m,{offset:new BMap.Size(20,-10)});
         markergg.setLabel(labelgg);
         markergg.addEventListener("dragend",function () {
@@ -251,7 +251,7 @@
     //打开搜索框
     function openSearch(pt) {
         var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
-                '<input name="lng" /><br/><input name="lat" >'+
+            '<input name="x" /><br/><input name="lat" >' +
             '</div>';
         //创建检索信息窗口对象
         var searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
@@ -264,7 +264,7 @@
         var marker = new BMap.Marker(pt); //创建marker对象
         marker.enableDragging();
         searchInfoWindow.open(pt);
-        $("input[name=lng]").val(pt.lng);
+        $("input[name=x]").val(pt.x);
         $("input[name=lat]").val(pt.lat);
 
     }
@@ -305,8 +305,8 @@
                 url: '/v1/amap/searchSuggestion',
                 success: function (data) {
                     var r = data.data;
+                    new AMap.point;
                     var html = '<select id="suggestionResult" onchange="setInputValue(this)"></select>';
-
                     $(obj).after(html);
                     for (var i = 0; i < r.length; i++) {
                         var opt = '<option value="' + r[i].name + '">' + r[i].name + '</option>'

@@ -1,9 +1,9 @@
 package cn.wyb.controller;
 
+import cn.wyb.common.result.CommResponse;
+import cn.wyb.common.result.PageResult;
 import cn.wyb.model.param.UserParam;
 import cn.wyb.model.po.UserPO;
-import cn.wyb.model.vo.CommResponse;
-import cn.wyb.model.vo.PageResult;
 import cn.wyb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

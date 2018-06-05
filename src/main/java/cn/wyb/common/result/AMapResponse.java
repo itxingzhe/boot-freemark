@@ -17,7 +17,7 @@ public class AMapResponse<T> {
 	@ApiModelProperty("POI检索总数，开发者请求中设置了page_num字段才会出现total字段。")
 	private Integer total;
 
-	private List<T> results;
+	private List<T> result;
 
 	@ApiModelProperty("响应数据")
 	private Object data;
@@ -38,12 +38,12 @@ public class AMapResponse<T> {
 		this.message = message;
 	}
 
-	public List<T> getResults() {
-		return results;
+	public List<T> getResult() {
+		return result;
 	}
 
-	public void setResults(List<T> results) {
-		this.results = results;
+	public void setResult(List<T> result) {
+		this.result = result;
 	}
 
 	public Integer getTotal() {

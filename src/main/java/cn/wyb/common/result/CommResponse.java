@@ -1,4 +1,4 @@
-package cn.wyb.model.vo;
+package cn.wyb.common.result;
 
 public class CommResponse {
 

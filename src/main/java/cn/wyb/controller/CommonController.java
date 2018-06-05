@@ -1,7 +1,7 @@
 package cn.wyb.controller;
 
+import cn.wyb.common.result.CommResponse;
 import cn.wyb.common.utils.HttpUtil;
-import cn.wyb.model.vo.CommResponse;
 import com.google.common.collect.Maps;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.springframework.stereotype.Controller;
