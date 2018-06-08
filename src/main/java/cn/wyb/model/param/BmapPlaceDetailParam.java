@@ -1,6 +1,6 @@
 package cn.wyb.model.param;
 
-public class AMapPlaceDetailParam extends AMapApiBaseParam {
+public class BmapPlaceDetailParam extends BmapApiBaseParam {
 
 	private String uid;//	是,poi的uid
 	private String uids;//是,uid的集合，最多可以传入10个uid，多个uid之间用英文逗号分隔。

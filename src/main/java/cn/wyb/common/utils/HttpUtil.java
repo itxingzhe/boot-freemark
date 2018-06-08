@@ -21,8 +21,9 @@ import org.apache.http.util.EntityUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,44 @@ public final class HttpUtil {
 	private static final String XML_HTTP_REQUEST = "XMLHttpRequest";
 	public static final String AMAP_AK = "ev82Imq86gQmRRZT5Chobk35KKPPh3NB";
 	public static final String AMAP_SEARCH_URL = "http://api.map.baidu.com/place_abroad/v1/search";
+
+
+	/**
+	 * @param
+	 * @return
+	 * @getUserIpAddress : 获取用户的IP地址
+	 * @author wangyibin
+	 * @date 2018/6/6 13:44
+	 **/
+	public static String getUserIpAddress(HttpServletRequest request) {
+		String ipAddress = request.getHeader("x-forwarded-for");
+		if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+			ipAddress = request.getHeader("Proxy-Client-IP");
+		}
+		if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+			ipAddress = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+			ipAddress = request.getRemoteAddr();
+			if (ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")) {
+				//根据网卡取本机配置的IP
+				InetAddress inet = null;
+				try {
+					inet = InetAddress.getLocalHost();
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				}
+				ipAddress = inet.getHostAddress();
+			}
+		}
+		//对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
+		if (ipAddress != null && ipAddress.length() > 15) { //"***.***.***.***".length() = 15
+			if (ipAddress.indexOf(",") > 0) {
+				ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
+			}
+		}
+		return ipAddress;
+	}
 
 	/***
 	 *
@@ -130,7 +169,7 @@ public final class HttpUtil {
 
 		CloseableHttpResponse response = null;
 		try {
-			URLEncoder.encode(url, "UTF-8");
+			//URLEncoder.encode(url, "UTF-8");
 			HttpGet httpget = new HttpGet(url);
 			assembleHeader(httpget, ContentType.APPLICATION_FORM_URLENCODED);
 			response = httpclient.execute(httpget);

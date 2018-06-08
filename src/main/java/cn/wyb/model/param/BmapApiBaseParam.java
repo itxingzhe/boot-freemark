@@ -2,7 +2,7 @@ package cn.wyb.model.param;
 
 import java.io.Serializable;
 
-public abstract class AMapApiBaseParam implements Serializable {
+public abstract class BmapApiBaseParam implements Serializable {
 
 	private String output;
 	private String ak;

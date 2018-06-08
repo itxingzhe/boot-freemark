@@ -1,6 +1,6 @@
 package cn.wyb.model.param;
 
-public abstract class AMapSearchBaseParam extends AMapApiBaseParam {
+public abstract class BmapSearchBaseParam extends BmapApiBaseParam {
 
 	private String scope;//检索结果详细程度。
 	private String query;//检索关键字，周边检索和矩形区域内检索支持多个关键字并集检索，不同关键字间以$符号分隔，最多支持10个关键字检索。如:”银行$酒店”。检索词支持中英文。(45)东京塔,必选

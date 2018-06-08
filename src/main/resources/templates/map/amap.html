@@ -31,6 +31,24 @@
 </html>
 <script type="text/javascript">
 
+    /*  $(function () {
+          $.ajax({
+              type: 'get',
+              data: {"query": query},
+              url: '/v1/amap/searchSuggestion',
+              success: function (data) {
+                  var r = data.data;
+                  new AMap.point;
+                  var html = '<select id="suggestionResult" onchange="setInputValue(this)"></select>';
+                  $(obj).after(html);
+                  for (var i = 0; i < r.length; i++) {
+                      var opt = '<option value="' + r[i].name + '">' + r[i].name + '</option>'
+                      $("#suggestionResult").append(opt);
+                  }
+              }
+          });
+      });*/
+
     // 百度地图API功能
     var map = new BMap.Map("allmap");    // 创建Map实例
     //设置地图风格
@@ -46,8 +64,8 @@
             }
         ]
     });
-    map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
-    getLocalization(map);
+    map.centerAndZoom(new BMap.Point(-73.996461, 40.729513), 11);  // 初始化地图,设置中心点坐标和地图级别
+    //getLocalization(map);
     //添加地图类型控件
     map.addControl(new BMap.MapTypeControl({
         mapTypes: [
@@ -98,17 +116,20 @@
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 
     map.addEventListener("click", function (m) {
+        debugger;
+        //所在城市，国外为国家
+        var city = this.Yg;
         //openMessageWindow(map, 200, 100, "Hello", "你想到这里去吗？", m.point);
         // openInfoBox(map, m.point);
-        // $("input[name=x]").val(m.point.x);
+        // $("input[name=x]").val(m.point.lng);
         // $("input[name=lat]").val(m.point.lat);
         //getLocalization(map);
         //getLocalizationById();
         //getPoint("杭州市西湖区求是路8号");
         //getAddress(m.point);
-        //showPoint(m.point);
+        showPoint(m.point);
         //openSearch(m.point);
-        projectDrive("杭州汽车北站", "杭州东站")
+        //projectDrive("杭州汽车北站", "杭州东站")
     });
 
     //搜索框智能提示
@@ -189,7 +210,7 @@
         geolocation.enableSDKLocation();
         geolocation.getCurrentPosition(function (position) {
             if(this.getStatus() == BMAP_STATUS_SUCCESS){
-                //alert('您的位置：'+position.point.x+','+position.point.lat);
+                //alert('您的位置：'+position.point.lng+','+position.point.lat);
                 map.setCenter(position.point);
             } else {
 
@@ -216,7 +237,7 @@
             if(point){
                 //map.centerAndZoom(point,16);
                 //map.addOverlay(new BMap.Marker(point));
-                alert(point.x + "," + point.lat);
+                alert(point.lng + "," + point.lat);
             }
         });
 
@@ -238,7 +259,7 @@
         map.centerAndZoom(pt, 18);
         markergg.enableDragging();
         map.addOverlay(markergg); //添加GPS marker
-        var m = "你当前标记的位置是经度:" + pt.x + ",纬度:" + pt.lat;
+        var m = "你当前标记的位置是经度:" + pt.lng + ",纬度:" + pt.lat;
         var labelgg = new BMap.Label(m,{offset:new BMap.Size(20,-10)});
         markergg.setLabel(labelgg);
         markergg.addEventListener("dragend",function () {
@@ -264,7 +285,7 @@
         var marker = new BMap.Marker(pt); //创建marker对象
         marker.enableDragging();
         searchInfoWindow.open(pt);
-        $("input[name=x]").val(pt.x);
+        $("input[name=x]").val(pt.lng);
         $("input[name=lat]").val(pt.lat);
 
     }
@@ -305,12 +326,19 @@
                 url: '/v1/amap/searchSuggestion',
                 success: function (data) {
                     var r = data.data;
-                    new AMap.point;
+                    var add = r[0];
+                    //var p = new BMap.Point(15.746227,-12.770208);
+                    //map.centerAndZoom(p,16);
                     var html = '<select id="suggestionResult" onchange="setInputValue(this)"></select>';
                     $(obj).after(html);
                     for (var i = 0; i < r.length; i++) {
                         var opt = '<option value="' + r[i].name + '">' + r[i].name + '</option>'
                         $("#suggestionResult").append(opt);
+                        if (r[i].name === r[i].city) {
+                            var p = new BMap.Point(r[i].location.lng, r[i].location.lat);
+                            map.setCenter(p);
+                            map.setZoom(18);
+                        }
                     }
                 }
             });

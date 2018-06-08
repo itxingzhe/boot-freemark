@@ -1,6 +1,6 @@
 package cn.wyb.model.param;
 
-public class AMapLocationParam extends AMapApiBaseParam {
+public class BmapLocationParam extends BmapApiBaseParam {
 
 	/**
 	 * 用户上网的IP地址

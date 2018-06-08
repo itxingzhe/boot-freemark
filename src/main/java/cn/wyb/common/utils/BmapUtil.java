@@ -5,6 +5,7 @@ import cn.wyb.common.result.AMapLocationResponse;
 import cn.wyb.common.result.AMapResponse;
 import cn.wyb.model.param.*;
 import cn.wyb.model.vo.map.AMapPlaceAbroadResultVO;
+import cn.wyb.model.vo.map.PointStrVO;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -13,12 +14,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class AMapUtil {
+public class BmapUtil {
 
-	private static final String AMAP_AK = "ev82Imq86gQmRRZT5Chobk35KKPPh3NB";
-	private static final String AMAP_ROOT_URL = "http://api.map.baidu.com";
-	private static final String AMAP_PLACE_ABROAD_PORT = "/place_abroad/v1";
-	private static final String AMAP_LOCATION_IP_PORT = "/location/ip";
+	private static final String BMAP_AK = "ev82Imq86gQmRRZT5Chobk35KKPPh3NB";
+	private static final String BMAP_ROOT_URL = "http://api.map.baidu.com";
+	private static final String BMAP_PLACE_ABROAD_PORT = "/place_abroad/v1";
+	private static final String BMAP_LOCATION_IP_PORT = "/location/ip";
+	private static final String BMAP_GEOCONV_PORT = "/geoconv/v1/";
 	private static final String POINT_SEARCH = "/search";
 	private static final String POINT_DETAIL = "/detail";
 	private static final String POINT_SUGGESTION = "/suggestion";
@@ -30,7 +32,7 @@ public class AMapUtil {
 	 * @author wangyibin
 	 * @date 2018/6/5 16:39
 	 **/
-	public static Map<String, String> Param2Map(AMapApiBaseParam param) {
+	public static Map<String, String> Param2Map(BmapApiBaseParam param) {
 		HashMap<String, String> map = Maps.newHashMap();
 		String output = null;
 		if (param != null) {
@@ -61,7 +63,7 @@ public class AMapUtil {
 		}
 		output = "xml".equals(output.toLowerCase()) ? "xml" : "json";
 		map.put("output", output);
-		map.put("ak", AMAP_AK);
+		map.put("ak", BMAP_AK);
 		return map;
 	}
 
@@ -73,7 +75,7 @@ public class AMapUtil {
 	 * @author wangyibin
 	 * @date 2018/6/5 16:40
 	 **/
-	public static String getAMapAPIResponse(String url, AMapApiBaseParam param) {
+	public static String getAMapAPIResponse(String url, BmapApiBaseParam param) {
 		Map<String, String> map = Param2Map(param);
 		String s = HttpUtil.sendGet(url, map);
 		System.out.println(s);
@@ -83,7 +85,7 @@ public class AMapUtil {
 		return s;
 	}
 
-	public static JSONObject getAMapAPIJsonResponse(String url, AMapApiBaseParam param) {
+	public static JSONObject getAMapAPIJsonResponse(String url, BmapApiBaseParam param) {
 		return JSONObject.parseObject(getAMapAPIResponse(url, param));
 	}
 
@@ -96,8 +98,8 @@ public class AMapUtil {
 	 * @param param
 	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> getSearchResponse(String port, AMapApiBaseParam param) {
-		String url = AMAP_ROOT_URL + AMAP_PLACE_ABROAD_PORT + port;
+	public static AMapResponse<AMapPlaceAbroadResultVO> getSearchResponse(String port, BmapApiBaseParam param) {
+		String url = BMAP_ROOT_URL + BMAP_PLACE_ABROAD_PORT + port;
 		JSONObject jsonObject = getAMapAPIJsonResponse(url, param);
 		AMapResponse<AMapPlaceAbroadResultVO> response = jsonObject.toJavaObject(AMapResponse.class);
 		if (AMapApiStatusCodeEnum.OK.getCode() == response.getStatus()) {
@@ -122,7 +124,7 @@ public class AMapUtil {
 	 * @param param
 	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> getSearchPlaceResponse(AMapSearchBaseParam param) {
+	public static AMapResponse<AMapPlaceAbroadResultVO> getSearchPlaceResponse(BmapSearchBaseParam param) {
 		AMapResponse<AMapPlaceAbroadResultVO> response = getSearchResponse(POINT_SEARCH, param);
 		return response;
 	}
@@ -135,7 +137,7 @@ public class AMapUtil {
 	 * @param param
 	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchPlaceDetail(AMapPlaceDetailParam param) {
+	public static AMapResponse<AMapPlaceAbroadResultVO> searchPlaceDetail(BmapPlaceDetailParam param) {
 		AMapResponse<AMapPlaceAbroadResultVO> response = getSearchResponse(POINT_DETAIL, param);
 		return response;
 	}
@@ -148,7 +150,7 @@ public class AMapUtil {
 	 * @param param
 	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchRegionalism(AMapSearchRegionalismParam param) {
+	public static AMapResponse<AMapPlaceAbroadResultVO> searchRegionalism(BmapSearchRegionalismParam param) {
 		return getSearchPlaceResponse(param);
 	}
 
@@ -160,7 +162,7 @@ public class AMapUtil {
 	 * @param param
 	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchCircum(AMapSearchCircumParam param) {
+	public static AMapResponse<AMapPlaceAbroadResultVO> searchCircum(BmapSearchCircumParam param) {
 		return getSearchPlaceResponse(param);
 	}
 
@@ -172,7 +174,7 @@ public class AMapUtil {
 	 * @param param
 	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchRectangle(AMapSearchRectangleParam param) {
+	public static AMapResponse<AMapPlaceAbroadResultVO> searchRectangle(BmapSearchRectangleParam param) {
 		return getSearchPlaceResponse(param);
 	}
 
@@ -184,7 +186,7 @@ public class AMapUtil {
 	 * @param param
 	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchSuggestion(AMapSearchSuggestionParam param) {
+	public static AMapResponse<AMapPlaceAbroadResultVO> searchSuggestion(BmapSearchSuggestionParam param) {
 		return getSearchResponse(POINT_SUGGESTION, param);
 	}
 
@@ -195,26 +197,45 @@ public class AMapUtil {
 	 * @author wangyibin
 	 * @date 2018/6/5 16:44
 	 **/
-	public static AMapLocationResponse searchLocationById(AMapLocationParam param) {
-		String url = AMAP_ROOT_URL + AMAP_LOCATION_IP_PORT;
+	public static AMapLocationResponse searchLocationById(BmapLocationParam param) {
+		String url = BMAP_ROOT_URL + BMAP_LOCATION_IP_PORT;
 		JSONObject jsonObject = getAMapAPIJsonResponse(url, param);
 		AMapLocationResponse response = jsonObject.toJavaObject(AMapLocationResponse.class);
 		return response;
 	}
 
 
+	public static AMapResponse toBmapcoordinate(BmapCoordsParam param) {
+		String url = BMAP_ROOT_URL + BMAP_GEOCONV_PORT;
+		JSONObject jsonObject = getAMapAPIJsonResponse(url, param);
+		AMapResponse response = jsonObject.toJavaObject(AMapResponse.class);
+		if (AMapApiStatusCodeEnum.OK.getCode() == response.getStatus()) {
+			JSONArray results = jsonObject.getJSONArray("result");
+			if (results != null && !results.isEmpty()) {
+				ArrayList<PointStrVO> resultVOS = new ArrayList<>();
+				for (int i = 0; i < results.size(); i++) {
+					PointStrVO vo = results.getJSONObject(i).toJavaObject(PointStrVO.class);
+					resultVOS.add(vo);
+				}
+				response.setData(resultVOS);
+			}
+		}
+		return response;
+	}
+
+
 	public static void main(String[] args) {
 
-		//AMapSearchRegionalismParam param = new AMapSearchRegionalismParam();
+		//BmapSearchRegionalismParam param = new BmapSearchRegionalismParam();
 		//param.setQuery("华尔街");
 		//param.setRegion("纽约");
 
 
-		//AMapSearchCircumParam param = new AMapSearchCircumParam();
+		//BmapSearchCircumParam param = new BmapSearchCircumParam();
 		//param.setQuery("寿司");
 		//param.setLocation("35.711343,139.767111");
 
-		//AMapSearchRectangleParam param = new AMapSearchRectangleParam();
+		//BmapSearchRectangleParam param = new BmapSearchRectangleParam();
 		//param.setQuery("美食");
 		//param.setBounds("35.66597,139.797339,35.677669,139.813544");
 
@@ -231,7 +252,7 @@ public class AMapUtil {
 //		Integer status = response.getStatus();
 //		List<AMapPlaceAbroadResultVO> results = response.getResults();
 //		String uid = results.get(3).getUid();
-//		AMapPlaceDetailParam detailParam = new AMapPlaceDetailParam();
+//		BmapPlaceDetailParam detailParam = new BmapPlaceDetailParam();
 //		detailParam.setUid(uid);
 //		detailParam.setUids(uid);
 //		detailParam.setScope("1");
@@ -239,16 +260,22 @@ public class AMapUtil {
 //		detailResponse.getStatus();
 //		detailResponse.getMessage();
 
-		/*AMapSearchRegionalismParam param = new AMapSearchRegionalismParam();
-		param.setQuery("首尔");
-		param.setRegion("首尔");
-		String url = AMAP_ROOT_URL + AMAP_PLACE_ABROAD_PORT + POINT_SUGGESTION;
-		JSONObject jsonObject = getAMapAPIResponse(url, param);
-		String s = jsonObject.toJSONString();
-		System.out.println(s);*/
-		AMapLocationResponse response = searchLocationById(null);
+		/*BmapSearchSuggestionParam param = new BmapSearchSuggestionParam();
+		param.setQuery("悉尼大学");
+		param.setRegion("悉尼");
+		String url = BMAP_ROOT_URL + BMAP_PLACE_ABROAD_PORT + POINT_SUGGESTION;
+		AMapResponse<AMapPlaceAbroadResultVO> response = searchSuggestion(param);
+		List<AMapPlaceAbroadResultVO> result = response.getResult();
+		System.out.println(result.get(0).getLocation().toString());*/
+		/*AMapLocationResponse response = searchLocationById(null);
 		System.out.printf(response.getAddress());
-		System.out.println(response.getContent());
+		System.out.println(response.getContent());*/
+
+		BmapCoordsParam param = new BmapCoordsParam();
+		param.setCoords("120.140447,30.28018");
+		AMapResponse response = toBmapcoordinate(param);
+		Object data = response.getData();
+		System.out.println(data);
 
 	}
 
