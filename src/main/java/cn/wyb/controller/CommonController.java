@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 
 /**
@@ -70,6 +71,16 @@ public class CommonController {
 		System.out.println("连接了一次");
 		int a = 1 / 0;
 		return "" + a;
+	}
+
+	@RequestMapping("common/test")
+	public ModelAndView myTest(HttpServletRequest request) {
+		String path = request.getContextPath();
+		String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
+		request.setAttribute("basePath", basePath);
+		ModelAndView mv = new ModelAndView("/test/test");
+		mv.addObject("userId", null);
+		return mv;
 	}
 
 }

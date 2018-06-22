@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<div>
+    <p>Hello World</p>
+    <p id="userId"></p>
+    <span id="user"></span>
+</div>
+<script type="text/javascript">
+    var path = "${basePath}";
+    var author = "${userId}";
+    var p = document.getElementById("userId");
+    var sp = document.getElementById("user");
+    gE("userId").innerHTML = author;
+
+    var ee = "";
+
+    function gE(id) {
+        debugger;
+        return document.getElementById(id);
+    }
+</script>
+</body>
+</html>
