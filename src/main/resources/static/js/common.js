@@ -1,9 +1,4 @@
-
-
-
-
-
-common.ajaxFileUpload = function (param) {
+ajaxFileUpload = function (param) {
 
     var success = param.success,
         error = param.error,

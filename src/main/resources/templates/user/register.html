@@ -6,6 +6,7 @@
     <link type="text/css" rel="stylesheet" href="/css/index.css" >
     <script type="text/javascript" src="/jars/jquery/jquery-3.3.1.js" ></script>
     <script type="text/javascript" src="/js/index.js" ></script>
+    <script type="text/javascript" src="/js/common.js"></script>
 </head>
 <body>
 <div class="login-page">
@@ -15,27 +16,33 @@
             <div id="registerForm" class="login-form">
                 <ul class="login-fileds list-unstyled">
                     <li class="login-user">
-                        <input placeholder="请输账户名" code="username" autocomplete="off" class="form-control"   type="text" size="25" validate="required" maxlength="50"
+                        <input placeholder="请输账户名" name="username" autocomplete="off" class="form-control" type="text"
+                               size="25" validate="required" maxlength="50"
                                message='{"required":"帐户不能为空"}' />
                     </li>
                     <li class="login-user">
-                        <input placeholder="请输真实性名" code="username" autocomplete="off" class="form-control"   type="text" size="25" validate="required" maxlength="50"
+                        <input placeholder="请输真实性名" name="uname" autocomplete="off" class="form-control" type="text"
+                               size="25" validate="required" maxlength="50"
                                message='{"required":"真实性名不能为空"}' />
                     </li>
                     <li class="login-password">
-                        <input placeholder="请输入密码" code="password" autocomplete="new-password" class="form-control"  type="password" size="25"
+                        <input placeholder="请输入密码" name="password" autocomplete="new-password" class="form-control"
+                               type="password" size="25"
                                message='{"required":"密码不能为空"}' />
                     </li>
                     <li class="login-password">
-                        <input placeholder="请输入性别" code="sex" autocomplete="new-password" class="form-control"  type="text" size="25"
+                        <input placeholder="请输入性别" name="sex" autocomplete="new-password" class="form-control"
+                               type="text" size="25"
                                message='{"required":"性别不能为空"}' />
                     </li>
                     <li class="login-password">
-                        <input placeholder="请输入年龄" code="password" autocomplete="new-password" class="form-control"  type="text" size="25"
+                        <input placeholder="请输入年龄" name="password" autocomplete="new-password" class="form-control"
+                               type="text" size="25"
                                message='{"required":"年龄不能为空"}' />
                     </li>
                     <li class="login-password">
-                        <input placeholder="请输入住址" code="address" autocomplete="new-password" class="form-control"  type="text" size="25"
+                        <input placeholder="请输入住址" name="address" autocomplete="new-password" class="form-control"
+                               type="text" size="25"
                                message='{"required":"住址不能为空"}' />
                     </li>
                 </ul>
