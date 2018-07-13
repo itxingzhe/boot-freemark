@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <style type="text/css">
+        body, html, #allmap {
+            width: 1000px;
+            height: 900px;
+            overflow: hidden;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+    </style>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/api?v=2.0&ak=M2iMmqRqUj7ZeonOfFfpqg0SHl4VQG3Q"></script>
+    <script type="text/javascript"
+            src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+    <script type="text/javascript" src="/jars/jquery/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="/jars/amaplib/InfoBox_min.js"></script>
+    <script type="text/javascript" src="/js/bmap.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css"/>
+    <title>地图展示</title>
+</head>
+<body>
+<div>
+    <input type="button" value="点我判断在国内" onclick="inChina()">
+</div>
+<div>详细地址：<input type="text" id="detailedAddress" name="detailedAddress"/>
+    <input type="button" value="搜索"/>
+</div>
+<div>全球检索输入提示：<input type="text" id="suggestion" onblur="getSuggestion(this)" name="suggestion"/>
+</div>
+<div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+
+    /*  $(function () {
+          $.ajax({
+              type: 'get',
+              data: {"query": query},
+              url: '/v1/amap/searchSuggestion',
+              success: function (data) {
+                  var r = data.data;
+                  new AMap.point;
+                  var html = '<select id="suggestionResult" onchange="setInputValue(this)"></select>';
+                  $(obj).after(html);
+                  for (var i = 0; i < r.length; i++) {
+                      var opt = '<option value="' + r[i].name + '">' + r[i].name + '</option>'
+                      $("#suggestionResult").append(opt);
+                  }
+              }
+          });
+      });*/
+
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");    // 创建Map实例
+    //设置地图风格
+    map.setMapStyle({
+        styleJson: [
+            {
+                "featureType": "all",
+                "elementType": "all",
+                "stylers": {
+                    "lightness": 10,
+                    "saturation": -100
+                }
+            }
+        ]
+    });
+    map.centerAndZoom(new BMap.Point(119.30495233371025, 26.105880034475164), 11);  // 初始化地图,设置中心点坐标和地图级别
+    //getLocalization(map);
+    //添加地图类型控件
+    map.addControl(new BMap.MapTypeControl({
+        mapTypes: [
+            BMAP_NORMAL_MAP,
+            BMAP_HYBRID_MAP
+        ],
+        anchor: BMAP_ANCHOR_TOP_RIGHT
+    }));
+    //添加平移缩放控件的位置和样式
+    map.addControl(new BMap.NavigationControl({
+        offset: new BMap.Size(100, 100),      //控件位置偏移量
+        type: BMAP_NAVIGATION_CONTROL_SMALL, //控件样式
+        anchor: BMAP_ANCHOR_TOP_RIGHT        //控件位置 右上角
+    }));
+    //设置比例尺的位置
+    map.addControl(new BMap.ScaleControl({
+        anchor: BMAP_ANCHOR_BOTTOM_LEFT
+    }));
+    //设置缩略图的位置
+    map.addControl(new BMap.OverviewMapControl({
+        offset: new BMap.Size(30, 30),
+        anchor: BMAP_ANCHOR_BOTTOM_RIGHT
+    }));
+    //设置自定义控件
+    //自定义控件
+    function MyZoomControl() {
+        this.defaultAnchor = BMAP_ANCHOR_TOP_LEFT;
+        this.defaultOffset = new BMap.Size(50, 50);
+    }
+
+    MyZoomControl.prototype = new BMap.Control();
+    MyZoomControl.prototype.initialize = function (map) {
+        var div = document.createElement("div");
+        div.appendChild(document.createTextNode("放大"));
+        div.style.cursor = "pointer";
+        div.style.border = "1px solid gray";
+        div.style.backgroundColor = "white";
+        div.onclick = function (ev) {
+            map.zoomTo(map.getZoom() + 1);
+        }
+        map.getContainer().appendChild(div);
+        return div;
+    }
+    map.addControl(new MyZoomControl());
+    //打开信息框
+    //openMessageWindow(map, 200, 100, "Hello", "World", new BMap.Point(116.3, 39.6));
+    //map.setCurrentCity("杭州");          // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+    map.addEventListener("click", function (m) {
+        debugger;
+        //所在城市，国外为国家
+        var city = this.Yg;
+        //openMessageWindow(map, 200, 100, "Hello", "你想到这里去吗？", m.point);
+        // openInfoBox(map, m.point);
+        // $("input[name=x]").val(m.point.lng);
+        // $("input[name=lat]").val(m.point.lat);
+        //getLocalization(map);
+        //getLocalizationById();
+        //getPoint("杭州市西湖区求是路8号");
+        //getAddress(m.point);
+        showPoint(m.point);
+        //openSearch(m.point);
+        //projectDrive("杭州汽车北站", "杭州东站")
+    });
+
+    var p = new BMap.Point(119.30495233371025, 26.105880034475164);
+    showPoint(p);
+
+    //搜索框智能提示
+    var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+        {
+            "input": "detailedAddress"
+            , "location": map
+        });
+    ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+        var str = "";
+        var _value = e.fromitem.value;
+        var value = "";
+        if (e.fromitem.index > -1) {
+            value = _value.province + _value.city + _value.district + _value.street + _value.business;
+        }
+        str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+        value = "";
+        if (e.toitem.index > -1) {
+            _value = e.toitem.value;
+            value = _value.province + _value.city + _value.district + _value.street + _value.business;
+        }
+        str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+        $("#searchResultPanel").html(str);
+    });
+
+    var myValue;
+    ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+        var _value = e.item.value;
+        myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+        $("#searchResultPanel").html("onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue);
+
+        setPlace();
+    });
+
+    //打开信息框
+    function openMessageWindow(map, width, height, title, message, point) {
+        var opts = {
+            width: width,
+            height: height,
+            title: title
+        }
+        var infoWindow = new BMap.InfoWindow(message, opts);
+        map.openInfoWindow(infoWindow, point);
+    }
+
+    //打开信息框BOX
+    function openInfoBox(map, point) {
+        var html = ["<div><div><strong>当前地址坐标是：</strong><br><input name='x' ><input name='lat' ></div>",
+            "</div>"];
+        var infoBox = new BMapLib.InfoBox(map, html.join(""), {
+            boxStyle: {
+                //background:"url('/img/ginkgo_leaf.jpg') no-repeat center top",
+                width: "220px",
+                height: "100px"
+            },
+            closeIconUrl: "/img/close.png",
+            closeIconMargin: "1px 1px 0 0",
+            enableAutoPan: true,
+            align: INFOBOX_AT_TOP
+        });
+
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        infoBox.open(marker);
+        marker.enableDragging();
+        // marker.addEventListener("dragend",function () {
+        //     infoBox.close();
+        //
+        // })
+    }
+
+    //获取浏览器定位信息
+    function getLocalization(map) {
+        //浏览器定位
+        var geolocation = new BMap.Geolocation();
+        // 开启SDK辅助定位
+        geolocation.enableSDKLocation();
+        geolocation.getCurrentPosition(function (position) {
+            if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                //alert('您的位置：'+position.point.lng+','+position.point.lat);
+                map.setCenter(position.point);
+            } else {
+
+            }
+        })
+    }
+
+    //获取IP定位信息
+    function getLocalizationById() {
+        var myCity = new BMap.LocalCity();
+        myCity.get(myFun);
+    }
+
+    function myFun(result) {
+        var cityName = result.name;
+        map.setCenter(cityName);
+
+    }
+
+    //解析地址
+    function getPoint(address) {
+        var myGeo = new BMap.Geocoder();
+        myGeo.getPoint(address, function (point) {
+            if (point) {
+                //map.centerAndZoom(point,16);
+                //map.addOverlay(new BMap.Marker(point));
+                alert(point.lng + "," + point.lat);
+            }
+        });
+
+    }
+
+    //根据坐标解析出地址
+    function getAddress(pt) {
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(pt, function (rs) {
+            var addComp = rs.addressComponents;
+            alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+        });
+    }
+
+    //展示信息
+    function showPoint(pt) {
+        //添加gps marker和label
+        var markergg = new BMap.Marker(pt);
+        map.centerAndZoom(pt, 18);
+        markergg.enableDragging();
+        map.addOverlay(markergg); //添加GPS marker
+        var m = "你当前标记的位置是经度:" + pt.lng + ",纬度:" + pt.lat;
+        var labelgg = new BMap.Label(m, {offset: new BMap.Size(20, -10)});
+        markergg.setLabel(labelgg);
+        ptInPolygon(pt.lng, pt.lat);
+        markergg.addEventListener("dragend", function () {
+            map.clearOverlays();
+            showPoint(markergg.getPosition());
+        })
+    }
+
+    //打开搜索框
+    function openSearch(pt) {
+        var content = '<div style="margin:0;line-height:20px;padding:2px;">' +
+            '<input name="x" /><br/><input name="lat" >' +
+            '</div>';
+        //创建检索信息窗口对象
+        var searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
+            title: "请选择你的位置",      //标题
+            width: 290,             //宽度
+            height: 105,              //高度
+            panel: "panel",         //检索结果面板
+            enableAutoPan: true,     //自动平移
+        });
+        var marker = new BMap.Marker(pt); //创建marker对象
+        marker.enableDragging();
+        searchInfoWindow.open(pt);
+        $("input[name=x]").val(pt.lng);
+        $("input[name=lat]").val(pt.lat);
+
+    }
+
+    function setPlace() {
+        map.clearOverlays();    //清除地图上所有覆盖物
+        function myFun() {
+            var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+            showPoint(pp);
+        }
+
+        var local = new BMap.LocalSearch(map, { //智能搜索
+            onSearchComplete: myFun
+        });
+        local.search(myValue);
+    }
+
+    function projectDrive(departure, destination) {
+
+        //三种驾车策略：最少时间，最短距离，避开高速
+        var routePolicy = [BMAP_DRIVING_POLICY_LEAST_TIME, BMAP_DRIVING_POLICY_LEAST_DISTANCE, BMAP_DRIVING_POLICY_AVOID_HIGHWAYS];
+        var driving = new BMap.DrivingRoute(map, {
+            renderOptions: {
+                map: map,
+                autoViewport: true
+            },
+            policy: BMAP_DRIVING_POLICY_LEAST_DISTANCE
+        });
+        driving.search(departure, destination);
+    }
+
+    function getSuggestion(obj) {
+        var query = $(obj).val();
+        if (query && query.length > 1) {
+            $.ajax({
+                type: 'get',
+                data: {"query": query},
+                url: '/v1/amap/searchSuggestion',
+                success: function (data) {
+                    var r = data.data;
+                    var add = r[0];
+                    //var p = new BMap.Point(15.746227,-12.770208);
+                    //map.centerAndZoom(p,16);
+                    var html = '<select id="suggestionResult" onchange="setInputValue(this)"></select>';
+                    $(obj).after(html);
+                    for (var i = 0; i < r.length; i++) {
+                        var opt = '<option value="' + r[i].name + '">' + r[i].name + '</option>'
+                        $("#suggestionResult").append(opt);
+                        if (r[i].name === r[i].city) {
+                            var p = new BMap.Point(r[i].location.lng, r[i].location.lat);
+                            map.setCenter(p);
+                            map.setZoom(18);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function setInputValue(obj) {
+        var v = $(obj).val();
+        $("#suggestion").val(v);
+    }
+
+    function inChina() {
+        var p = map.getCenter();
+        ptInPolygon(p.lng, p.lat);
+    }
+</script>

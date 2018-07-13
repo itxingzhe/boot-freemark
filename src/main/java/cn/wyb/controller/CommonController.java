@@ -28,9 +28,9 @@ public class CommonController {
 		return "index";
 	}
 
-	@RequestMapping("common/amap")
+	@RequestMapping("common/bmap")
 	public String toMap() {
-		return "/map/amap";
+		return "/map/bmap";
 	}
 
 	@RequestMapping("common/ajaxFileUpload")
@@ -51,7 +51,7 @@ public class CommonController {
 		return CommResponse.success(name + "-" + contentType + "-" + originalFilename);
 	}
 
-	@RequestMapping("common/amapApi")
+	@RequestMapping("common/bmapApi")
 	public ModelAndView toMapApi() throws Exception {
 
 		HashMap<String, String> map = Maps.newHashMap();
@@ -80,6 +80,12 @@ public class CommonController {
 		request.setAttribute("basePath", basePath);
 		ModelAndView mv = new ModelAndView("/test/test");
 		mv.addObject("userId", null);
+		return mv;
+	}
+
+	@RequestMapping("common/amap")
+	public ModelAndView showAmap(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("map/amap");
 		return mv;
 	}
 

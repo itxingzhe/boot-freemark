@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Api(value = "aMapApiController", description = "百度地图地址检索API")
 @Controller
 @RequestMapping("/v1/amap")
-public class AMapApiController {
+public class BmapApiController {
 
 	@ApiOperation(value = "行政区划区域检索", notes = "行政区划区域检索", response = AMapPlaceAbroadResultVO.class)
 	@RequestMapping(value = "/searchRegionalism", method = RequestMethod.GET)

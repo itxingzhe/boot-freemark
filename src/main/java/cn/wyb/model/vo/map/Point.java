@@ -44,4 +44,9 @@ public class Point {
 	public void setLat(Float lat) {
 		this.lat = lat;
 	}
+
+	@Override
+	public String toString() {
+		return lng + "," + lat;
+	}
 }

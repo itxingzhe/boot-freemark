@@ -171,7 +171,8 @@ public final class HttpUtil {
 		try {
 			//URLEncoder.encode(url, "UTF-8");
 			HttpGet httpget = new HttpGet(url);
-			assembleHeader(httpget, ContentType.APPLICATION_FORM_URLENCODED);
+			//assembleHeader(httpget, ContentType.APPLICATION_FORM_URLENCODED);
+			System.out.println(url);
 			response = httpclient.execute(httpget);
 		} catch (IOException e) {
 			e.printStackTrace();

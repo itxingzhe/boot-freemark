@@ -226,9 +226,9 @@ public class BmapUtil {
 
 	public static void main(String[] args) {
 
-		//BmapSearchRegionalismParam param = new BmapSearchRegionalismParam();
-		//param.setQuery("华尔街");
-		//param.setRegion("纽约");
+		BmapSearchRegionalismParam param = new BmapSearchRegionalismParam();
+		param.setQuery("丹特港");
+		param.setRegion("丹特港");
 
 
 		//BmapSearchCircumParam param = new BmapSearchCircumParam();
@@ -243,22 +243,23 @@ public class BmapUtil {
 //		param.setPage_num(1);
 //		param.setPage_size(10);
 
-		//AMapResponse<AMapPlaceAbroadResultVO> response = searchRegionalism(param);
+		AMapResponse<AMapPlaceAbroadResultVO> response = searchRegionalism(param);
 		//AMapResponse<AMapPlaceAbroadResultVO> response = searchCircum(param);
 		//AMapResponse<AMapPlaceAbroadResultVO> response = searchRectangle(param);
 
 
-//		String message = response.getMessage();
-//		Integer status = response.getStatus();
-//		List<AMapPlaceAbroadResultVO> results = response.getResults();
-//		String uid = results.get(3).getUid();
-//		BmapPlaceDetailParam detailParam = new BmapPlaceDetailParam();
-//		detailParam.setUid(uid);
-//		detailParam.setUids(uid);
-//		detailParam.setScope("1");
-//		AMapResponse<AMapPlaceAbroadResultVO> detailResponse = searchPlaceDetail(detailParam);
-//		detailResponse.getStatus();
-//		detailResponse.getMessage();
+		String message = response.getMessage();
+		Integer status = response.getStatus();
+		//List<AMapPlaceAbroadResultVO> results = response.getResults();
+		List<AMapPlaceAbroadResultVO> results = response.getResult();
+		String uid = results.get(3).getUid();
+		BmapPlaceDetailParam detailParam = new BmapPlaceDetailParam();
+		detailParam.setUid(uid);
+		detailParam.setUids(uid);
+		detailParam.setScope("1");
+		AMapResponse<AMapPlaceAbroadResultVO> detailResponse = searchPlaceDetail(detailParam);
+		detailResponse.getStatus();
+		detailResponse.getMessage();
 
 		/*BmapSearchSuggestionParam param = new BmapSearchSuggestionParam();
 		param.setQuery("悉尼大学");
@@ -266,16 +267,16 @@ public class BmapUtil {
 		String url = BMAP_ROOT_URL + BMAP_PLACE_ABROAD_PORT + POINT_SUGGESTION;
 		AMapResponse<AMapPlaceAbroadResultVO> response = searchSuggestion(param);
 		List<AMapPlaceAbroadResultVO> result = response.getResult();
-		System.out.println(result.get(0).getLocation().toString());*/
-		/*AMapLocationResponse response = searchLocationById(null);
+		System.out.println(result.get(0).getLocation().toString());
+		AMapLocationResponse response = searchLocationById(null);
 		System.out.printf(response.getAddress());
 		System.out.println(response.getContent());*/
 
-		BmapCoordsParam param = new BmapCoordsParam();
+		/*BmapCoordsParam param = new BmapCoordsParam();
 		param.setCoords("120.140447,30.28018");
 		AMapResponse response = toBmapcoordinate(param);
 		Object data = response.getData();
-		System.out.println(data);
+		System.out.println(data);*/
 
 	}
 

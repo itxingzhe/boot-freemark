@@ -67,3 +67,10 @@ function operation(value, row, index) {
     ope += '<input type="button" data-id = "' + row.uid + '" class="btn" value="修改" >'
     return ope;
 }
+
+function showMessage() {
+    var addr = $("input[name=address2]").val();
+    var adds = addr.split("，");
+    alert(adds[0] | "");
+
+}
