@@ -16,15 +16,15 @@ import java.util.List;
  * Create Time: 2018年04月26日 14:15
  * C@author wyb
  **/
-@Service("userService")
-public class UserServiceImpl implements UserService {
+@Service("userService2")
+public class UserServiceImpl2 implements UserService {
 
 	@Autowired
 	private UserPOMapper userPOMapper;
 
 	@Override
 	public void toInterface() {
-		System.out.println("<<<<<<<< userService-byType >>>>>>>>");
+		System.out.println("<<<<<<<< userService2-byName >>>>>>>>");
 	}
 
 	@Override

@@ -10,6 +10,8 @@ import cn.wyb.model.po.UserPO;
  **/
 public interface UserService {
 
+	void toInterface();
+
 	UserPO getUser(Integer id);
 
 	Integer save(UserPO user);

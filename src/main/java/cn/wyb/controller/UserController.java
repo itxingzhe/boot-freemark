@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
+
 /**
  * Create Time: 2018年04月26日 13:06
  * C@author wyb
@@ -20,12 +22,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/user")
 public class UserController {
 
-	@Autowired
+	@Autowired//通过类型注入
+	//@Qualifier("userService2")//通过名称注入
 	private UserService userService;
+
+	@Resource(name = "userService2")//通过名称注入
+	private UserService userService2;
 
 	@RequestMapping("/queryData")
 	@ResponseBody
 	public PageResult<UserPO> listData(UserParam param) {
+		userService.toInterface();
+		userService2.toInterface();
 		return userService.listData(param);
 	}
 
