@@ -3,7 +3,7 @@ package cn.wyb.model.param;
 public class BmapCoordsParam extends BmapApiBaseParam {
 
 	/**
-	 * 需转换的源坐标，多组坐标以“；”分隔 （经度，纬度）
+	 * 需转换的源坐标，多组坐标以“；”分隔 （经度，纬度），最多100组
 	 */
 	private String coords;
 

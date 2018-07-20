@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 
 @ApiModel(value = "aMapResponse", description = "api响应类")
-public class AMapResponse<T> {
+public class BmapResponse<T> {
 
 	@ApiModelProperty("本次API访问状态，如果成功返回0，如果失败返回其他数字。")
 	private Integer status;

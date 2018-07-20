@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "aMapAddressDetailVO", description = "地址详细信息")
-public class AMapAddressDetailVO {
+public class BmapAddressDetailVO {
 	/**
 	 * 城市
 	 */

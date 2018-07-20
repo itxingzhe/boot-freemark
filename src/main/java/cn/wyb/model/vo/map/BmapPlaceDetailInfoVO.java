@@ -2,7 +2,7 @@ package cn.wyb.model.vo.map;
 
 import com.alibaba.fastjson.JSONArray;
 
-public class AMapPlaceDetailInfoVO {
+public class BmapPlaceDetailInfoVO {
 	private Long distance;//	距离中心点的距离，圆形区域检索时返回
 	private String type;//	所属分类，如’hotel’、’cater’。
 	private String tag;//	标签

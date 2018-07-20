@@ -1,6 +1,6 @@
 package cn.wyb.model.vo.map;
 
-public class AMapPlaceAbroadResultVO {
+public class BmapPlaceAbroadResultVO {
 
 	private String name;        //poi名称
 	private Point location;        //poi经纬度坐标
@@ -9,7 +9,7 @@ public class AMapPlaceAbroadResultVO {
 	private String uid;        //poi的唯一标示
 	private String street_id;        //街景图id
 	private String detail;        //是否有详情页：1有，0没有
-	private AMapPlaceDetailInfoVO detail_info;        //poi的扩展信息，仅当scope=2时，显示该字段，不同的poi类型，显示的detail_info字段不同。
+	private BmapPlaceDetailInfoVO detail_info;        //poi的扩展信息，仅当scope=2时，显示该字段，不同的poi类型，显示的detail_info字段不同。
 	private String city;//城市
 	private String district;//区县
 	private String tag;//poi分类
@@ -70,11 +70,11 @@ public class AMapPlaceAbroadResultVO {
 		this.detail = detail;
 	}
 
-	public AMapPlaceDetailInfoVO getDetail_info() {
+	public BmapPlaceDetailInfoVO getDetail_info() {
 		return detail_info;
 	}
 
-	public void setDetail_info(AMapPlaceDetailInfoVO detail_info) {
+	public void setDetail_info(BmapPlaceDetailInfoVO detail_info) {
 		this.detail_info = detail_info;
 	}
 

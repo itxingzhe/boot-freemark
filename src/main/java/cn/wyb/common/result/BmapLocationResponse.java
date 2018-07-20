@@ -1,11 +1,11 @@
 package cn.wyb.common.result;
 
-import cn.wyb.model.vo.map.AMapLocationVO;
+import cn.wyb.model.vo.map.BmapLocationVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "aMapLocationResponse", description = "IP定位响应类")
-public class AMapLocationResponse {
+public class BmapLocationResponse {
 
 	@ApiModelProperty("本次API访问状态，如果成功返回0，如果失败返回其他数字。")
 	private Integer status;
@@ -14,7 +14,7 @@ public class AMapLocationResponse {
 	private String address;
 
 	@ApiModelProperty("定位到的地址信息")
-	private AMapLocationVO content;
+	private BmapLocationVO content;
 
 	public Integer getStatus() {
 		return status;
@@ -32,11 +32,11 @@ public class AMapLocationResponse {
 		this.address = address;
 	}
 
-	public AMapLocationVO getContent() {
+	public BmapLocationVO getContent() {
 		return content;
 	}
 
-	public void setContent(AMapLocationVO content) {
+	public void setContent(BmapLocationVO content) {
 		this.content = content;
 	}
 }

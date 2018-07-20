@@ -1,6 +1,6 @@
 package cn.wyb.common.utils;
 
-import cn.wyb.model.vo.map.AMapPlaceAbroadResultVO;
+import cn.wyb.model.vo.map.BmapPlaceAbroadResultVO;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -125,7 +125,7 @@ public final class HttpUtil {
 				String s = EntityUtils.toString(resEntity, "utf-8");
 				JSONObject jsonObject = JSONObject.parseObject(s);
 				JSONArray results = (JSONArray) jsonObject.get("results");
-				List<AMapPlaceAbroadResultVO> list = results.toJavaList(AMapPlaceAbroadResultVO.class);
+				List<BmapPlaceAbroadResultVO> list = results.toJavaList(BmapPlaceAbroadResultVO.class);
 				System.out.println(list);
 				System.out.println(s);
 			} else {

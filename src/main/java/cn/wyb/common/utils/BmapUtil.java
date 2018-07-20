@@ -1,10 +1,10 @@
 package cn.wyb.common.utils;
 
 import cn.wyb.common.enums.AMapApiStatusCodeEnum;
-import cn.wyb.common.result.AMapLocationResponse;
-import cn.wyb.common.result.AMapResponse;
+import cn.wyb.common.result.BmapLocationResponse;
+import cn.wyb.common.result.BmapResponse;
 import cn.wyb.model.param.*;
-import cn.wyb.model.vo.map.AMapPlaceAbroadResultVO;
+import cn.wyb.model.vo.map.BmapPlaceAbroadResultVO;
 import cn.wyb.model.vo.map.PointStrVO;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -16,14 +16,15 @@ import java.util.*;
 
 public class BmapUtil {
 
-	private static final String BMAP_AK = "ev82Imq86gQmRRZT5Chobk35KKPPh3NB";
-	private static final String BMAP_ROOT_URL = "http://api.map.baidu.com";
+	public static final String BMAP_AK = "ev82Imq86gQmRRZT5Chobk35KKPPh3NB";
+	private static final String BMAP_URL = "http://api.map.baidu.com";
 	private static final String BMAP_PLACE_ABROAD_PORT = "/place_abroad/v1";
 	private static final String BMAP_LOCATION_IP_PORT = "/location/ip";
 	private static final String BMAP_GEOCONV_PORT = "/geoconv/v1/";
 	private static final String POINT_SEARCH = "/search";
 	private static final String POINT_DETAIL = "/detail";
 	private static final String POINT_SUGGESTION = "/suggestion";
+	private static final Double RE = 6378137.0;
 
 	/**
 	 * @param param
@@ -75,39 +76,40 @@ public class BmapUtil {
 	 * @author wangyibin
 	 * @date 2018/6/5 16:40
 	 **/
-	public static String getAMapAPIResponse(String url, BmapApiBaseParam param) {
+	public static String getApiResponse(String url, BmapApiBaseParam param) {
 		Map<String, String> map = Param2Map(param);
 		String s = HttpUtil.sendGet(url, map);
-		System.out.println(s);
 		if (StringUtils.isBlank(s)) {
 			return null;
 		}
 		return s;
 	}
 
-	public static JSONObject getAMapAPIJsonResponse(String url, BmapApiBaseParam param) {
-		return JSONObject.parseObject(getAMapAPIResponse(url, param));
+	public static JSONObject getApiJsonResponse(String url, BmapApiBaseParam param) {
+		return JSONObject.parseObject(getApiResponse(url, param));
 	}
 
 	/**
-	 * @getSearchResponse : 获取搜索结果
-	 *
-	 * @author wangyibin
-	 * @date 2018/6/5 16:42
 	 * @param port
 	 * @param param
 	 * @return
+	 * @getSearchResponse : 获取搜索结果
+	 * @author wangyibin
+	 * @date 2018/6/5 16:42
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> getSearchResponse(String port, BmapApiBaseParam param) {
-		String url = BMAP_ROOT_URL + BMAP_PLACE_ABROAD_PORT + port;
-		JSONObject jsonObject = getAMapAPIJsonResponse(url, param);
-		AMapResponse<AMapPlaceAbroadResultVO> response = jsonObject.toJavaObject(AMapResponse.class);
+	public static BmapResponse<BmapPlaceAbroadResultVO> getSearchResponse(String port, BmapApiBaseParam param) {
+		String url = BMAP_URL + BMAP_PLACE_ABROAD_PORT + port;
+		JSONObject jsonObject = getApiJsonResponse(url, param);
+		BmapResponse<BmapPlaceAbroadResultVO> response = jsonObject.toJavaObject(BmapResponse.class);
 		if (AMapApiStatusCodeEnum.OK.getCode() == response.getStatus()) {
-			JSONArray results = jsonObject.getJSONArray("result");
+			JSONArray results = jsonObject.getJSONArray("results");
+			if (results == null) {
+				results = jsonObject.getJSONArray("result");
+			}
 			if (results != null && !results.isEmpty()) {
-				ArrayList<AMapPlaceAbroadResultVO> resultVOS = new ArrayList<>();
+				ArrayList<BmapPlaceAbroadResultVO> resultVOS = new ArrayList<>();
 				for (int i = 0; i < results.size(); i++) {
-					AMapPlaceAbroadResultVO vo = results.getJSONObject(i).toJavaObject(AMapPlaceAbroadResultVO.class);
+					BmapPlaceAbroadResultVO vo = results.getJSONObject(i).toJavaObject(BmapPlaceAbroadResultVO.class);
 					resultVOS.add(vo);
 				}
 				response.setData(resultVOS);
@@ -117,76 +119,70 @@ public class BmapUtil {
 	}
 
 	/**
+	 * @param param
+	 * @return
 	 * @getSearchPlaceResponse : 地点检索查询
-	 *
 	 * @author wangyibin
 	 * @date 2018/6/5 16:45
-	 * @param param
-	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> getSearchPlaceResponse(BmapSearchBaseParam param) {
-		AMapResponse<AMapPlaceAbroadResultVO> response = getSearchResponse(POINT_SEARCH, param);
+	public static BmapResponse<BmapPlaceAbroadResultVO> getSearchPlaceResponse(BmapSearchBaseParam param) {
+		BmapResponse<BmapPlaceAbroadResultVO> response = getSearchResponse(POINT_SEARCH, param);
 		return response;
 	}
 
 	/**
+	 * @param param
+	 * @return
 	 * @searchPlaceDetail : 地点详情检索
-	 *
 	 * @author wangyibin
 	 * @date 2018/6/5 16:45
-	 * @param param
-	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchPlaceDetail(BmapPlaceDetailParam param) {
-		AMapResponse<AMapPlaceAbroadResultVO> response = getSearchResponse(POINT_DETAIL, param);
+	public static BmapResponse<BmapPlaceAbroadResultVO> searchPlaceDetail(BmapPlaceDetailParam param) {
+		BmapResponse<BmapPlaceAbroadResultVO> response = getSearchResponse(POINT_DETAIL, param);
 		return response;
 	}
 
 	/**
+	 * @param param
+	 * @return
 	 * @searchRegionalism : 行政区划区域检索
-	 *
 	 * @author wangyibin
 	 * @date 2018/6/5 16:45
-	 * @param param
-	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchRegionalism(BmapSearchRegionalismParam param) {
+	public static BmapResponse<BmapPlaceAbroadResultVO> searchRegionalism(BmapSearchRegionalismParam param) {
 		return getSearchPlaceResponse(param);
 	}
 
 	/**
+	 * @param param
+	 * @return
 	 * @searchCircum : 周边检索
-	 *
 	 * @author wangyibin
 	 * @date 2018/6/5 16:45
-	 * @param param
-	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchCircum(BmapSearchCircumParam param) {
+	public static BmapResponse<BmapPlaceAbroadResultVO> searchCircum(BmapSearchCircumParam param) {
 		return getSearchPlaceResponse(param);
 	}
 
 	/**
+	 * @param param
+	 * @return
 	 * @searchRectangle : 矩形区域检索
-	 *
 	 * @author wangyibin
 	 * @date 2018/6/5 16:45
-	 * @param param
-	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchRectangle(BmapSearchRectangleParam param) {
+	public static BmapResponse<BmapPlaceAbroadResultVO> searchRectangle(BmapSearchRectangleParam param) {
 		return getSearchPlaceResponse(param);
 	}
 
 	/**
+	 * @param param
+	 * @return
 	 * @searchSuggestion : 地点输入提示
-	 *
 	 * @author wangyibin
 	 * @date 2018/6/5 16:44
-	 * @param param
-	 * @return
 	 **/
-	public static AMapResponse<AMapPlaceAbroadResultVO> searchSuggestion(BmapSearchSuggestionParam param) {
+	public static BmapResponse<BmapPlaceAbroadResultVO> searchSuggestion(BmapSearchSuggestionParam param) {
 		return getSearchResponse(POINT_SUGGESTION, param);
 	}
 
@@ -197,18 +193,25 @@ public class BmapUtil {
 	 * @author wangyibin
 	 * @date 2018/6/5 16:44
 	 **/
-	public static AMapLocationResponse searchLocationById(BmapLocationParam param) {
-		String url = BMAP_ROOT_URL + BMAP_LOCATION_IP_PORT;
-		JSONObject jsonObject = getAMapAPIJsonResponse(url, param);
-		AMapLocationResponse response = jsonObject.toJavaObject(AMapLocationResponse.class);
+	public static BmapLocationResponse searchLocationById(BmapLocationParam param) {
+		String url = BMAP_URL + BMAP_LOCATION_IP_PORT;
+		JSONObject jsonObject = getApiJsonResponse(url, param);
+		BmapLocationResponse response = jsonObject.toJavaObject(BmapLocationResponse.class);
 		return response;
 	}
 
-
-	public static AMapResponse toBmapcoordinate(BmapCoordsParam param) {
-		String url = BMAP_ROOT_URL + BMAP_GEOCONV_PORT;
-		JSONObject jsonObject = getAMapAPIJsonResponse(url, param);
-		AMapResponse response = jsonObject.toJavaObject(AMapResponse.class);
+	/**
+	 * toBmapcoordinate:坐标转换为百度地图坐标
+	 *
+	 * @param param
+	 * @return
+	 * @author wangyibin
+	 * @date 2018/6/8 13:08
+	 */
+	public static BmapResponse toBmapcoordinate(BmapCoordsParam param) {
+		String url = BMAP_URL + BMAP_GEOCONV_PORT;
+		JSONObject jsonObject = getApiJsonResponse(url, param);
+		BmapResponse response = jsonObject.toJavaObject(BmapResponse.class);
 		if (AMapApiStatusCodeEnum.OK.getCode() == response.getStatus()) {
 			JSONArray results = jsonObject.getJSONArray("result");
 			if (results != null && !results.isEmpty()) {
@@ -223,61 +226,69 @@ public class BmapUtil {
 		return response;
 	}
 
+	/**
+	 * 根据两个位置的经纬度，来计算两地的距离（单位为KM）
+	 * 参数为String类型
+	 *
+	 * @param lat1Str 用户经度
+	 * @param lng1Str 用户纬度
+	 * @param lat2Str 商家经度
+	 * @param lng2Str 商家纬度
+	 * @return
+	 */
+	public static String getDistance(String lat1Str, String lng1Str, String lat2Str, String lng2Str) {
+		Double lat1 = Double.parseDouble(lat1Str);
+		Double lng1 = Double.parseDouble(lng1Str);
+		Double lat2 = Double.parseDouble(lat2Str);
+		Double lng2 = Double.parseDouble(lng2Str);
+		double patm = 2;
+		double radLat1 = Math.toRadians(lat1);
+		double radLat2 = Math.toRadians(lat2);
+		double difference = radLat1 - radLat2;
+		double mdifference = Math.toRadians(lng1) - Math.toRadians(lng2);
+		double distance = patm * Math.asin(Math.sqrt(Math.pow(Math.sin(difference / patm), patm)
+				+ Math.cos(radLat1) * Math.cos(radLat2)
+				* Math.pow(Math.sin(mdifference / patm), patm)));
+		distance = distance * RE;
+		String distanceStr = String.valueOf(distance);
+		return distanceStr;
+	}
 
-	public static void main(String[] args) {
+	/**
+	 * 获取当前用户一定距离以内的经纬度值
+	 * 单位米 return minLat
+	 * 最小经度 minLng
+	 * 最小纬度 maxLat
+	 * 最大经度 maxLng
+	 * 最大纬度 minLat
+	 */
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public static Map getAround(String latStr, String lngStr, String raidus) {
+		Map map = new HashMap();
+		Double latitude = Double.parseDouble(latStr);// 传值给经度
+		Double longitude = Double.parseDouble(lngStr);// 传值给纬度
+		Double degree = (24901 * 1609) / 360.0; // 获取每度
+		double raidusMile = Double.parseDouble(raidus);
 
-		BmapSearchRegionalismParam param = new BmapSearchRegionalismParam();
-		param.setQuery("丹特港");
-		param.setRegion("丹特港");
+		Double mpdLng = Double.parseDouble((degree * Math.cos(latitude * (Math.PI / 180)) + "").replace("-", ""));
+		Double dpmLng = 1 / mpdLng;
+		Double radiusLng = dpmLng * raidusMile;
+		//获取最小经度
+		Double minLat = longitude - radiusLng;
+		// 获取最大经度
+		Double maxLat = longitude + radiusLng;
+		Double dpmLat = 1 / degree;
+		Double radiusLat = dpmLat * raidusMile;
+		// 获取最小纬度
+		Double minLng = latitude - radiusLat;
+		// 获取最大纬度
+		Double maxLng = latitude + radiusLat;
 
-
-		//BmapSearchCircumParam param = new BmapSearchCircumParam();
-		//param.setQuery("寿司");
-		//param.setLocation("35.711343,139.767111");
-
-		//BmapSearchRectangleParam param = new BmapSearchRectangleParam();
-		//param.setQuery("美食");
-		//param.setBounds("35.66597,139.797339,35.677669,139.813544");
-
-		//param.setScope("2");
-//		param.setPage_num(1);
-//		param.setPage_size(10);
-
-		AMapResponse<AMapPlaceAbroadResultVO> response = searchRegionalism(param);
-		//AMapResponse<AMapPlaceAbroadResultVO> response = searchCircum(param);
-		//AMapResponse<AMapPlaceAbroadResultVO> response = searchRectangle(param);
-
-
-		String message = response.getMessage();
-		Integer status = response.getStatus();
-		//List<AMapPlaceAbroadResultVO> results = response.getResults();
-		List<AMapPlaceAbroadResultVO> results = response.getResult();
-		String uid = results.get(3).getUid();
-		BmapPlaceDetailParam detailParam = new BmapPlaceDetailParam();
-		detailParam.setUid(uid);
-		detailParam.setUids(uid);
-		detailParam.setScope("1");
-		AMapResponse<AMapPlaceAbroadResultVO> detailResponse = searchPlaceDetail(detailParam);
-		detailResponse.getStatus();
-		detailResponse.getMessage();
-
-		/*BmapSearchSuggestionParam param = new BmapSearchSuggestionParam();
-		param.setQuery("悉尼大学");
-		param.setRegion("悉尼");
-		String url = BMAP_ROOT_URL + BMAP_PLACE_ABROAD_PORT + POINT_SUGGESTION;
-		AMapResponse<AMapPlaceAbroadResultVO> response = searchSuggestion(param);
-		List<AMapPlaceAbroadResultVO> result = response.getResult();
-		System.out.println(result.get(0).getLocation().toString());
-		AMapLocationResponse response = searchLocationById(null);
-		System.out.printf(response.getAddress());
-		System.out.println(response.getContent());*/
-
-		/*BmapCoordsParam param = new BmapCoordsParam();
-		param.setCoords("120.140447,30.28018");
-		AMapResponse response = toBmapcoordinate(param);
-		Object data = response.getData();
-		System.out.println(data);*/
-
+		map.put("minLat", minLat + "");
+		map.put("maxLat", maxLat + "");
+		map.put("minLng", minLng + "");
+		map.put("maxLng", maxLng + "");
+		return map;
 	}
 
 }

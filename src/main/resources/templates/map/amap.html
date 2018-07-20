@@ -43,9 +43,12 @@
             parent.$("#longitude").eq(id).trigger('propertychange');
             parent.$("#latitude").eq(id).trigger('propertychange');
             parent.layer.close(index);
-        })
+        });
 
-        var center = longitude && latitude ? [longitude, latitude] : [120.131292, 30.264455];
+        var lon = 71094169 / 600000;
+        var lat = 18857989 / 600000;
+
+        var center = longitude && latitude ? [longitude, latitude] : [lon, lat];
         //地图
         var map = new AMap.Map("container", {
             resizeEnable: true,
@@ -91,8 +94,10 @@
             map:map
         });*/
         //百度地图经纬度转高德
-        /*var baidu = [120.228084, 30.323391];
-        AMap.convertFrom(baidu, 'baidu', function (status, result) {debugger
+        //var baidu = [120.228084, 30.323391];
+        var baidu = [lon, lat];
+        AMap.convertFrom(baidu, 'gps', function (status, result) {
+            debugger
             if (result.info === 'ok') {
                 var lnglats = result.locations; // Array.<LngLat>
                 var m = new AMap.Marker({
@@ -103,7 +108,7 @@
                     map:map
                 });
             }
-        });*/
+        });
 
         /*var g = [120.131292, 30.264455];
         var m = new AMap.Marker({
