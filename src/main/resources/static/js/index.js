@@ -44,8 +44,28 @@ function toRegister() {
     });
 }
 
+function doLogin() {
+    var data = getData("#loginForm");
+    $.ajax({
+        type: 'post',
+        data: getData("#loginForm"),
+        url: '/user/doLogin',
+        success: function (data) {
+            $("body").html(data)
+        }
+    });
+}
+
 function addUser() {
     window.location.href = "/user/toRegister";
+}
+
+function logout() {
+    window.location.href = "/user/logout";
+}
+
+function toLogin() {
+    window.location.href = "/user/toLogin";
 }
 
 function updateUser() {
