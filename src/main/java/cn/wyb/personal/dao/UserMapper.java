@@ -20,5 +20,5 @@ public interface UserMapper {
 
 	List<UserPO> queryPage(UserParam param);
 
-	UserPO findByUserName(String username);
+	List<UserPO> findByUserName(String username);
 }

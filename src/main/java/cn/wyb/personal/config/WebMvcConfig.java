@@ -1,20 +1,24 @@
 package cn.wyb.personal.config;
 
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import cn.wyb.personal.interceptor.UserActionInterceptor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-//@Configuration
+@Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-
-		registry.addResourceHandler("swagger-ui.html")
-				.addResourceLocations("classpath:/META-INF/resources/");
-
-		registry.addResourceHandler("/webjars/**")
-				.addResourceLocations("classpath:/META-INF/resources/webjars/");
-
+	@Bean
+	public UserActionInterceptor userActionInterceptor() {
+		return new UserActionInterceptor();
 	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		System.out.println(">>>>>>>>>>>>>>>>> webInterceptor <<<<<<<<<<<<<<<<<");
+		registry.addInterceptor(userActionInterceptor()).excludePathPatterns("/", "/user/toLogin", "/user/doLogin",
+				"/user/toRegister", "/user/logout", "/css/**", "/js/**", "/img/**", "/jars/**", "/error*");
+	}
+
 }

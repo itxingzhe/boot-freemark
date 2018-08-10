@@ -6,7 +6,10 @@ import cn.wyb.personal.model.param.UserParam;
 import cn.wyb.personal.model.po.UserPO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,11 +37,20 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Integer save(UserPO user) {
+		md5Password(user);
 		return userMapper.insertSelective(user);
+	}
+
+	private void md5Password(UserPO user) {
+		if (user != null && StringUtils.isNotBlank(user.getPassword()) && StringUtils.isNotBlank(user.getUsername())) {
+			ByteSource source = ByteSource.Util.bytes(user.getUsername());
+			user.setPassword(new Md5Hash(user.getPassword(), source).toString());
+		}
 	}
 
 	@Override
 	public Integer update(UserPO user) {
+		md5Password(user);
 		return userMapper.updateByPrimaryKeySelective(user);
 	}
 
@@ -52,16 +64,15 @@ public class UserServiceImpl implements UserService {
 		result.setData(data);
 		String uname = param.getUname();
 		StringUtils.isNotBlank(uname);
-
-		//uname.trim();
-//		List names = Arrays.stream(uname.split(",")).filter( a -> StringUtils.isEmpty(a)).map(a -> {
-//			return a;
-//		}).collect(Collectors.toList());
 		return result;
 	}
 
 	@Override
 	public UserPO findUserByUderName(String username) {
-		return userMapper.findByUserName(username);
+		List<UserPO> userList = userMapper.findByUserName(username);
+		if (CollectionUtils.isNotEmpty(userList)) {
+			return userList.get(0);
+		}
+		return null;
 	}
 }

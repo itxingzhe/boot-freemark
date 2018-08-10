@@ -40,6 +40,9 @@ function toRegister() {
         url: '/user/saveUser',
         success: function (data) {
             alert(data.message);
+            setTimeout(function () {
+                window.location.href = "/";
+            }, 3000)
         }
     });
 }
@@ -49,9 +52,12 @@ function doLogin() {
     $.ajax({
         type: 'post',
         data: getData("#loginForm"),
-        url: '/user/doLogin',
+        url: '/user/toLogin',
         success: function (data) {
-            $("body").html(data)
+            $("body").html(data);
+        },
+        error: function (data) {
+            $("body").html(data);
         }
     });
 }

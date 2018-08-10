@@ -19,6 +19,8 @@ public class UserPO implements Serializable {
 
 	private String address;
 
+	private String version;
+
 	private Set<RolePO> roles = new HashSet<>();
 
 	public Integer getUid() {
@@ -83,5 +85,13 @@ public class UserPO implements Serializable {
 
 	public void setRoles(Set<RolePO> roles) {
 		this.roles = roles;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 }

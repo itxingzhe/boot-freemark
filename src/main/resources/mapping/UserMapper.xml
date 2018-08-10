@@ -9,6 +9,7 @@
         <result column="age" jdbcType="INTEGER" property="age"/>
         <result column="sex" jdbcType="VARCHAR" property="sex"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
     </resultMap>
     <resultMap id="userMap" type="cn.wyb.personal.model.po.UserPO">
         <id column="uid" jdbcType="INTEGER" property="uid"/>
@@ -18,6 +19,7 @@
         <result column="age" jdbcType="INTEGER" property="age"/>
         <result column="sex" jdbcType="VARCHAR" property="sex"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="version" jdbcType="INTEGER" property="version"/>
         <collection property="roles" ofType="cn.wyb.personal.model.po.RolePO">
             <id property="rid" column="rid"/>
             <result property="rname" column="rname"/>
@@ -28,7 +30,7 @@
         </collection>
     </resultMap>
     <sql id="Base_Column_List">
-    uid, username, password, uname, age, sex, address
+        uid, username, password, uname, age, sex, address, version
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -41,11 +43,12 @@
     where uid = #{uid,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="cn.wyb.personal.model.po.UserPO">
-    insert into p_user (uid, username, password, 
-      uname, age, sex, address
+    insert into p_user (uid, username, password,
+        uname, age, sex, address, version
       )
-    values (#{uid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{uname,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}
+    values (#{uid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+        #{uname,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, #{sex,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+        #{version,jdbcType=INTEGER}
       )
   </insert>
     <insert id="insertSelective" parameterType="cn.wyb.personal.model.po.UserPO">
@@ -72,6 +75,9 @@
             <if test="address != null">
                 address,
             </if>
+            <if test="version != null">
+                version,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="uid != null">
@@ -94,6 +100,9 @@
             </if>
             <if test="address != null">
                 #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -118,6 +127,9 @@
             <if test="address != null">
                 address = #{address,jdbcType=VARCHAR},
             </if>
+            <if test="version != null">
+                #{version,jdbcType=INTEGER},
+            </if>
         </set>
         where uid = #{uid,jdbcType=INTEGER}
     </update>
@@ -128,7 +140,8 @@
       uname = #{uname,jdbcType=VARCHAR},
       age = #{age,jdbcType=INTEGER},
       sex = #{sex,jdbcType=VARCHAR},
-      address = #{address,jdbcType=VARCHAR}
+        address = #{address,jdbcType=VARCHAR},
+        version = #{version,jdbcType=INTEGER}
     where uid = #{uid,jdbcType=INTEGER}
   </update>
     <select id="queryPage" resultMap="BaseResultMap" parameterType="java.lang.Integer">

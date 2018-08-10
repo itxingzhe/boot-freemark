@@ -6,7 +6,6 @@ import cn.wyb.personal.model.param.UserParam;
 import cn.wyb.personal.model.po.UserPO;
 import cn.wyb.personal.service.UserService;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
@@ -52,8 +51,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "doLogin", method = RequestMethod.POST)
-	public String login(UserPO user, HttpSession session) {
-		UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+	public void login(UserPO user, HttpSession session) {
+		System.out.println(user);
+		int a = 1;
+		System.out.println(a);
+		/*UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
 		Subject subject = SecurityUtils.getSubject();
 		try {
 			subject.login(usernamePasswordToken);   //完成登录
@@ -62,7 +64,7 @@ public class UserController {
 			return "forward:/";
 		} catch (Exception e) {
 			return "froward:/user/toLogin";//返回登录页面
-		}
+		}*/
 	}
 
 	@RequestMapping(value = "toRegister", method = RequestMethod.GET)

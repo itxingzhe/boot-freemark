@@ -9,6 +9,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -28,9 +29,10 @@ public class AuthRealm extends AuthorizingRealm {
 		String username = utoken.getUsername();
 		UserPO user = userService.findUserByUderName(username);
 		if (user == null) {
-			return null;
+			throw new AccountException("该用户不存在");
 		}
-		return new SimpleAuthenticationInfo(user, user.getPassword(), this.getClass().getName());//放入shiro.调用CredentialsMatcher检验密码
+		ByteSource source = ByteSource.Util.bytes(username);
+		return new SimpleAuthenticationInfo(user, user.getPassword(), source, this.getClass().getName());//放入shiro.调用CredentialsMatcher检验密码
 	}
 
 	//授权

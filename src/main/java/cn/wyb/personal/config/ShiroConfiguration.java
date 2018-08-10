@@ -1,7 +1,9 @@
 package cn.wyb.personal.config;
 
 import cn.wyb.personal.shiro.AuthRealm;
-import cn.wyb.personal.shiro.CredentialsMatcher;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -41,22 +43,19 @@ public class ShiroConfiguration {
 		//配置登录的url和登录成功的url
 		bean.setLoginUrl("/user/toLogin");
 		bean.setSuccessUrl("/");
-		bean.setUnauthorizedUrl("/");
+		bean.setUnauthorizedUrl("/user/toLogin");
 		//配置访问权限
 		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-		filterChainDefinitionMap.put("/jsp/login.jsp*", "anon"); //表示可以匿名访问
-		filterChainDefinitionMap.put("/user/doLogin", "anon");
-		filterChainDefinitionMap.put("/css/*", "anon");
-		filterChainDefinitionMap.put("/js/*", "anon");
-		filterChainDefinitionMap.put("/img/*", "anon");
-		filterChainDefinitionMap.put("/jars/**", "anon");
-		filterChainDefinitionMap.put("/js/*", "anon");
-		filterChainDefinitionMap.put("/user/logout*", "anon");
+		//filterChainDefinitionMap.put("/user/toLogin", "anon");//anon 表示可以匿名访问
 		filterChainDefinitionMap.put("/", "anon");
-		filterChainDefinitionMap.put("/jsp/error.jsp*", "anon");
-		filterChainDefinitionMap.put("/jsp/index.jsp*", "authc");
-		filterChainDefinitionMap.put("/*", "authc");//表示需要认证才可以访问
-		filterChainDefinitionMap.put("/**", "authc");//表示需要认证才可以访问
+		filterChainDefinitionMap.put("/css/*", "anon");
+		filterChainDefinitionMap.put("/js/**", "anon");
+		filterChainDefinitionMap.put("/img/**", "anon");
+		filterChainDefinitionMap.put("/jars/**", "anon");
+		filterChainDefinitionMap.put("/user/logout*", "anon");
+		filterChainDefinitionMap.put("/**/error.*", "anon");
+		filterChainDefinitionMap.put("/*", "authc");//authc 表示需要认证才可以访问
+		filterChainDefinitionMap.put("/**", "authc");
 		filterChainDefinitionMap.put("/*.*", "authc");
 		bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return bean;
@@ -64,8 +63,10 @@ public class ShiroConfiguration {
 
 	//配置自定义的密码比较器
 	@Bean(name = "credentialsMatcher")
-	public CredentialsMatcher credentialsMatcher() {
-		return new CredentialsMatcher();
+	public CredentialsMatcher getCredentialsMatcher() {
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher();
+		matcher.setHashAlgorithmName(Md5Hash.ALGORITHM_NAME);
+		return matcher;
 	}
 
 	@Bean
