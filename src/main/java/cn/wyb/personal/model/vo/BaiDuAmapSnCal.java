@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class BaiDuAmapSnCal {
 
-	public static String url = "http://api.map.baidu.com/";
+	public static String url = "http://api.bmap.baidu.com/";
 	private static String ak = "qkBwHWfskc4wWo6ZZwiAp400NbIydVyD";
 
 	/*public static void main(String[] args) throws UnsupportedEncodingException {

@@ -1,21 +1,18 @@
 package cn.wyb.personal;
 
-import cn.wyb.personal.common.utils.AmapUtil;
-import cn.wyb.personal.model.param.AmapCoordinateParam;
-import cn.wyb.personal.model.vo.map.PointStrVO;
+import cn.wyb.personal.model.po.UserPO;
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.shiro.util.ByteSource;
 
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 public class RunMain {
 
@@ -41,7 +38,7 @@ public class RunMain {
 		System.out.println(s);
 		System.out.println(s.equals(j));*/
 
-		String ss = "重货:3000元/吨，轻货:3000元/立方，最低一票:33333元。阶梯价：60吨以上，重货3000元/吨，轻货3000元/立方；60吨以上，重货3000元/吨，轻货3000元/立方；";
+		/*String ss = "重货:3000元/吨，轻货:3000元/立方，最低一票:33333元。阶梯价：60吨以上，重货3000元/吨，轻货3000元/立方；60吨以上，重货3000元/吨，轻货3000元/立方；";
 		ss = ss.split("。")[1];
 		String t = ss.contains(",") ? "," : "，";
 		System.out.println(ss.replace(t, " ").substring(4));
@@ -75,7 +72,18 @@ public class RunMain {
 		System.out.println("MD5后加密：" + decryptResult);
 		//解密
 		String decryptResult2 = decryptMD5(decryptResult);
-		System.out.println("解密为MD5后的：" + decryptResult2);
+		System.out.println("解密为MD5后的：" + decryptResult2);*/
+
+		UserPO user = new UserPO();
+		user.setUname("张三");
+		user.setAddress("78956@qq.com'\"<img src=x onerror=alert(1)>;//");
+		String s = JSON.toJSONString(user);
+		System.out.println(s);
+		String s1 = StringEscapeUtils.escapeJson(s);
+		StringEscapeUtils.unescapeJson(s1);
+		System.out.println(s1);
+
+
 	}
 
 	/***

@@ -35,6 +35,11 @@ public class UserController {
 	@Resource(name = "userService2")//通过名称注入
 	private UserService userService2;
 
+	@RequestMapping(value = "/init", method = RequestMethod.GET)
+	public ModelAndView init() {
+		return new ModelAndView("/user/list");
+	}
+
 	@RequestMapping("/queryData")
 	@ResponseBody
 	public PageResult<UserPO> listData(UserParam param) {

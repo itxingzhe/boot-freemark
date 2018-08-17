@@ -8,6 +8,19 @@
     <sql id="Base_Column_List">
     rid, rname
   </sql>
+    <select id="queryListData" parameterType="cn.wyb.personal.model.po.RolePO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from role
+        <where>
+            <if test="rid != null">
+                AND rid = #{rid,jdbcType=INTEGER}
+            </if>
+            <if test="rname != null and rname != ''">
+                AND rname LIKE CONCAT('%',#{rname,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

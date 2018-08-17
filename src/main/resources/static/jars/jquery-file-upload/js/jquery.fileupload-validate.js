@@ -41,7 +41,7 @@
             // Always trigger this action,
             // even if the previous action was rejected:
             always: true,
-            // Options taken from the global options map:
+            // Options taken from the global options bmap:
             acceptFileTypes: '@',
             maxFileSize: '@',
             minFileSize: '@',

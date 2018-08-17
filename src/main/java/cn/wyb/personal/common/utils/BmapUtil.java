@@ -4,8 +4,8 @@ import cn.wyb.personal.common.enums.AMapApiStatusCodeEnum;
 import cn.wyb.personal.common.result.BmapLocationResponse;
 import cn.wyb.personal.common.result.BmapResponse;
 import cn.wyb.personal.model.param.*;
-import cn.wyb.personal.model.vo.map.BmapPlaceAbroadResultVO;
-import cn.wyb.personal.model.vo.map.PointStrVO;
+import cn.wyb.personal.model.vo.bmap.BmapPlaceAbroadResultVO;
+import cn.wyb.personal.model.vo.bmap.PointStrVO;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -17,7 +17,7 @@ import java.util.*;
 public class BmapUtil {
 
 	public static final String BMAP_AK = "ev82Imq86gQmRRZT5Chobk35KKPPh3NB";
-	private static final String BMAP_URL = "http://api.map.baidu.com";
+	private static final String BMAP_URL = "http://api.bmap.baidu.com";
 	private static final String BMAP_PLACE_ABROAD_PORT = "/place_abroad/v1";
 	private static final String BMAP_LOCATION_IP_PORT = "/location/ip";
 	private static final String BMAP_GEOCONV_PORT = "/geoconv/v1/";

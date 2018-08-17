@@ -1,6 +1,6 @@
 package cn.wyb.personal.common.result;
 
-import cn.wyb.personal.model.vo.map.BmapLocationVO;
+import cn.wyb.personal.model.vo.bmap.BmapLocationVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

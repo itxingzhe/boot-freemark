@@ -1,6 +1,6 @@
 package cn.wyb.personal.common.utils;
 
-import cn.wyb.personal.model.vo.map.BmapPlaceAbroadResultVO;
+import cn.wyb.personal.model.vo.bmap.BmapPlaceAbroadResultVO;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -47,7 +47,7 @@ public final class HttpUtil {
 	private static final String APPLICATION_JSON = "application/json";
 	private static final String XML_HTTP_REQUEST = "XMLHttpRequest";
 	public static final String AMAP_AK = "ev82Imq86gQmRRZT5Chobk35KKPPh3NB";
-	public static final String AMAP_SEARCH_URL = "http://api.map.baidu.com/place_abroad/v1/search";
+	public static final String AMAP_SEARCH_URL = "http://api.bmap.baidu.com/place_abroad/v1/search";
 
 
 	/**

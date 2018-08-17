@@ -237,7 +237,7 @@ var INFOBOX_AT_TOP = 1, INFOBOX_AT_RIGHT = 2, INFOBOX_AT_BOTTOM = 3, INFOBOX_AT_
      * @class InfoBox <b>入口</b>。
      * 可以自定义border,margin,padding,关闭按钮等等。
      * @constructor
-         * @param {Map} map Baidu map的实例对象.
+     * @param {Map} bmap Baidu map的实例对象.
          * @param {String} content infoBox中的内容.
          * @param {Json Object} opts 可选的输入参数，非必填项。可输入选项包括：<br />
          * {<br />"<b>offset</b>" : {Size} infoBox的偏移量
@@ -249,7 +249,7 @@ var INFOBOX_AT_TOP = 1, INFOBOX_AT_RIGHT = 2, INFOBOX_AT_BOTTOM = 3, INFOBOX_AT_
          * <br />"<b>align</b>" : {Number} 基于哪个位置进行定位，取值为[INFOBOX_AT_TOP,INFOBOX_AT_BOTTOM]<br />
          * }<br />.
          * @example <b>参考示例：</b><br />
-         * var infoBox = new BMapLib.InfoBox(map,"百度地图api",{boxStyle:{background:"url('tipbox.gif') no-repeat
+     * var infoBox = new BMapLib.InfoBox(bmap,"百度地图api",{boxStyle:{background:"url('tipbox.gif') no-repeat
           center top",width: "200px"},closeIconMargin: "10px 2px 0 0",enableAutoPan: true
           ,alignBottom: false});
      */

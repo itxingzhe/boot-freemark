@@ -3,11 +3,39 @@
 <mapper namespace="cn.wyb.personal.dao.ModuleMapper">
     <resultMap id="BaseResultMap" type="cn.wyb.personal.model.po.ModulePO">
         <id column="mid" jdbcType="INTEGER" property="mid"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
         <result column="mname" jdbcType="VARCHAR" property="mname"/>
+        <result column="module_type" jdbcType="VARCHAR" property="moduleType"/>
+        <result column="is_default" jdbcType="VARCHAR" property="isDefault"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="menu_url" jdbcType="VARCHAR" property="menuUrl"/>
+        <result column="show_position" jdbcType="SMALLINT" property="showPosition"/>
     </resultMap>
     <sql id="Base_Column_List">
-    mid, mname
+        mid, parent_id, mname, module_type, is_default, status, menu_url, show_position
   </sql>
+    <select id="queryData" parameterType="cn.wyb.personal.model.po.ModulePO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from module
+        <where>
+            <if test="mid != null">
+                AND mid = #{rid,jdbcType=INTEGER}
+            </if>
+            <if test="mname != null and mname != ''">
+                AND mname LIKE CONCAT('%',#{rname,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="moduleType != null and moduleType != ''">
+                AND module_type = #{moduleType,jdbcType=VARCHAR}
+            </if>
+            <if test="isDefault != null and isDefault != ''">
+                AND is_default = #{isDefault,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -19,8 +47,12 @@
     where mid = #{mid,jdbcType=INTEGER}
   </delete>
     <insert id="insert" parameterType="cn.wyb.personal.model.po.ModulePO">
-    insert into module (mid, mname)
-    values (#{mid,jdbcType=INTEGER}, #{mname,jdbcType=VARCHAR})
+        insert into module (mid, parent_id, mname,
+        module_type, is_default, status,
+        menu_url, show_position)
+        values (#{mid,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{mname,jdbcType=VARCHAR},
+        #{moduleType,jdbcType=VARCHAR}, #{isDefault,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+        #{menuUrl,jdbcType=VARCHAR}, #{showPosition,jdbcType=SMALLINT})
   </insert>
     <insert id="insertSelective" parameterType="cn.wyb.personal.model.po.ModulePO">
         insert into module
@@ -28,31 +60,91 @@
             <if test="mid != null">
                 mid,
             </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
             <if test="mname != null">
                 mname,
+            </if>
+            <if test="moduleType != null">
+                module_type,
+            </if>
+            <if test="isDefault != null">
+                is_default,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="menuUrl != null">
+                menu_url,
+            </if>
+            <if test="showPosition != null">
+                show_position,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="mid != null">
                 #{mid,jdbcType=INTEGER},
             </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=INTEGER},
+            </if>
             <if test="mname != null">
                 #{mname,jdbcType=VARCHAR},
+            </if>
+            <if test="moduleType != null">
+                #{moduleType,jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null">
+                #{isDefault,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="menuUrl != null">
+                #{menuUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="showPosition != null">
+                #{showPosition,jdbcType=SMALLINT},
             </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="cn.wyb.personal.model.po.ModulePO">
         update module
         <set>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=INTEGER},
+            </if>
             <if test="mname != null">
                 mname = #{mname,jdbcType=VARCHAR},
+            </if>
+            <if test="moduleType != null">
+                module_type = #{moduleType,jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null">
+                is_default = #{isDefault,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="menuUrl != null">
+                menu_url = #{menuUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="showPosition != null">
+                show_position = #{showPosition,jdbcType=SMALLINT},
             </if>
         </set>
         where mid = #{mid,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.wyb.personal.model.po.ModulePO">
     update module
-    set mname = #{mname,jdbcType=VARCHAR}
+        set parent_id = #{parentId,jdbcType=INTEGER},
+        mname = #{mname,jdbcType=VARCHAR},
+        module_type = #{moduleType,jdbcType=VARCHAR},
+        is_default = #{isDefault,jdbcType=VARCHAR},
+        status = #{status,jdbcType=VARCHAR},
+        menu_url = #{menuUrl,jdbcType=VARCHAR},
+        show_position = #{showPosition,jdbcType=SMALLINT}
     where mid = #{mid,jdbcType=INTEGER}
   </update>
 </mapper>

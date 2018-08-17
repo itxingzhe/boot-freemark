@@ -3,7 +3,7 @@ package cn.wyb.personal.controller;
 import cn.wyb.personal.common.result.BmapResponse;
 import cn.wyb.personal.common.utils.BmapUtil;
 import cn.wyb.personal.model.param.*;
-import cn.wyb.personal.model.vo.map.BmapPlaceAbroadResultVO;
+import cn.wyb.personal.model.vo.bmap.BmapPlaceAbroadResultVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;

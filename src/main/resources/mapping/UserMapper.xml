@@ -25,7 +25,13 @@
             <result property="rname" column="rname"/>
             <collection property="modules" ofType="cn.wyb.personal.model.po.ModulePO">
                 <id property="mid" column="mid"/>
-                <result property="mname" column="mname"/>
+                <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+                <result column="mname" jdbcType="VARCHAR" property="mname"/>
+                <result column="module_type" jdbcType="VARCHAR" property="moduleType"/>
+                <result column="is_default" jdbcType="VARCHAR" property="isDefault"/>
+                <result column="status" jdbcType="VARCHAR" property="status"/>
+                <result column="menu_url" jdbcType="VARCHAR" property="menuUrl"/>
+                <result column="show_position" jdbcType="SMALLINT" property="showPosition"/>
             </collection>
         </collection>
     </resultMap>

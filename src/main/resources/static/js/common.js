@@ -30,10 +30,9 @@ ajaxFileUpload = function (param) {
                 alert(e.message);
             }
         }
-
     });
-    
-}
+
+};
 
 //获取标签下所有input标签的value
 function getData(dataDom, data, config) {
@@ -43,7 +42,7 @@ function getData(dataDom, data, config) {
     });
     $(dataDom).find('input[type=checkbox]:checked').each(function () {
         setVal(data, $(this).attr('name'), $(this).val(), config);
-    })
+    });
     return data;
 }
 

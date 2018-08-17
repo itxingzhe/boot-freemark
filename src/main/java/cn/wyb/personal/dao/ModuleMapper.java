@@ -2,6 +2,8 @@ package cn.wyb.personal.dao;
 
 import cn.wyb.personal.model.po.ModulePO;
 
+import java.util.List;
+
 public interface ModuleMapper {
 	int deleteByPrimaryKey(Integer mid);
 
@@ -14,4 +16,6 @@ public interface ModuleMapper {
 	int updateByPrimaryKeySelective(ModulePO record);
 
 	int updateByPrimaryKey(ModulePO record);
+
+	List<ModulePO> queryData(ModulePO modulePO);
 }

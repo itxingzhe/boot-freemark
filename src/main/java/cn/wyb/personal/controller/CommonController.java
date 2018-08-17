@@ -2,7 +2,10 @@ package cn.wyb.personal.controller;
 
 import cn.wyb.personal.common.result.CommResponse;
 import cn.wyb.personal.common.utils.HttpUtil;
+import cn.wyb.personal.model.po.UserPO;
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 /**
@@ -23,14 +30,38 @@ import java.util.HashMap;
 public class CommonController {
 
 	@RequestMapping("/")
-	public String init(Model m) {
+	public String init(Model m, HttpServletRequest request, HttpServletResponse response) {
 		m.addAttribute("username", "张三");
+		UserPO user = new UserPO();
+		user.setUname("张三");
+		user.setAddress("78956@qq.com'\"<img src=x onerror=alert(1)>;//");
+		String s = JSON.toJSONString(user);
+		System.out.println(s);
+		String s1 = StringEscapeUtils.escapeJson(s);
+		System.out.println(s1);
+		m.addAttribute("escapeJson", s1);
+		String realPath = request.getServletContext().getRealPath("/");
+		String realPath1 = request.getServletContext().getRealPath("static/img");
+		String realPath3 = request.getServletContext().getRealPath("img");
+		try {
+			File file = new File("src/main/resources/static/img/a.txt");
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileOutputStream out = new FileOutputStream(file);
+			ObjectOutputStream objOut = new ObjectOutputStream(out);
+			objOut.writeObject(user);
+			objOut.flush();
+			objOut.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "index";
 	}
 
 	@RequestMapping("common/bmap")
 	public String toMap() {
-		return "/map/bmap";
+		return "/bmap/bmap";
 	}
 
 	@RequestMapping("common/ajaxFileUpload")
@@ -87,6 +118,12 @@ public class CommonController {
 	public ModelAndView showAmap(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("map/amap");
 		return mv;
+	}
+
+	@RequestMapping("common/upload")
+	@ResponseBody
+	public ModelAndView toUpload() {
+		return new ModelAndView("/upload/upload");
 	}
 
 }

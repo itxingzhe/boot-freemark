@@ -4,65 +4,18 @@
     <meta charset="UTF-8">
     <title>用户列表</title>
     <link type="text/css" rel="stylesheet" href="/css/index.css" >
-    <link type="text/css" rel="stylesheet" href="/jars/bootstrap-table/bootstrap-table.css" >
     <link type="text/css" rel="stylesheet" href="/jars/bootstrap/css/bootstrap.css" >
-    <link type="text/css" rel="stylesheet" href="/jars/bootstrap/css/bootstrap-responsive.css" >
     <script type="text/javascript" src="/jars/jquery/jquery-3.3.1.js" ></script>
     <script type="text/javascript" src="/js/index.js" ></script>
     <script type="text/javascript" src="/js/common.js" ></script>
     <script type="text/javascript" src="/js/AjaxFileupload.js"></script>
-    <script type="text/javascript" src="/jars/bootstrap-table/bootstrap-table.js" ></script>
-    <script type="text/javascript" src="/jars/bootstrap-table/bootstrap-table-locale-all.js" ></script>
-    <script type="text/javascript" src="/jars/bootstrap/js/bootstrap.js" ></script>
-    <style>
-        table.table tbody tr td.text-center{
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
     <div>
-        <div>
-            <form  id="search_User" style="padding-left: auto;padding-right: auto">
-                <p class="panel-body search_box">
-                <p class="search_p">
-                    <label for="search_name">用户姓名：</label>
-                    <input type="text" class="form-control" id="search_name" name="uname">
-                </p>
-                <p class="search_p">
-                    <label for="search_sex">性别：</label>
-                    <select class="form-control" id="search_sex" name="sex">
-                        <option value="">---请选择---</option>
-                        <option value="男">男</option>
-                        <option value="女">女</option>
-                    </select>
-                </p>
-                <p class="search_p">
-                    <label for="search_name">用户账号：</label>
-                    <input type="text" class="form-control" id="username" name="username">
-                </p>
-                </p>
-                <p class="panel-body search_box" style="text-align: right;">
-                    <input type="button" class="btn btn-primary" value="搜索" onclick="serachUser()"/>
-                    <input type="button" class="btn btn-primary" value="登录" onclick="toLogin()"/>
-                    <input type="button" class="btn btn-primary" value="退出" onclick="logout()"/>
-                    <input type="button" class="btn btn-primary" value="新增用户" onclick="addUser()"/>
-                </p>
-            </form>
-        </div>
-        <table class="bootstrap-table table" id="#dataTable" data-toggle="table" data-url="/user/queryData">
-            <thead>
-            <tr>
-                <th class="text-center" data-field="uid">用户ID</th>
-                <th data-class="text-center" data-field="uname">用户名称</th>
-                <th data-class="text-center" data-field="username">账号</th>
-                <th data-class="text-center" data-field="sex">性别</th>
-                <th data-class="text-center" data-field="age">年龄</th>
-                <th data-class="text-overborder" data-field="address">住址</th>
-                <th data-class="text-center" data-formatter="operation">住址</th>
-            </tr>
-            </thead>
-        </table>
+        <input type="button" class="btn btn-primary" value="登录" onclick="toLogin()"/>
+        <input type="button" class="btn btn-primary" value="退出" onclick="logout()"/>
+        <input type="button" class="btn btn-primary" value="用户管理" onclick="userManager()"/>
+        <input type="button" class="btn btn-primary" value="展示图片" onclick="showUserImg()"/>
     </div>
     <div>
         <form id="fileupload" action="/common/fileUpload" method="POST" enctype="multipart/form-data">
@@ -97,7 +50,7 @@
         <p>
             <br>To break<br/>lines<br/>in a<br/>paragraph,<br/>use the br tag.
         </p>
+        <p>${escapeJson!''}</p>
     </div>
-
 </body>
 </html>

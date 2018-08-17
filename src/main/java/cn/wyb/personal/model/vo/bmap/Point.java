@@ -1,4 +1,4 @@
-package cn.wyb.personal.model.vo.map;
+package cn.wyb.personal.model.vo.bmap;
 
 import java.util.Objects;
 

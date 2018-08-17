@@ -67,7 +67,7 @@
             visible: true
         });
         map.addControl(scale);
-        //marker.setMap(map);
+        //marker.setMap(bmap);
         //为地图注册click事件获取鼠标点击出的经纬度坐标
         var clickEventListener = map.on('click', function (e) {
             map.clearMap();
@@ -91,7 +91,7 @@
             draggable: true,
             cursor: 'move',
             raiseOnDrag: true,
-            map:map
+            bmap:bmap
         });*/
         //百度地图经纬度转高德
         //var baidu = [120.228084, 30.323391];
@@ -116,7 +116,7 @@
             draggable: true,
             cursor: 'move',
             raiseOnDrag: true,
-            map: map
+            bmap: bmap
         });*/
 
     });

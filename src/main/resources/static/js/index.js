@@ -7,10 +7,14 @@ $(function () {
             $(this).attr("title", $(this).text());
             $(this).css("cursor", 'pointer');
         });
-    }).on("click", ".btn", function () {
+    }).on("click", ".btn-update", function () {
         var id = $(this).attr("data-id");
         window.location.href = "/user/toUpdate?id="+id;
-    }).on("click","");
+    }).on("click", ".btn-role-manager", function () {
+        var id = $(this).attr("data-id");
+        window.location.href = "/role/manager?id=" + id;
+    });
+
     $(".file_upload").on("click",function () {
         var result = common.ajaxFileUpload({
             url:"common/ajaxFileUpload",
@@ -74,6 +78,10 @@ function toLogin() {
     window.location.href = "/user/toLogin";
 }
 
+function showUserImg() {
+    window.location.href = "/common/upload";
+}
+
 function updateUser() {
     $.ajax({
         type: 'post',
@@ -88,15 +96,13 @@ function updateUser() {
     });
 }
 
-function operation(value, row, index) {
-    var ope = '';
-    ope += '<input type="button" data-id = "' + row.uid + '" class="btn" value="修改" >'
-    return ope;
-}
-
 function showMessage() {
     var addr = $("input[name=address2]").val();
     var adds = addr.split("，");
     alert(adds[0] | "");
 
+}
+
+function userManager() {
+    window.location.href = "/user/init";
 }

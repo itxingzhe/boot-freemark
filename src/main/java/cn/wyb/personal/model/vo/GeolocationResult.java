@@ -1,6 +1,6 @@
 package cn.wyb.personal.model.vo;
 
-import cn.wyb.personal.model.vo.map.Point;
+import cn.wyb.personal.model.vo.bmap.Point;
 
 public class GeolocationResult {
 

@@ -71,7 +71,7 @@
         ]
     });
     map.centerAndZoom(new BMap.Point(119.30495233371025, 26.105880034475164), 11);  // 初始化地图,设置中心点坐标和地图级别
-    //getLocalization(map);
+    //getLocalization(bmap);
     //添加地图类型控件
     map.addControl(new BMap.MapTypeControl({
         mapTypes: [
@@ -117,19 +117,19 @@
     }
     map.addControl(new MyZoomControl());
     //打开信息框
-    //openMessageWindow(map, 200, 100, "Hello", "World", new BMap.Point(116.3, 39.6));
-    //map.setCurrentCity("杭州");          // 设置地图显示的城市 此项是必须设置的
+    //openMessageWindow(bmap, 200, 100, "Hello", "World", new BMap.Point(116.3, 39.6));
+    //bmap.setCurrentCity("杭州");          // 设置地图显示的城市 此项是必须设置的
     map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
 
     map.addEventListener("click", function (m) {
         debugger;
         //所在城市，国外为国家
         var city = this.Yg;
-        //openMessageWindow(map, 200, 100, "Hello", "你想到这里去吗？", m.point);
-        // openInfoBox(map, m.point);
+        //openMessageWindow(bmap, 200, 100, "Hello", "你想到这里去吗？", m.point);
+        // openInfoBox(bmap, m.point);
         // $("input[name=x]").val(m.point.lng);
         // $("input[name=lat]").val(m.point.lat);
-        //getLocalization(map);
+        //getLocalization(bmap);
         //getLocalizationById();
         //getPoint("杭州市西湖区求是路8号");
         //getAddress(m.point);
@@ -150,7 +150,7 @@
 
      //添加gps marker和label
      var markerggps = new BMap.Marker(ggPoint);
-     map.addOverlay(markerggps); //添加GPS marker
+     bmap.addOverlay(markerggps); //添加GPS marker
      var labelgg1= new BMap.Label("未转换的GPS坐标（错误）",{offset:new BMap.Size(20,-10)});
      markerggps.setLabel(labelgg1); //添加GPS label
 
@@ -158,7 +158,7 @@
      translateCallback = function (data){
          if(data.status === 0) {
              var marker = new BMap.Marker(data.points[0]);
-             map.addOverlay(marker);
+             bmap.addOverlay(marker);
              var label = new BMap.Label("转换后的百度坐标（正确）",{offset:new BMap.Size(20,-10)});
              marker.setLabel(label); //添加百度label
              bm.setCenter(data.points[0]);
@@ -275,8 +275,8 @@
         var myGeo = new BMap.Geocoder();
         myGeo.getPoint(address, function (point) {
             if (point) {
-                //map.centerAndZoom(point,16);
-                //map.addOverlay(new BMap.Marker(point));
+                //bmap.centerAndZoom(point,16);
+                //bmap.addOverlay(new BMap.Marker(point));
                 alert(point.lng + "," + point.lat);
             }
         });
@@ -368,7 +368,7 @@
                     var r = data.data;
                     var add = r[0];
                     //var p = new BMap.Point(15.746227,-12.770208);
-                    //map.centerAndZoom(p,16);
+                    //bmap.centerAndZoom(p,16);
                     var html = '<select id="suggestionResult" onchange="setInputValue(this)"></select>';
                     $(obj).after(html);
                     for (var i = 0; i < r.length; i++) {

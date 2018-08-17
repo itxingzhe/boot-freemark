@@ -54,7 +54,7 @@ public class UserServiceImpl2 implements UserService {
 		StringUtils.isNotBlank(uname);
 
 		//uname.trim();
-//		List names = Arrays.stream(uname.split(",")).filter( a -> StringUtils.isEmpty(a)).map(a -> {
+//		List names = Arrays.stream(uname.split(",")).filter( a -> StringUtils.isEmpty(a)).bmap(a -> {
 //			return a;
 //		}).collect(Collectors.toList());
 		return result;

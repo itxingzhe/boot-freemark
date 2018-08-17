@@ -1,9 +1,20 @@
-package cn.wyb.personal.model.po;
+package cn.wyb.personal.model.vo.Authority;
+
+import cn.wyb.personal.model.po.RolePO;
+import com.google.common.collect.Lists;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class ModulePO {
+/**
+ * Authority: (请描述这个类).
+ *
+ * @author wangyibin
+ * @date 2018/8/14 15:24
+ * @see
+ */
+public class AuthorityVO {
 
 	private Integer mid;
 
@@ -21,30 +32,28 @@ public class ModulePO {
 
 	private Short showPosition;
 
+	private List<AuthorityVO> children = Lists.newArrayList();
+
 	private Set<RolePO> roles = new HashSet<>();
+
+	public List<AuthorityVO> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<AuthorityVO> children) {
+		this.children = children;
+	}
 
 	public Integer getMid() {
 		return mid;
 	}
 
+	public Integer getId() {
+		return mid;
+	}
+
 	public void setMid(Integer mid) {
 		this.mid = mid;
-	}
-
-	public String getMname() {
-		return mname;
-	}
-
-	public void setMname(String mname) {
-		this.mname = mname == null ? null : mname.trim();
-	}
-
-	public Set<RolePO> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<RolePO> roles) {
-		this.roles = roles;
 	}
 
 	public Integer getParentId() {
@@ -53,6 +62,18 @@ public class ModulePO {
 
 	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
+	}
+
+	public String getMname() {
+		return mname;
+	}
+
+	public String getText() {
+		return mname;
+	}
+
+	public void setMname(String mname) {
+		this.mname = mname;
 	}
 
 	public String getModuleType() {
@@ -93,5 +114,13 @@ public class ModulePO {
 
 	public void setShowPosition(Short showPosition) {
 		this.showPosition = showPosition;
+	}
+
+	public Set<RolePO> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<RolePO> roles) {
+		this.roles = roles;
 	}
 }

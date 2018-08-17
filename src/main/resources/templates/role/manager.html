@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>权限管理</title>
+    <link type="text/css" rel="stylesheet" href="/jars/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/jars/vakata-jstree/themes/default/style.css"/>
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/jars/jquery/jquery-3.3.1.js"></script>
+    <script src="/jars/vakata-jstree/jstree.js"></script>
+    <style>
+        html {
+            margin: 0;
+            padding: 0;
+            font-size: 62.5%;
+        }
+
+        body {
+            max-width: 800px;
+            min-width: 300px;
+            margin: 0 auto;
+            padding: 20px 10px;
+            font-size: 14px;
+            font-size: 1.4em;
+        }
+
+        .demo {
+            overflow: auto;
+            border: 1px solid silver;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="row" id="roleData"></div>
+<div id="authorityData" class="demo"></div>
+<div class="row">
+    <button type="button" class="btn btn-success btn-sm" onclick="saveAuthority();"><i></i> 保存</button>
+    <!--    <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i> Delete</button>-->
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            type: 'get',
+            url: '/role/listData',
+            success: function (data) {
+                if (data) {
+                    $.each(data, function (i, role) {
+                        var html = '<input type="checkbox" name="roleId" value="';
+                        html += role.rid;
+                        html += '" /><span>';
+                        html += role.rname;
+                        html += '</span>';
+                        $("#roleData").append(html);
+                    });
+                }
+            }
+        })
+    });
+
+    $("#authorityData").jstree({
+        'plugins': ['wholerow', 'checkbox'],
+        'core': {
+            'data': {
+                "url": "/authority/listData",
+                "dataType": "json"
+            }
+        }
+    });
+
+    function saveAuthority() {
+        debugger;
+        var role = getData("#roleData");
+        var ref = $('#authorityData').jstree(true),
+            sel = ref.get_selected();
+        alert(sel);
+
+
+    }
+</script>
+</html>

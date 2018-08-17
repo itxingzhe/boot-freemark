@@ -2,6 +2,8 @@ package cn.wyb.personal.dao;
 
 import cn.wyb.personal.model.po.RolePO;
 
+import java.util.List;
+
 public interface RoleMapper {
 	int deleteByPrimaryKey(Integer rid);
 
@@ -14,4 +16,6 @@ public interface RoleMapper {
 	int updateByPrimaryKeySelective(RolePO record);
 
 	int updateByPrimaryKey(RolePO record);
+
+	List<RolePO> queryListData(RolePO po);
 }

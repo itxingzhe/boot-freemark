@@ -1,7 +1,7 @@
 package cn.wyb.personal.common.utils;
 
 import cn.wyb.personal.model.param.AmapCoordinateParam;
-import cn.wyb.personal.model.vo.map.PointStrVO;
+import cn.wyb.personal.model.vo.bmap.PointStrVO;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
