@@ -48,7 +48,14 @@
             </p>
         </form>
     </div>
-    <table class="bootstrap-table table" id="#dataTable" data-toggle="table" data-url="/user/queryData">
+    <table class="bootstrap-table table" id="#dataTable"
+           data-toggle="table"
+           data-side-pagination="server"
+           data-pagination="true"
+           data-page-number="1"
+           data-page-size="10"
+           data-page-list="[10,20,30]"
+           data-url="/user/queryData">
         <thead>
         <tr>
             <th class="text-center" data-field="uid">用户ID</th>
@@ -64,6 +71,21 @@
 </div>
 </body>
 <script type="text/javascript">
+    $(function () {
+
+        $(".bootstrap-table").on("load-success.bs.table", function () {
+            $('.bootstrap-table tr td.text-overborder').each(function () {
+                $(this).attr("title", $(this).text());
+                $(this).css("cursor", 'pointer');
+            });
+        }).on("click", ".btn-update", function () {
+            var id = $(this).attr("data-id");
+            window.location.href = "/user/toUpdate?id=" + id;
+        }).on("click", ".btn-role-manager", function () {
+            var id = $(this).attr("data-id");
+            window.location.href = "/role/manager?id=" + id;
+        });
+    });
 
     function operation(value, row, index) {
         var ope = '';
@@ -72,6 +94,24 @@
         return ope;
     }
 
+    function serachUser() {
+        var param = getData("search_User");
+        //queryParams(param);
+        $(".bootstrap-table").bootstrapTable('refresh', param);
+    }
 
+    function updateUser() {
+        $.ajax({
+            type: 'post',
+            data: getData("#registerForm"),
+            url: '/user/updateUser',
+            success: function (data) {
+                alert(data.message);
+                setTimeout(function () {
+                    window.location.href = "/";
+                }, 3000)
+            }
+        });
+    }
 </script>
 </html>

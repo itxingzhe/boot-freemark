@@ -2,18 +2,6 @@ $(function () {
     $(".font-style").click(function () {
         alert($(this).text());
     });
-    $(".bootstrap-table").on("load-success.bs.table", function () {
-        $('.bootstrap-table tr td.text-overborder').each(function () {
-            $(this).attr("title", $(this).text());
-            $(this).css("cursor", 'pointer');
-        });
-    }).on("click", ".btn-update", function () {
-        var id = $(this).attr("data-id");
-        window.location.href = "/user/toUpdate?id="+id;
-    }).on("click", ".btn-role-manager", function () {
-        var id = $(this).attr("data-id");
-        window.location.href = "/role/manager?id=" + id;
-    });
 
     $(".file_upload").on("click",function () {
         var result = common.ajaxFileUpload({
@@ -31,11 +19,6 @@ $(function () {
     });
 });
 
-function serachUser() {
-    var param = getData("search_User");
-    //queryParams(param);
-    $(".bootstrap-table").bootstrapTable('refresh', param);
-}
 
 function toRegister() {
     $.ajax({
@@ -80,20 +63,6 @@ function toLogin() {
 
 function showUserImg() {
     window.location.href = "/common/upload";
-}
-
-function updateUser() {
-    $.ajax({
-        type: 'post',
-        data: getData("#registerForm"),
-        url: '/user/updateUser',
-        success: function (data) {
-            alert(data.message);
-            setTimeout(function () {
-                window.location.href = "/";
-            },3000)
-        }
-    });
 }
 
 function showMessage() {

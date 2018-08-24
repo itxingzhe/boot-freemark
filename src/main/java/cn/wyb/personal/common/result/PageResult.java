@@ -6,7 +6,7 @@ public class PageResult<T> {
 
 	private Long total;
 	private Integer pageNum;
-	private List<T> data;
+	private List<T> rows;
 
 	public Long getTotal() {
 		return total;
@@ -24,11 +24,11 @@ public class PageResult<T> {
 		this.pageNum = pageNum;
 	}
 
-	public List<T> getData() {
-		return data;
+	public List<T> getRows() {
+		return rows;
 	}
 
-	public void setData(List<T> data) {
-		this.data = data;
+	public void setRows(List<T> rows) {
+		this.rows = rows;
 	}
 }

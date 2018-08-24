@@ -87,7 +87,7 @@ public class UserController {
 
 	//注解的使用
 	@RequiresRoles("admin")
-	@RequiresPermissions("add")
+	@RequiresPermissions("user_add")
 	@RequestMapping(value = "saveUser", method = RequestMethod.POST)
 	@ResponseBody
 	public CommResponse addUser(UserPO user) {

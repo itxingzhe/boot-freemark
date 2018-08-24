@@ -1,8 +1,6 @@
 package cn.wyb.personal;
 
-import cn.wyb.personal.model.po.UserPO;
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.lang3.StringEscapeUtils;
+import cn.wyb.personal.common.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -13,6 +11,8 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class RunMain {
 
@@ -74,14 +74,27 @@ public class RunMain {
 		String decryptResult2 = decryptMD5(decryptResult);
 		System.out.println("解密为MD5后的：" + decryptResult2);*/
 
-		UserPO user = new UserPO();
+		/*UserPO user = new UserPO();
 		user.setUname("张三");
 		user.setAddress("78956@qq.com'\"<img src=x onerror=alert(1)>;//");
 		String s = JSON.toJSONString(user);
 		System.out.println(s);
 		String s1 = StringEscapeUtils.escapeJson(s);
 		StringEscapeUtils.unescapeJson(s1);
-		System.out.println(s1);
+		System.out.println(s1);*/
+
+		Date date = new Date();
+		Date newDate = DateUtils.addDays(date, 39);
+		System.out.println(DateUtils.formatDateToString(newDate, DateUtils.DATE_FORMAT_FULL));
+		newDate = DateUtils.add(newDate, Calendar.MILLISECOND, 777);
+		System.out.println(DateUtils.formatDateToString(newDate, DateUtils.DATE_FORMAT_FULL));
+		String s = DateUtils.formatDateToString(newDate, DateUtils.DATE_FORMAT_ALL);
+		System.out.println(s);
+		Calendar instance = Calendar.getInstance();
+		instance.setTime(newDate);
+		instance.set(Calendar.MONTH, 1);
+		instance.set(Calendar.DAY_OF_MONTH, 29);
+		System.out.println(DateUtils.formatDateToString(instance.getTime(), DateUtils.DATE_FORMAT_FULL));
 
 
 	}

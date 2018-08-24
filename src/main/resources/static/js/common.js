@@ -37,7 +37,7 @@ ajaxFileUpload = function (param) {
 //获取标签下所有input标签的value
 function getData(dataDom, data, config) {
     data = data ? data : {};
-    $(dataDom).find('input[type = hidden],input[type = text],input[type = password],input[type = redio]:checked,select,textarea').each(function () {
+    $(dataDom).find('input[type = hidden],input[type = text],input[type = password],input[type = radio]:checked,select,textarea').each(function () {
         setVal(data, $(this).attr('name'), $(this).val(), config);
     });
     $(dataDom).find('input[type=checkbox]:checked').each(function () {

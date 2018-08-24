@@ -28,4 +28,14 @@
             </if>
         </trim>
     </insert>
+    <select id="queryRoleModuleList" resultType="map" parameterType="map">
+        SELECT
+        mid
+        FROM module_role
+        <where>
+            <if test="rid != null">
+                AND rid = #{rid,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
 </mapper>

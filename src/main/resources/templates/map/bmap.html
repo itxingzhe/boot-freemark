@@ -385,6 +385,104 @@
         }
     }
 
+    //绘制运动轨迹
+    function showLocationArray(locationData) {
+
+        var tracelist = [];     //为轨迹做准备，把所有的点扔里面，但不对每个点标注
+        for (i = 0; i < locationData.length; i++) {
+            point = new BMap.Point(locationData[i].lng, locationData[i].lat);
+            tracelist.push(point);                                  //将每个点压入数组
+        }
+
+        var polyline = new BMap.Polyline(tracelist, {
+            enableEditing: false,//是否启用线编辑，默认为false
+            enableClicking: false,//是否响应点击事件，默认为true
+            strokeWeight: '4',//折线的宽度，以像素为单位
+            strokeOpacity: 0.8,//折线的透明度，取值范围0 - 1
+            strokeColor: "red" //折线颜色
+        });
+        map.addOverlay(polyline);          //增加折线
+        map.centerAndZoom(tracelist[num_list.length - 1], 15);
+
+        //首尾加上标注点
+        var marker = new BMap.Marker(tracelist[0]); // 创建点
+        map.addOverlay(marker);                 // 加载标注
+
+        var marker = new BMap.Marker(tracelist[num_list.length - 1]); // 创建点
+        map.addOverlay(marker);                 // 加载标注
+
+    }
+
+    //绘制起始点加运动轨迹
+    var PointArr = [{long: 117.128937, lat: 36.676339, route: 30}]
+    addMarker(new BMap.Point(PointArr[0].long, PointArr[0].lat), '起点', map, PointArr);
+
+    //调用方法具体为
+    function addMarker(point, name, mapInit, trackUnit) {
+        if (name == "起点") {
+            var myIcon = new BMap.Icon("css/img/startMap.svg", new BMap.Size(45, 45), {
+                anchor: new BMap.Size(20, 45)//这句表示图片相对于所加的点的位置mapStart
+                // offset: new BMap.Size(-10, 45), // 指定定位位置
+                // imageOffset: new BMap.Size(0, 0 - 10 * 25) // 设置图片偏移
+            });
+            var marker = new BMap.Marker(point, {icon: myIcon});  // 创建标注
+            mapInit.addOverlay(marker);               // 将标注添加到地图中
+            marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        }
+    }
+
+    var carMk;//先将终点坐标展示的mark对象定义
+    var myIcon2 = new BMap.Icon('http://developer.baidu.com/map/jsdemo/img/car.png', new BMap.Size(52, 26),
+        {anchor: new BMap.Size(27, 13)});//初始化终点坐标图标
+    var temporary = [];//定义中间新取出的值放到一个新的数组里面
+    var i = 0;
+    var interval = setInterval(function () {
+        if (i >= PointArr.length) {
+            clearInterval(interval);
+            return;
+        }
+        console.log(PointArr[i]);
+        i = i + 1;
+        temporary.push(PointArr[i]);
+        console.log(temporary);
+        drowLine(map, temporary);//画线调用
+    }, 1000);
+
+    function drowLine(map, temporary) {
+        if (temporary && temporary.length > 1) {//判断数值为两个点时开始进行绘制
+            for (var i = 0; i < temporary.length - 1; i++) {
+                var polyline22 = new BMap.Polyline(
+                    [
+                        new BMap.Point(temporary[i].long, temporary[i].lat),
+                        new BMap.Point(temporary[i + 1].long, temporary[i + 1].lat)
+                    ],
+                    {
+                        strokeColor: "red",
+                        strokeWeight: 7,
+                        strokeOpacity: 1
+                    });   //创建折线
+                map.addOverlay(polyline22);
+                addMarkerEnd(new BMap.Point(temporary[i + 1].long, temporary[i + 1].lat), '终点', map, temporary[i + 1]);//添加图标
+            }
+        }
+    }
+
+    function addMarkerEnd(point, name, mapInit, trackUnit) {
+        if (name == "终点") {
+            if (carMk) {//先判断第一次进来的时候这个值有没有定义，有的话就清除掉上一次的。然后在进行画图标。第一次进来时候没有定义也就不走这块，直接进行画图标
+                mapInit.removeOverlay(carMk);
+            }
+            carMk = new BMap.Marker(point, {icon: myIcon2});  // 创建标注
+            carMk.setRotation(trackUnit.route);//trackUnit.route
+            mapInit.addOverlay(carMk);               // 将标注添加到地图中
+            carMk.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+
+        }
+    }
+
+
+
+
     function setInputValue(obj) {
         var v = $(obj).val();
         $("#suggestion").val(v);

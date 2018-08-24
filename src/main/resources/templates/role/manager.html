@@ -32,9 +32,13 @@
     </style>
 </head>
 <body>
-<div class="row" id="roleData"></div>
+<div id="roleData">
+    <div class="form-group">
+        <label>用户角色：</label>
+    </div>
+</div>
 <div id="authorityData" class="demo"></div>
-<div class="row">
+<div>
     <button type="button" class="btn btn-success btn-sm" onclick="saveAuthority();"><i></i> 保存</button>
     <!--    <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
         <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i> Delete</button>-->
@@ -48,16 +52,16 @@
             success: function (data) {
                 if (data) {
                     $.each(data, function (i, role) {
-                        var html = '<input type="checkbox" name="roleId" value="';
+                        var html = '<label class ="radio-inline"><input id="roleId" type="radio" name="roleId" value="';
                         html += role.rid;
                         html += '" /><span>';
                         html += role.rname;
-                        html += '</span>';
-                        $("#roleData").append(html);
+                        html += '</span></label>';
+                        $("#roleData").children("div").append(html);
                     });
                 }
             }
-        })
+        });
     });
 
     $("#authorityData").jstree({
@@ -75,7 +79,18 @@
         var role = getData("#roleData");
         var ref = $('#authorityData').jstree(true),
             sel = ref.get_selected();
-        alert(sel);
+        sel.splice(sel.length - 1, 1, "0");
+        role.moduleIds = sel;
+        var roleJson = JSON.stringify(role);
+        $.ajax({
+            type: 'post',
+            url: '/authority/saveRoleModule',
+            data: role,
+            dataType: "json",
+            success: function (data) {
+
+            }
+        });
 
 
     }

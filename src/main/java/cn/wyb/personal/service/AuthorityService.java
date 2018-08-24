@@ -14,4 +14,6 @@ import java.util.List;
 public interface AuthorityService {
 
 	List<AuthorityVO> queryData();
+
+	void saveModuleAndRole(Long roleId, Long[] moduleIds);
 }

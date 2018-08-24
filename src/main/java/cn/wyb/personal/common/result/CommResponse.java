@@ -18,6 +18,17 @@ public class CommResponse {
 	/**
 	 * success : 正常请求响应.
 	 *
+	 * @return cn.wyb.personal.common.result.CommResponse
+	 * @author wangyibin
+	 * @date 2018/7/26 10:33
+	 */
+	public static CommResponse success() {
+		return success(null);
+	}
+
+	/**
+	 * success : 正常请求响应.
+	 *
 	 * @author wangyibin
 	 * @date 2018/7/26 10:33
 	 * @param data
