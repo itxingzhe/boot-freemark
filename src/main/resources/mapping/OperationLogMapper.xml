@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.wyb.personal.dao.OperationLogMapper">
+    <resultMap id="BaseResultMap" type="cn.wyb.personal.model.po.OperationLogPO">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="login_id" jdbcType="BIGINT" property="loginId"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="ip_address" jdbcType="VARCHAR" property="ipAddress"/>
+        <result column="method_name" jdbcType="VARCHAR" property="methodName"/>
+        <result column="method_remark" jdbcType="VARCHAR" property="methodRemark"/>
+        <result column="opt_date" jdbcType="TIMESTAMP" property="optDate"/>
+        <result column="operating_content" jdbcType="VARCHAR" property="operatingContent"/>
+    </resultMap>
+    <insert id="insert" parameterType="cn.wyb.personal.model.po.OperationLogPO">
+    insert into operation_log (id, login_id, login_name, 
+      ip_address, method_name, method_remark, 
+      opt_date, operating_content)
+    values (#{id,jdbcType=BIGINT}, #{loginId,jdbcType=BIGINT}, #{loginName,jdbcType=VARCHAR}, 
+      #{ipAddress,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, #{methodRemark,jdbcType=VARCHAR}, 
+      #{optDate,jdbcType=TIMESTAMP}, #{operatingContent,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.wyb.personal.model.po.OperationLogPO">
+        insert into operation_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="loginId != null">
+                login_id,
+            </if>
+            <if test="loginName != null">
+                login_name,
+            </if>
+            <if test="ipAddress != null">
+                ip_address,
+            </if>
+            <if test="methodName != null">
+                method_name,
+            </if>
+            <if test="methodRemark != null">
+                method_remark,
+            </if>
+            <if test="optDate != null">
+                opt_date,
+            </if>
+            <if test="operatingContent != null">
+                operating_content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="loginId != null">
+                #{loginId,jdbcType=BIGINT},
+            </if>
+            <if test="loginName != null">
+                #{loginName,jdbcType=VARCHAR},
+            </if>
+            <if test="ipAddress != null">
+                #{ipAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="methodName != null">
+                #{methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="methodRemark != null">
+                #{methodRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="optDate != null">
+                #{optDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="operatingContent != null">
+                #{operatingContent,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

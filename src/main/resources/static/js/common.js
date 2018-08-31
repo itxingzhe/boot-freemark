@@ -81,3 +81,37 @@ function isBlank(str) {
     return re.test(str);
 
 }
+
+function initTable(opts) {
+    var initOpts = {
+        table: "#dataTable",
+        toggle: "table",
+        pagination: "true",
+        sidePagination: "server",
+        pageSize: "10",
+        method: "get",
+        pageList: "[]",
+        uniqueId: "id",
+        contentType: "application/x-www-form-urlencoded",
+        cache: false,
+        searchParam: "#searchParam",
+        queryParams: function (params) {
+            var searchParam = $(opts.searchParam).serializeArray(), data = $(".J_tab.active").data();
+            $(searchParam).each(function () {
+                params[this.name] = $.trim(this.value);
+            });
+            return $.extend(params, data);
+        },
+        onLoadError: function (status, data) {
+            $(".both").remove();
+        },
+        onLoadSuccess: function (data) {
+
+        }
+    };
+    var opts = $.extend(initOpts, opts);
+    window.queue = function () {
+        $(opts.table).bootstrapTable("refresh", {url: $(opts.table).data("url")});
+    };
+    return $(opts.table).bootstrapTable(opts);
+}

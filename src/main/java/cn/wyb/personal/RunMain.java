@@ -11,8 +11,12 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RunMain {
 
@@ -86,6 +90,7 @@ public class RunMain {
 		Date date = new Date();
 		Date newDate = DateUtils.addDays(date, 39);
 		System.out.println(DateUtils.formatDateToString(newDate, DateUtils.DATE_FORMAT_FULL));
+		System.out.println(DateUtils.formatStringToDate("2017-5-50 3:4:5", DateUtils.DATE_FORMAT_FULL));
 		newDate = DateUtils.add(newDate, Calendar.MILLISECOND, 777);
 		System.out.println(DateUtils.formatDateToString(newDate, DateUtils.DATE_FORMAT_FULL));
 		String s = DateUtils.formatDateToString(newDate, DateUtils.DATE_FORMAT_ALL);
@@ -96,7 +101,134 @@ public class RunMain {
 		instance.set(Calendar.DAY_OF_MONTH, 29);
 		System.out.println(DateUtils.formatDateToString(instance.getTime(), DateUtils.DATE_FORMAT_FULL));
 
+		Instant now = Instant.now();
 
+		LocalDate now1 = LocalDate.now();
+		System.out.println("今天的日期是：" + now1.toString());
+		LocalDate d = LocalDate.of(2016, 2, 29);
+		LocalDate d1 = d.plusYears(3);
+		LocalDate d2 = d.minusYears(3);
+		System.out.println(d.toString());
+		System.out.println(d1.toString());
+		System.out.println(d2.toString());
+
+		//捕获日期正则
+		String regDate = "^((?!0000)[0-9]{4}-((0[1-9]|1[0-2])-(0[1-9]|1[0-9]|2[0-8])|(0[13-9]|1[0-2])-(29|30)|(0[13578]|1[02])-31)|([0-9]{2}(0[48]|[2468][048]|[13579][26])|(0[48]|[2468][048]|[13579][26])00)-02-29)$";
+		//非捕获日期正则
+		String regDates = "^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$";
+		//Instant now3 = Instant.now();
+		long l = System.currentTimeMillis();
+		boolean matches = Pattern.compile(regDate).matcher("2016-02-29").matches();
+		System.out.println(matches);
+		long l1 = System.currentTimeMillis();
+		System.out.println(l1 - l);
+		//Instant now4 = Instant.now();
+		//System.out.println(Duration.between(now3,now4).toMillis());
+		matches = Pattern.compile(regDates).matcher("2016-02-29").matches();
+		//Instant now5 = Instant.now();
+		System.out.println(matches);
+		long l2 = System.currentTimeMillis();
+		System.out.println(l2 - l1);
+		//System.out.println(Duration.between(now4,now5).toMillis());
+
+		String strDate = "";
+		String isDate = getDatetimeFormat(strDate);
+		System.out.println("1>" + isDate);
+		strDate = "14-9-30";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("2>" + isDate);
+		strDate = "2014-9-30 15:85:45";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("3>" + isDate);
+		strDate = "2014-9-30 15:35:75";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("4>" + isDate);
+		strDate = "2014-13-30 25:35:45";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("5>" + isDate);
+		strDate = "2014-9-40 15:35:45";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("6>" + isDate);
+		strDate = "2014930153545";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("7>" + isDate);
+		strDate = "20141231";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("8>" + isDate);
+		strDate = "2014-12-31 23:59:59";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("9>" + isDate);
+		strDate = "2014-12-31";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("10>" + isDate);
+		strDate = "2014-12-31 23:59";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("11>" + isDate);
+		strDate = "2014-12-31 24:00:00";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("12>" + isDate);
+		System.out.println(DateUtils.formatStringToDate(strDate, DateUtils.DATE_FORMAT_FULL));
+		strDate = "2014-12-31 00:00:00";
+		isDate = getDatetimeFormat(strDate);
+		System.out.println("13>" + isDate);
+
+
+	}
+
+	/**
+	 * 获取时间字符对应的格式化类型.
+	 *
+	 * @param date
+	 * @return java.lang.String
+	 * @author wangyibin
+	 * @date 2018/8/31 15:19
+	 */
+	public static String getDatetimeFormat(String date) {
+		if (date != null) {
+			date = date.trim();
+			//yyyyMMddHHmmss
+			String a1 = "[0-9]{4}((0?[0-9])|(1[0-2]))((0?[1-9])|([12][0-9])|(3[01]))((([01][0-9]|2[0-3])[0-5]?[0-9][0-5]?[0-9])|240?00?0)";
+			//yyyyMMdd
+			String a2 = "[0-9]{4}((0?[0-9])|(1[0-2]))((0?[1-9])|([12][0-9])|(3[01]))";
+			//yyyy-MM-dd HH:mm:ss
+			String a3 = "[0-9]{4}-((0?[0-9])|(1[0-2]))-((0?[1-9])|([12][0-9])|(3[01])) (((([01][0-9])|(2[0-3])):[0-5]?[0-9]:[0-5]?[0-9])|24:0?0:0?0)";
+			//yyyy-MM-dd
+			String a4 = "[0-9]{4}-((0?[0-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[0-1]))";
+			//yyyy-MM-dd  HH:mm
+			String a5 = "[0-9]{4}-((0?[0-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[0-1])) (((([0,1][0-9])|(2[0-3])):[0-5]?[0-9])|24:0?0)";
+			boolean datea1 = Pattern.compile(a1).matcher(date).matches();
+			if (datea1) {
+				return "yyyyMMddHHmmss";
+			}
+			boolean datea2 = Pattern.compile(a2).matcher(date).matches();
+			if (datea2) {
+				return "yyyyMMdd";
+			}
+			boolean datea3 = Pattern.compile(a3).matcher(date).matches();
+			if (datea3) {
+				return "yyyy-MM-dd HH:mm:ss";
+			}
+			boolean datea4 = Pattern.compile(a4).matcher(date).matches();
+			if (datea4) {
+				return "yyyy-MM-dd";
+			}
+			boolean datea5 = Pattern.compile(a5).matcher(date).matches();
+			if (datea5) {
+				return "yyyy-MM-dd HH:mm";
+			}
+		}
+		return "";
+	}
+
+	public static boolean isDate(String strDate) {
+		Pattern pattern = Pattern
+				.compile("^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\\s(((0?[0-9])|([1-2][0-3]))\\:([0-5]?[0-9])((\\s)|(\\:([0-5]?[0-9])))))?$");
+		Matcher m = pattern.matcher(strDate);
+		if (m.matches()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/***

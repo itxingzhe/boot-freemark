@@ -109,13 +109,14 @@ public class NioAndIoTest {
 		FileChannel outChannel = FileChannel.open(Paths.get("F:\\download\\batdemo\\music.exe"), StandardOpenOption.READ, StandardOpenOption.WRITE, StandardOpenOption.CREATE);
 
 		//2.创建得到直接缓冲区
-		MappedByteBuffer inMappedBuffer = inChannel.map(FileChannel.MapMode.READ_ONLY, 0, inChannel.size());
-		MappedByteBuffer outMappedBuffer = outChannel.map(FileChannel.MapMode.READ_WRITE, 0, inChannel.size());
+		MappedByteBuffer inMappedBuffer = inChannel.map(FileChannel.MapMode.READ_ONLY, 0, 1024 * 1024 * 8);
+		MappedByteBuffer outMappedBuffer = outChannel.map(FileChannel.MapMode.READ_WRITE, 0, 1024 * 1024 * 8);
 
 		//3.数据的读写
 		byte[] dst = new byte[inMappedBuffer.limit()];
-		//将数据写入到dst中
-		inMappedBuffer.get(dst);
+		while (inMappedBuffer.get() > -1)
+			//将数据写入到dst中
+			inMappedBuffer.get(dst);
 		//从dst中将数据取出
 		outMappedBuffer.put(dst);
 		//outChannel.write(outMappedBuffer);
