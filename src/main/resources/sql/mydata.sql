@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50558
 File Encoding         : 65001
 
-Date: 2018-07-25 19:07:27
+Date: 2018-09-03 17:01:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -44,6 +44,26 @@ CREATE TABLE `hibernate_sequence` (
 INSERT INTO `hibernate_sequence` VALUES ('1');
 
 -- ----------------------------
+-- Table structure for lg_user_amount
+-- ----------------------------
+DROP TABLE IF EXISTS `lg_user_amount`;
+CREATE TABLE `lg_user_amount` (
+  `id` bigint(30) NOT NULL COMMENT '主键',
+  `company_user_id` bigint(30) DEFAULT NULL COMMENT '用户ID',
+  `amount` decimal(20,4) DEFAULT NULL COMMENT '资产',
+  `amount_type` varchar(3) DEFAULT NULL COMMENT '资产类型',
+  `create_time` datetime DEFAULT NULL COMMENT '新增日期',
+  `create_id` bigint(30) DEFAULT NULL COMMENT '新增人ID',
+  `update_time` datetime DEFAULT NULL COMMENT '修改日期',
+  `update_id` bigint(30) DEFAULT NULL COMMENT '修改人ID',
+  `delete_flag` varchar(3) DEFAULT '0' COMMENT '删除标记'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户资产表';
+
+-- ----------------------------
+-- Records of lg_user_amount
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for login_user_information
 -- ----------------------------
 DROP TABLE IF EXISTS `login_user_information`;
@@ -66,17 +86,30 @@ INSERT INTO `login_user_information` VALUES ('1', '1868219932', 'llixin', 'lx543
 DROP TABLE IF EXISTS `module`;
 CREATE TABLE `module` (
   `mid` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
   `mname` varchar(255) DEFAULT NULL,
+  `module_type` varchar(30) DEFAULT NULL,
+  `is_default` varchar(3) DEFAULT NULL,
+  `status` varchar(3) DEFAULT NULL,
+  `menu_url` varchar(100) DEFAULT NULL,
+  `show_position` smallint(2) DEFAULT NULL,
   PRIMARY KEY (`mid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of module
 -- ----------------------------
-INSERT INTO `module` VALUES ('1', 'add');
-INSERT INTO `module` VALUES ('2', 'delete');
-INSERT INTO `module` VALUES ('3', 'query');
-INSERT INTO `module` VALUES ('4', 'update');
+INSERT INTO `module` VALUES ('0', null, 'personal', 'unreal', '0', '0', null, '1');
+INSERT INTO `module` VALUES ('1', '5', 'user_add', 'add', '1', '0', null, '1');
+INSERT INTO `module` VALUES ('2', '5', 'user_delete', 'delete', '1', '0', null, '2');
+INSERT INTO `module` VALUES ('3', '5', 'user_query', 'query', '0', '0', null, '3');
+INSERT INTO `module` VALUES ('4', '5', 'user_update', 'update', '1', '0', null, '4');
+INSERT INTO `module` VALUES ('5', '0', 'user', 'unreal', '1', '0', null, '1');
+INSERT INTO `module` VALUES ('6', '0', 'role', 'unreal', '1', '0', null, '2');
+INSERT INTO `module` VALUES ('7', '6', 'role_add', 'add', '1', '0', null, '1');
+INSERT INTO `module` VALUES ('8', '6', 'role_delete', 'delete', '1', '0', null, '2');
+INSERT INTO `module` VALUES ('9', '6', 'role_query', 'query', '0', '0', null, '3');
+INSERT INTO `module` VALUES ('10', '6', 'role_update', 'update', '1', '0', null, '4');
 
 -- ----------------------------
 -- Table structure for module_role
@@ -94,12 +127,12 @@ CREATE TABLE `module_role` (
 -- ----------------------------
 -- Records of module_role
 -- ----------------------------
+INSERT INTO `module_role` VALUES ('2', '1');
+INSERT INTO `module_role` VALUES ('2', '3');
+INSERT INTO `module_role` VALUES ('1', '4');
 INSERT INTO `module_role` VALUES ('1', '1');
 INSERT INTO `module_role` VALUES ('1', '2');
 INSERT INTO `module_role` VALUES ('1', '3');
-INSERT INTO `module_role` VALUES ('1', '4');
-INSERT INTO `module_role` VALUES ('2', '1');
-INSERT INTO `module_role` VALUES ('2', '3');
 
 -- ----------------------------
 -- Table structure for mycat_seqlg
@@ -116,6 +149,25 @@ CREATE TABLE `mycat_seqlg` (
 -- Records of mycat_seqlg
 -- ----------------------------
 INSERT INTO `mycat_seqlg` VALUES ('t_user', '6', '1');
+
+-- ----------------------------
+-- Table structure for operation_log
+-- ----------------------------
+DROP TABLE IF EXISTS `operation_log`;
+CREATE TABLE `operation_log` (
+  `id` bigint(30) NOT NULL,
+  `login_id` bigint(30) DEFAULT NULL,
+  `login_name` varchar(255) DEFAULT NULL,
+  `ip_address` varchar(255) DEFAULT NULL,
+  `method_name` varchar(255) DEFAULT NULL,
+  `method_remark` varchar(255) DEFAULT NULL,
+  `opt_date` datetime DEFAULT NULL,
+  `operating_content` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='操作日志表';
+
+-- ----------------------------
+-- Records of operation_log
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for portal_resource
@@ -161,22 +213,27 @@ DROP TABLE IF EXISTS `p_user`;
 CREATE TABLE `p_user` (
   `uid` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(30) DEFAULT NULL,
-  `password` varchar(30) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
   `uname` varchar(30) DEFAULT NULL,
   `age` int(3) DEFAULT NULL,
   `sex` varchar(8) DEFAULT NULL,
   `address` varchar(255) DEFAULT NULL,
+  `version` int(11) DEFAULT '0' COMMENT '用户状态版本',
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of p_user
 -- ----------------------------
-INSERT INTO `p_user` VALUES ('1', 'hlhdidi', '123', '张三', '23', '男', '求是路3号');
-INSERT INTO `p_user` VALUES ('2', 'xyycici', '1992', null, null, null, null);
-INSERT INTO `p_user` VALUES ('5', '13024333333', '29', '李四', null, '男', '半山出口');
-INSERT INTO `p_user` VALUES ('6', '13024333332', '18', '散散', null, '女', '西溪');
-INSERT INTO `p_user` VALUES ('7', 'lisi', '111111', '李四', '99', '男', '二弄口');
+INSERT INTO `p_user` VALUES ('1', 'hlhdidi', '4c24ba976846dc67e58c3a26dc9bffd9', '张三', '23', '男', '求是路3号', '1');
+INSERT INTO `p_user` VALUES ('2', 'xyycici', '1992', '赵六', '99', '男', '六安叶集镇', '0');
+INSERT INTO `p_user` VALUES ('5', '13024333333', '29', '李四', null, '男', '半山出口', '0');
+INSERT INTO `p_user` VALUES ('6', '13024333332', '18', '散散', null, '女', '西溪', '0');
+INSERT INTO `p_user` VALUES ('7', 'lisi', '111111', '李四', '99', '男', '二弄口', '0');
+INSERT INTO `p_user` VALUES ('8', 'wangwu', '111111', '王五', '33', '男', '舟山渔山岛', '0');
+INSERT INTO `p_user` VALUES ('9', 'zhangsan', '28dc4103b273f13f1629d0473e44ce38', '张伞伞', '23', '男', '求是路3号', '0');
+INSERT INTO `p_user` VALUES ('10', 'lisi', '39d75529bc43830d18800118cfd68756', 'lisi', '18', '未知', '保密', '0');
+INSERT INTO `p_user` VALUES ('11', 'lalala', 'df3ea1160e9427e0a50b0c11bfc00b0e', '啦啦啦', '23', '保密', '78956@qq.com\'\"<img src=x onerror=alert(1)>;//', '0');
 
 -- ----------------------------
 -- Table structure for role
@@ -186,13 +243,14 @@ CREATE TABLE `role` (
   `rid` int(11) NOT NULL AUTO_INCREMENT,
   `rname` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`rid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
 INSERT INTO `role` VALUES ('1', 'admin');
 INSERT INTO `role` VALUES ('2', 'customer');
+INSERT INTO `role` VALUES ('3', 'operator');
 
 -- ----------------------------
 -- Table structure for user_role
