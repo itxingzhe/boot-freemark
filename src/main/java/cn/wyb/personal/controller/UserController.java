@@ -1,5 +1,6 @@
 package cn.wyb.personal.controller;
 
+import cn.wyb.personal.annotation.MethodLog;
 import cn.wyb.personal.common.result.CommResponse;
 import cn.wyb.personal.common.result.PageResult;
 import cn.wyb.personal.model.param.UserParam;
@@ -60,6 +61,7 @@ public class UserController {
 		System.out.println(user);
 		int a = 1;
 		System.out.println(a);
+
 		/*UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
 		Subject subject = SecurityUtils.getSubject();
 		try {
@@ -86,6 +88,7 @@ public class UserController {
 	}
 
 	//注解的使用
+	@MethodLog(remark = "新增用户")
 	@RequiresRoles("admin")
 	@RequiresPermissions("user_add")
 	@RequestMapping(value = "saveUser", method = RequestMethod.POST)

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public abstract class BmapApiBaseParam implements Serializable {
 
+	private static final long serialVersionUID = 5192411734715139862L;
+
 	private String output;
 	private String ak;
 

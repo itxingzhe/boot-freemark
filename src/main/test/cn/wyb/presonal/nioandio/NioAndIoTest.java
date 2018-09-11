@@ -1,5 +1,7 @@
 package cn.wyb.presonal.nioandio;
 
+import cn.wyb.personal.model.po.UserPO;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,7 +27,10 @@ public class NioAndIoTest {
 
 		try {
 			//test2();
-			test3();
+			//test3();
+			new UserPO();
+			String format = String.format("333%s", args);
+			System.out.println(format);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
