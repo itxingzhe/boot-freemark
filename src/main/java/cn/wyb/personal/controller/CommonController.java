@@ -34,7 +34,7 @@ public class CommonController {
 		m.addAttribute("username", "张三");
 		UserPO user = new UserPO();
 		user.setUname("张三");
-		user.setAddress("78956@qq.com'\"<img src=x onerror=alert(1)>;//");
+		user.setAddress("是大法官好");
 		String s = JSON.toJSONString(user);
 		System.out.println(s);
 		String s1 = StringEscapeUtils.escapeJson(s);

@@ -36,15 +36,26 @@ function toRegister() {
 
 function doLogin() {
     var data = getData("#loginForm");
+    var t = new Date().getTime();
     $.ajax({
         type: 'post',
         data: getData("#loginForm"),
-        url: '/user/toLogin',
+        url: '/user/doLogin?t=' + t,
         success: function (data) {
-            $("body").html(data);
+            if (!data.code) {
+                $("body").html(data)
+            } else {
+                $("#message").remove();
+                $("body").append("<p id='message'>" + data.message + "</p>");
+            }
         },
         error: function (data) {
-            $("body").html(data);
+            if (!data.code) {
+                $("body").html(data)
+            } else {
+                $("#message").remove();
+                $("body").append(data.message);
+            }
         }
     });
 }

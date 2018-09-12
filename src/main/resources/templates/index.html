@@ -12,7 +12,12 @@
 </head>
 <body>
     <div>
+        <#if userInfo?exists>
+        ${userInfo.uname} 欢迎您登陆
+        <#else>
         <input type="button" class="btn btn-primary" value="登录" onclick="toLogin()"/>
+    </
+    #if>
         <input type="button" class="btn btn-primary" value="退出" onclick="logout()"/>
         <input type="button" class="btn btn-primary" value="用户管理" onclick="userManager()"/>
         <input type="button" class="btn btn-primary" value="展示图片" onclick="showUserImg()"/>

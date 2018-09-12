@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public PageResult<UserPO> listData(UserParam param) {
-		Page page = PageHelper.startPage(param.getPageNum(), param.getPageSize());
+		Page page = PageHelper.offsetPage(param.getOffset(), param.getLimit());
 		List<UserPO> data = userMapper.queryPage(param);
 		PageResult<UserPO> result = new PageResult<UserPO>();
 		result.setTotal(page.getTotal());

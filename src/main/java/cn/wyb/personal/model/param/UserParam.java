@@ -1,6 +1,6 @@
 package cn.wyb.personal.model.param;
 
-public class UserParam {
+public class UserParam extends PageQueryParam {
 
 	private Integer uid;
 

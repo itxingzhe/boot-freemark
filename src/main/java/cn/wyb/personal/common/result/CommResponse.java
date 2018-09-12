@@ -59,6 +59,18 @@ public class CommResponse {
 	/**
 	 * failure : 异常请求响应.
 	 *
+	 * @param e
+	 * @return cn.wyb.personal.common.result.CommResponse
+	 * @author wangyibin
+	 * @date 2018/7/26 10:34
+	 */
+	public static CommResponse failure(Exception e) {
+		return failure("500", e.getMessage());
+	}
+
+	/**
+	 * failure : 异常请求响应.
+	 *
 	 * @param message
 	 * @return cn.wyb.personal.common.result.CommResponse
 	 * @author wangyibin
