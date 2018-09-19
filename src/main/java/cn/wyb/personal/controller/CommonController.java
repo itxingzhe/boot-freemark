@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Create Time: 2018年04月26日 13:09
@@ -30,16 +31,20 @@ import java.util.HashMap;
 public class CommonController {
 
 	@RequestMapping("/")
-	public String init(Model m, HttpServletRequest request, HttpServletResponse response) {
+	public String init(Model m, HttpServletRequest request) {
+		//AtomicInteger.class;
 		m.addAttribute("username", "张三");
 		UserPO user = new UserPO();
 		user.setUname("张三");
-		user.setAddress("是大法官好");
+		user.setAddress("是大法官好sdfdsf,hello");
 		String s = JSON.toJSONString(user);
 		System.out.println(s);
 		String s1 = StringEscapeUtils.escapeJson(s);
 		System.out.println(s1);
 		m.addAttribute("escapeJson", s1);
+		m.addAttribute("contextPath", request.getServletContext().getContextPath());
+		m.addAttribute("requestURI", request.getRequestURI());
+		m.addAttribute("servletPath", request.getServletPath());
 		String realPath = request.getServletContext().getRealPath("/");
 		String realPath1 = request.getServletContext().getRealPath("static/img");
 		String realPath3 = request.getServletContext().getRealPath("img");

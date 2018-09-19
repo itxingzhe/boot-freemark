@@ -48,7 +48,7 @@ function getData(dataDom, data, config) {
 
 //向data中封装新的value
 function setVal(data, key, value, config) {
-    if (!key || value === undefined) {
+    if (!key || !value) {
         return;
     }
     if (typeof (value) === 'string') {

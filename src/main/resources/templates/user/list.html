@@ -43,7 +43,7 @@
             </p>
             </p>
             <p class="panel-body search_box" style="text-align: right;">
-                <input type="button" class="btn btn-primary" value="搜索" onclick="serachUser()"/>
+                <input type="button" class="btn btn-primary" value="搜索" onclick="searchUser()"/>
                 <input type="button" class="btn btn-primary" value="新增用户" onclick="addUser()"/>
             </p>
         </form>
@@ -53,6 +53,7 @@
            data-side-pagination="server"
            data-pagination="true"
            data-page-number="1"
+           data-query-params=queryParams
            data-page-size="10"
            data-page-list="[10,20,30]"
            data-url="/user/queryData">
@@ -87,6 +88,11 @@
         });
     });
 
+    function queryParams(params) {debugger;
+        getData("#search_User",params);
+        return params;
+    }
+
     function operation(value, row, index) {
         var ope = '';
         ope += '<input type="button" data-id = "' + row.uid + '" class="btn btn-update" value="修改" >'
@@ -94,10 +100,8 @@
         return ope;
     }
 
-    function serachUser() {
-        var param = getData("search_User");
-        //queryParams(param);
-        $(".bootstrap-table").bootstrapTable('refresh', param);
+    function searchUser() {
+        $(".bootstrap-table").bootstrapTable('refresh');
     }
 
     function updateUser() {

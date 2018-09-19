@@ -52,6 +52,7 @@ public class ShiroConfiguration {
 		LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 		// anon 表示可以匿名访问
 		filterChainDefinitionMap.put("/", "anon");
+		filterChainDefinitionMap.put("/druid/*", "anon");
 		filterChainDefinitionMap.put("/css/*", "anon");
 		filterChainDefinitionMap.put("/js/**", "anon");
 		filterChainDefinitionMap.put("/img/**", "anon");

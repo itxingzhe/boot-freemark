@@ -2,15 +2,25 @@ package cn.wyb.personal.config;
 
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
+import com.google.common.collect.Lists;
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Create Time: 2018年04月26日 18:19
@@ -54,20 +64,45 @@ public class ApplicationConfig {
 	PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor() {
 		return new PersistenceExceptionTranslationPostProcessor();
 	}
+
+	@Bean
+	public ServletRegistrationBean druidServlet(){
+		ServletRegistrationBean registrationBean = new ServletRegistrationBean();
+		registrationBean.setServlet(new StatViewServlet());
+		registrationBean.addUrlMappings("/druid/*");
+		Map<String, String> initParameters = new HashMap<>();
+		//禁用HTML页面上的“Rest All”功能
+		initParameters.put("resetEnable", "false");
+		// ip白名单（没有配置或者为空，则允许所有访问）
+		//initParameters.put("allow", "127.0.0.1");
+		//++监控页面登录用户名
+		initParameters.put("loginUsername", "admin");
+		//++监控页面登录用户密码
+		initParameters.put("loginPassword", "admin123");
+		//initParameters.put("deny", ""); //ip黑名单
+		//如果某个ip同时存在，deny优先于allow
+		registrationBean.setInitParameters(initParameters);
+		return registrationBean;
+	}
+
 	//配置数据库的基本链接信息
-	/*@Bean(name = "dataSource")
+	//可以在application.properties中直接导入
+	@Bean(name = "dataSource")
 	@Primary
-	@ConfigurationProperties(prefix = "spring.datasource")    //可以在application.properties中直接导入
+	@ConfigurationProperties(prefix = "spring.datasource")
 	public DataSource dataSource(){
 		return DataSourceBuilder.create().type(com.alibaba.druid.pool.DruidDataSource.class).build();
 	}
+
 	@Bean
-	public SqlSessionFactoryBean sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) {
+	public SqlSessionFactoryBean sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws IOException {
 		SqlSessionFactoryBean bean=new SqlSessionFactoryBean();
 		bean.setDataSource(dataSource);
+		Resource[] resources = new PathMatchingResourcePatternResolver()
+				.getResources("classpath:mapping/*.xml");
+		bean.setMapperLocations(resources);
 		return bean;
 	}
-*/
 /*    @Bean
     @Primary
     public SqlSessionFactory getSqlSessionFactory(DataSource dataSource) throws Exception {

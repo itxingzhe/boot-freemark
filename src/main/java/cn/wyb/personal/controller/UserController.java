@@ -30,11 +30,14 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/user")
 public class UserController {
 
-	@Autowired//通过类型注入
-	//@Qualifier("userService2")//通过名称注入
+	//通过类型注入
+	@Autowired
+	// 通过名称注入
+	//@Qualifier("userService2")
 	private UserService userService;
 
-	@Resource(name = "userService2")//通过名称注入
+	//通过名称注入
+	@Resource(name = "userService2")
 	private UserService userService2;
 
 	@RequestMapping(value = "/init", method = RequestMethod.GET)
@@ -62,16 +65,12 @@ public class UserController {
 
 		UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
 		Subject subject = SecurityUtils.getSubject();
-		/*		try {*/
 		//完成登录
 		subject.login(usernamePasswordToken);
 			UserPO userIn = (UserPO) subject.getPrincipal();
 		session.setAttribute("userInfo", userIn);
 			return "forward:/";
-/*		} catch (Exception e) {
-			//返回登录页面
-			return "user/toLogin";
-		}*/
+
 	}
 
 	@RequestMapping(value = "toRegister", method = RequestMethod.GET)
