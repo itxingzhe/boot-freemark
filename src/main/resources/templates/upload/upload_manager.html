@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传下载</title>
+    <link type="text/css" rel="stylesheet" href="/jars/bootstrap/css/bootstrap.css" >
+    <script type="text/javascript" src="/jars/jquery/jquery-3.3.1.js" ></script>
+    <script type="text/javascript" src="/js/common.js" ></script>
+    <script type="text/javascript" src="/js/AjaxFileupload.js"></script>
+</head>
+<body>
+    <div>
+        <form id="fileUploadForm"  action="/upload/uploadFile" method="post"  enctype="multipart/form-data">
+            <input type="file" name="file" id="file" />
+            <input type="submit" value="提交" />
+        </form>
+    </div>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <td>文件全称</td>
+            </tr>
+            </thead>
+            <tbody id="filesData">
+            </tbody>
+        </table>
+    </div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            type: 'get',
+            url: '/upload/showUploadFiles',
+            success: function (data) {
+                if(!!data.data){
+                    $("#filesData").html("");
+                    var map = data.data;
+                    for(var key in map){
+                        var html = '<tr><td><a href="#" onclick="downloadFile(\''+ key +'\')">'+ map[key] +'</a></td></tr>';
+                        $("#filesData").append(html);
+                    }
+                }
+            }
+        })
+        
+    });
+
+function downloadFile(fileName) {debugger;
+
+    /*var fileName = obj.innerText;
+    fileName = obj.innerHTML;
+    fileName = $(obj).text();*/
+    if(!!fileName){
+        window.location.href = '/upload/downloadFile?fileName=' + fileName;
+    }
+
+}
+
+
+
+</script>
+</html>

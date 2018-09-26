@@ -16,7 +16,7 @@
         ${userInfo.uname} 欢迎您登陆
         <#else>
         <input type="button" class="btn btn-primary" value="登录" onclick="toLogin()"/>
-    </#if>
+        </#if>
         <input type="button" class="btn btn-primary" value="退出" onclick="logout()"/>
         <input type="button" class="btn btn-primary" value="用户管理" onclick="userManager()"/>
         <input type="button" class="btn btn-primary" value="展示图片" onclick="showUserImg()"/>
@@ -50,6 +50,7 @@
         地址2：<input type="text" name="address2"/>
         <a class="search" onclick="showMessage()" href="#">查询地址</a>
     </div>
+    <div><a href="/upload/init">文件上传下载</a></div>
     <div>
         <p>${contextPath!''}</p>
         <p>${requestURI!''}</p>
@@ -58,6 +59,12 @@
             <br>To break<br/>lines<br/>in a<br/>paragraph,<br/>use the br tag.Hello World!
         </p>
         <p>${escapeJson!''}</p>
+    </div>
+    <div style= "padding: 0px; width:800px; height:200px; text-align:center; background-color:#F69; display: table-cell; vertical-align:middle;">
+        Hello World center！
+    </div>
+    <div style="width:800px; height:100px;text-align: center;background-color: greenyellow;margin: 0 auto">
+        <span>Hello World!</span>
     </div>
 </body>
 </html>

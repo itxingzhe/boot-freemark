@@ -11,7 +11,10 @@ public enum BaseExceptionEnum {
 
 	MODEL_AND_VIEW_ERROR("100000001", "页面访问异常！"),
 
-	NOT_QUERY__TO_THE_DATA("200000001", "	未查询到数据！"),;
+	NOT_QUERY__TO_THE_DATA("200000001", "未查询到数据！"),
+
+
+	COMMON_500("500", "%s");
 	/**
 	 * 异常编码
 	 */

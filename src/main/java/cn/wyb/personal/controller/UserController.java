@@ -11,7 +11,10 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.util.SavedRequest;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -61,7 +65,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "doLogin", method = RequestMethod.POST)
-	public String login(UserPO user, HttpSession session) {
+	public String login(UserPO user, HttpSession session, HttpServletRequest request) {
 
 		UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
 		Subject subject = SecurityUtils.getSubject();
@@ -69,7 +73,14 @@ public class UserController {
 		subject.login(usernamePasswordToken);
 			UserPO userIn = (UserPO) subject.getPrincipal();
 		session.setAttribute("userInfo", userIn);
-			return "forward:/";
+		SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+		if(savedRequest != null && savedRequest.getMethod().equals(RequestMethod.GET.name())){
+			String url = savedRequest.getRequestUrl();
+			if(url != null && url.indexOf("/") >= 0 && !url.equals("/user/toLogin") && !url.equals("/user/logout")){
+				return url;
+			}
+		}
+		return "forward:/";
 
 	}
 

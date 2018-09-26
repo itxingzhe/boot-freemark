@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 
+import javax.servlet.MultipartConfigElement;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,15 +105,22 @@ public class ApplicationConfig {
 		bean.setMapperLocations(resources);
 		return bean;
 	}
-/*    @Bean
-    @Primary
-    public SqlSessionFactory getSqlSessionFactory(DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-        bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapping/*.xml"));
-        bean.setConfigLocation(new ClassPathResource("config/mybatis-page.xml"));
-        return bean.getObject();
-    }*/
+
+
+	/**
+	 * 文件上传配置
+	 * @return
+	 */
+	/*@Bean
+	public MultipartConfigElement multipartConfigElement() {
+		MultipartConfigFactory factory = new MultipartConfigFactory();
+		//文件最大
+		factory.setMaxFileSize("10240KB"); //KB,MB
+		/// 设置总上传数据总大小
+		factory.setMaxRequestSize("102400KB");
+		return factory.createMultipartConfig();
+	}*/
+
 
 
 }
