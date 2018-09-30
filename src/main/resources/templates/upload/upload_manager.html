@@ -12,6 +12,7 @@
     <div>
         <form id="fileUploadForm"  action="/upload/uploadFile" method="post"  enctype="multipart/form-data">
             <input type="file" name="file" id="file" />
+            <input type="file" name="file1" />
             <input type="submit" value="提交" />
         </form>
     </div>
@@ -47,7 +48,6 @@
     });
 
 function downloadFile(fileName) {debugger;
-
     /*var fileName = obj.innerText;
     fileName = obj.innerHTML;
     fileName = $(obj).text();*/
