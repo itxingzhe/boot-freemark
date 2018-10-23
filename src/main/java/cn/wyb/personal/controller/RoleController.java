@@ -1,14 +1,15 @@
 package cn.wyb.personal.controller;
 
-import cn.wyb.personal.model.vo.role.RoleVO;
-import cn.wyb.personal.service.RoleService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import cn.wyb.personal.model.vo.role.RoleVO;
+import cn.wyb.personal.service.user.RoleService;
 
 /**
  * RoleController: 角色控制层.

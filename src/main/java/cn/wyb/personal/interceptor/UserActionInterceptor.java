@@ -1,7 +1,8 @@
 package cn.wyb.personal.interceptor;
 
-import cn.wyb.personal.model.po.UserPO;
-import cn.wyb.personal.service.UserService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -9,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import cn.wyb.personal.model.po.UserPO;
+import cn.wyb.personal.service.user.UserService;
 
 /**
  * UserActionInterceptor: 拦截器 判断用户角色变更.

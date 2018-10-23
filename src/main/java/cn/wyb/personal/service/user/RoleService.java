@@ -1,8 +1,8 @@
-package cn.wyb.personal.service;
-
-import cn.wyb.personal.model.vo.role.RoleVO;
+package cn.wyb.personal.service.user;
 
 import java.util.List;
+
+import cn.wyb.personal.model.vo.role.RoleVO;
 
 /**
  * RoleService: (请描述这个类).

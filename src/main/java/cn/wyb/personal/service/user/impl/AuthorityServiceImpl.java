@@ -1,4 +1,16 @@
-package cn.wyb.personal.service.impl;
+package cn.wyb.personal.service.user.impl;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.google.common.collect.Lists;
 
 import cn.wyb.personal.common.utils.BeanConvertor;
 import cn.wyb.personal.dao.ModuleMapper;
@@ -7,17 +19,7 @@ import cn.wyb.personal.model.param.ParamMap;
 import cn.wyb.personal.model.po.ModulePO;
 import cn.wyb.personal.model.po.ModuleRolePO;
 import cn.wyb.personal.model.vo.Authority.AuthorityVO;
-import cn.wyb.personal.service.AuthorityService;
-import com.google.common.collect.Lists;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import cn.wyb.personal.service.user.AuthorityService;
 
 /**
  * AuthorityServiceImpl: 权限业务类.
@@ -56,27 +58,35 @@ public class AuthorityServiceImpl implements AuthorityService {
 	}
 
 	@Override
-	public void saveModuleAndRole(Long roleId, Long[] moduleIds) {
+    public void saveModuleAndRole(Integer roleId, Integer[] moduleIds) {
 		if (ArrayUtils.isNotEmpty(moduleIds) && roleId != null) {
-
 			ParamMap paramMap = new ParamMap();
 			paramMap.put("rid", roleId);
 			List<Integer> moduleList = moduleRoleMapper.queryRoleModuleList(paramMap);
-			ArrayList<Long> list = Lists.newArrayList(moduleIds);
+            ArrayList<Integer> list = Lists.newArrayList(moduleIds);
+            boolean equalCollection = CollectionUtils.isEqualCollection(list, moduleList);
+            if (equalCollection) {
+                return;
+            }
 			//交集
 			Collection intersection = CollectionUtils.intersection(list, moduleList);
 			//交集的补集
-			Collection intersection1 = CollectionUtils.disjunction(list, moduleList);
+            // Collection disjunction = CollectionUtils.disjunction(list, moduleList);
 			//差集
-			Collection intersection2 = CollectionUtils.subtract(list, moduleList);
-			boolean equalCollection = CollectionUtils.isEqualCollection(list, moduleList);
-			for (Long moduleId : moduleIds) {
+            Collection<Integer> insert = CollectionUtils.subtract(list, intersection);
+            Collection<Integer> delete = CollectionUtils.subtract(moduleList, intersection);
+            for (Integer moduleId : insert) {
 				ModuleRolePO po = new ModuleRolePO();
 				po.setRid(roleId.intValue());
 				po.setMid(moduleId.intValue());
-				int insert = moduleRoleMapper.insert(po);
-				System.out.println("id" + insert);
+                int row = moduleRoleMapper.insert(po);
+                System.out.println("id" + row);
 			}
+            ParamMap deleteParamMap = new ParamMap();
+            deleteParamMap.put("rid", roleId);
+            deleteParamMap.put("deleteMidList", delete);
+            int rowNum = moduleRoleMapper.deleteByRidAndMid(deleteParamMap);
+            System.out.println("delete:" + rowNum);
 		}
 
 	}

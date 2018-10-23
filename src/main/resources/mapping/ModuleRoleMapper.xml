@@ -28,7 +28,7 @@
             </if>
         </trim>
     </insert>
-    <select id="queryRoleModuleList" resultType="map" parameterType="map">
+    <select id="queryRoleModuleList" resultType="java.lang.Integer" parameterType="map">
         SELECT
         mid
         FROM module_role
@@ -38,4 +38,13 @@
             </if>
         </where>
     </select>
+    <delete id="deleteByRidAndMid" parameterType="map">
+        DELETE FROM module_role
+        WHERE
+        rid = #{rid,jdbcType=INTEGER}
+        AND mid IN
+        <foreach collection="deleteMidList" item="mid" open="(" close=")" separator=",">
+            #{mid,jdbcType=INTEGER}
+        </foreach>
+    </delete>
 </mapper>

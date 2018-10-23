@@ -1,4 +1,4 @@
-package cn.wyb.personal.service;
+package cn.wyb.personal.service.user;
 
 import cn.wyb.personal.common.result.PageResult;
 import cn.wyb.personal.model.param.UserParam;

@@ -1,17 +1,19 @@
-package cn.wyb.personal.service.impl;
+package cn.wyb.personal.service.user.impl;
+
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 
 import cn.wyb.personal.common.result.PageResult;
 import cn.wyb.personal.dao.UserMapper;
 import cn.wyb.personal.model.param.UserParam;
 import cn.wyb.personal.model.po.UserPO;
-import cn.wyb.personal.service.UserService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import cn.wyb.personal.service.user.UserService;
 
 /**
  * Create Time: 2018年04月26日 14:15

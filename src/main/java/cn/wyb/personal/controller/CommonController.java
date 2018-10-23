@@ -1,27 +1,29 @@
 package cn.wyb.personal.controller;
 
-import cn.wyb.personal.common.result.CommResponse;
-import cn.wyb.personal.common.utils.HttpUtil;
-import cn.wyb.personal.model.po.UserPO;
-import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
+
+import cn.wyb.personal.common.result.CommResponse;
+import cn.wyb.personal.common.utils.HttpUtil;
+import cn.wyb.personal.model.po.UserPO;
 
 /**
  * Create Time: 2018年04月26日 13:09
@@ -64,9 +66,9 @@ public class CommonController {
 		return "index";
 	}
 
-	@RequestMapping("common/bmap")
+    @RequestMapping(value = "/common/bmap", method = RequestMethod.GET)
 	public String toMap() {
-		return "/bmap/bmap";
+        return "/map/bmap";
 	}
 
 	@RequestMapping("common/ajaxFileUpload")
@@ -87,7 +89,8 @@ public class CommonController {
 		return CommResponse.success(name + "-" + contentType + "-" + originalFilename);
 	}
 
-	@RequestMapping("common/bmapApi")
+    @RequestMapping(value = "common/bmapApi", method = RequestMethod.GET)
+    @ResponseBody
 	public ModelAndView toMapApi() throws Exception {
 
 		HashMap<String, String> map = Maps.newHashMap();

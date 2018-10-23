@@ -1,9 +1,9 @@
 package cn.wyb.personal.dao;
 
+import java.util.List;
+
 import cn.wyb.personal.model.param.ParamMap;
 import cn.wyb.personal.model.po.ModuleRolePO;
-
-import java.util.List;
 
 public interface ModuleRoleMapper {
 	int insert(ModuleRolePO record);
@@ -11,4 +11,6 @@ public interface ModuleRoleMapper {
 	int insertSelective(ModuleRolePO record);
 
 	List<Integer> queryRoleModuleList(ParamMap paramMap);
+
+    int deleteByRidAndMid(ParamMap deleteParamMap);
 }

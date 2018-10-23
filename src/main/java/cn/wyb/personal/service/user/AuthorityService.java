@@ -1,8 +1,8 @@
-package cn.wyb.personal.service;
-
-import cn.wyb.personal.model.vo.Authority.AuthorityVO;
+package cn.wyb.personal.service.user;
 
 import java.util.List;
+
+import cn.wyb.personal.model.vo.Authority.AuthorityVO;
 
 /**
  * AuthorityService: (权限业务.
@@ -15,5 +15,5 @@ public interface AuthorityService {
 
 	List<AuthorityVO> queryData();
 
-	void saveModuleAndRole(Long roleId, Long[] moduleIds);
+    void saveModuleAndRole(Integer roleId, Integer[] moduleIds);
 }

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * DateUtils: 时间工具类.
@@ -22,6 +24,7 @@ public class DateUtils {
 	public static final String DATE_FORMAT_FULL = "yyyy-MM-dd HH:mm:ss";
 	public static final String DATE_FORMAT_ALL = "yyyy-MM-dd a hh:mm:ss SSS E ";
 	public static final String DATE_FORMAT_YMD = "yyyy-MM-dd";
+    public static final String DATE_FORMAT_YYYYMMDD = "yyyyMMdd";
 	public static final String DATE_FORMAT_HMS = "HH:mm:ss";
 	public static final String DATE_FORMAT_HM = "HH:mm";
 	public static final String DATE_FORMAT_YMDHM = "yyyy-MM-dd HH:mm";
@@ -30,6 +33,71 @@ public class DateUtils {
 	public static final int WEEK_DAYS = 7;
 	private static final int dateLength = DATE_FORMAT_YMDHM.length();
 
+
+    /**
+     * 获取时间字符对应的格式化类型.
+     *
+     * @param date
+     * @return java.lang.String
+     * @author wangyibin
+     * @date 2018/8/31 15:19
+     */
+    public static String getDatetimeFormat(String date) {
+        if (date != null) {
+            date = date.trim();
+            // yyyyMMddHHmmss
+            String format1 = "[0-9]{4}((0?[0-9])|(1[0-2]))((0?[1-9])|([12][0-9])|(3[01]))((([01][0-9]|2[0-3])[0-5]?[0-9][0-5]?[0-9])|240?00?0)";
+            // yyyyMMdd
+            String format2 = "[0-9]{4}((0?[0-9])|(1[0-2]))((0?[1-9])|([12][0-9])|(3[01]))";
+            // yyyy-MM-dd HH:mm:ss
+            String format3 = "[0-9]{4}-((0?[0-9])|(1[0-2]))-((0?[1-9])|([12][0-9])|(3[01])) (((([01][0-9])|(2[0-3])):[0-5]?[0-9]:[0-5]?[0-9])|24:0?0:0?0)";
+            // yyyy-MM-dd
+            String format4 = "[0-9]{4}-((0?[0-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[0-1]))";
+            // yyyy-MM-dd HH:mm
+            String format5 = "[0-9]{4}-((0?[0-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[0-1])) (((([0,1][0-9])|(2[0-3])):[0-5]?[0-9])|24:0?0)";
+            boolean isFormat = Pattern.compile(format1).matcher(date).matches();
+            if (isFormat) {
+                return DATE_FORMAT_YMDHMS;
+            }
+            isFormat = Pattern.compile(format2).matcher(date).matches();
+            if (isFormat) {
+                return DATE_FORMAT_YYYYMMDD;
+            }
+            isFormat = Pattern.compile(format3).matcher(date).matches();
+            if (isFormat) {
+                return DATE_FORMAT_FULL;
+            }
+            isFormat = Pattern.compile(format4).matcher(date).matches();
+            if (isFormat) {
+                return DATE_FORMAT_YMD;
+            }
+            isFormat = Pattern.compile(format5).matcher(date).matches();
+            if (isFormat) {
+                return DATE_FORMAT_YMDHM;
+            }
+        }
+        return "";
+    }
+
+    /**
+     * isDate : 字符是否是日期
+     *
+     * @author wangyibin
+     * @date 2018/10/11 13:41
+     * @param strDate
+     * @return boolean
+     * 
+     */
+    public static boolean isDate(String strDate) {
+        Pattern pattern = Pattern.compile(
+                "^((\\d{2}(([02468][048])|([13579][26]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])))))|(\\d{2}(([02468][1235679])|([13579][01345789]))[\\-\\/\\s]?((((0?[13578])|(1[02]))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\\-\\/\\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\\-\\/\\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\\s(((0?[0-9])|([1-2][0-3]))\\:([0-5]?[0-9])((\\s)|(\\:([0-5]?[0-9])))))?$");
+        Matcher m = pattern.matcher(strDate);
+        if (m.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 	/**
 	 * 日期转换为制定格式字符串

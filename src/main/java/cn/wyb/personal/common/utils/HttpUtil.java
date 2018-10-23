@@ -1,9 +1,16 @@
 package cn.wyb.personal.common.utils;
 
-import cn.wyb.personal.model.vo.bmap.BmapPlaceAbroadResultVO;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URLDecoder;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
 import org.apache.http.client.config.RequestConfig;
@@ -19,15 +26,11 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URLDecoder;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
+import cn.wyb.personal.model.vo.bmap.BmapPlaceAbroadResultVO;
 
 
 /**
@@ -47,7 +50,7 @@ public final class HttpUtil {
 	private static final String APPLICATION_JSON = "application/json";
 	private static final String XML_HTTP_REQUEST = "XMLHttpRequest";
 	public static final String AMAP_AK = "ev82Imq86gQmRRZT5Chobk35KKPPh3NB";
-	public static final String AMAP_SEARCH_URL = "http://api.bmap.baidu.com/place_abroad/v1/search";
+    public static final String               AMAP_SEARCH_URL  = "http://api.map.baidu.com/place_abroad/v1/search";
 
 
 	/**
@@ -87,16 +90,16 @@ public final class HttpUtil {
 		return ipAddress;
 	}
 
-	/***
-	 *
-	 * sendGet:发送HttpGet请求.
-	 *
-	 * @author luochao
-	 * @date 2018年1月29日 上午11:36:30
-	 * @param url 地址
-	 * @param map 参数
-	 * @return
-	 */
+    /**
+     *
+     * sendGet:发送HttpGet请求.
+     *
+     * @author luochao
+     * @date 2018年1月29日 上午11:36:30
+     * @param url 地址
+     * @param map 参数
+     * @return
+     */
 	public static CloseableHttpResponse sendAmapGet(String url, Map<String, String> map) {
 		List<NameValuePair> formparams = new ArrayList<NameValuePair>();
 		for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -149,16 +152,16 @@ public final class HttpUtil {
 		return sendGet(url, new HashMap<>());
 	}
 
-	/***
-	 *
-	 * sendGet:发送HttpGet请求.
-	 *
-	 * @author luochao
-	 * @date 2018年1月29日 上午11:36:30
-	 * @param url 地址
-	 * @param map 参数
-	 * @return
-	 */
+    /**
+     *
+     * sendGet:发送HttpGet请求.
+     *
+     * @author luochao
+     * @date 2018年1月29日 上午11:36:30
+     * @param url 地址
+     * @param map 参数
+     * @return
+     */
 	public static String sendGet(String url, Map<String, String> map) {
 		String paramStr = toString(assembleParam(map, ContentType.APPLICATION_FORM_URLENCODED));
 		if (url.indexOf("?") >= 0 && StringUtils.isNotBlank(paramStr)) {
@@ -181,59 +184,59 @@ public final class HttpUtil {
 		return getString(response);
 	}
 
-	/***
-	 *
-	 * sentPost:发送post请求， 注此方法适用于ContentType=application/x-www-form-urlencoded
-	 *
-	 * @author luochao
-	 * @date 2018年1月29日 上午11:37:04
-	 * @param url
-	 * @param map
-	 * @return
-	 */
+    /**
+     *
+     * sentPost:发送post请求， 注此方法适用于ContentType=application/x-www-form-urlencoded
+     *
+     * @author luochao
+     * @date 2018年1月29日 上午11:37:04
+     * @param url
+     * @param map
+     * @return
+     */
 	public static String sendPost(String url, Map<String, String> map) {
 		return sendPost(url, map, ContentType.APPLICATION_FORM_URLENCODED);
 	}
 
-	/***
-	 *
-	 * sentPost:发送无参post请求,注意，此方法默认ContentType=application/x-www-form-urlencoded
-	 * ，如需发送json数据请使用其他重载方法
-	 *
-	 * @author luochao
-	 * @date 2018年1月29日 上午11:38:28
-	 * @param url 地址
-	 * @return
-	 */
+    /**
+     *
+     * sentPost:发送无参post请求,注意，此方法默认ContentType=application/x-www-form-urlencoded
+     * ，如需发送json数据请使用其他重载方法
+     *
+     * @author luochao
+     * @date 2018年1月29日 上午11:38:28
+     * @param url 地址
+     * @return
+     */
 	public static String sendPost(String url) {
 		return sendPost(url, new HashMap<>(), ContentType.APPLICATION_FORM_URLENCODED);
 	}
 
-	/***
-	 *
-	 * sentPost:发送无参post请求
-	 *
-	 * @author luochao
-	 * @date 2018年1月29日 上午11:38:28
-	 * @param url 地址
-	 * @param contentType 请求类型
-	 * @return
-	 */
+    /**
+     *
+     * sentPost:发送无参post请求
+     *
+     * @author luochao
+     * @date 2018年1月29日 上午11:38:28
+     * @param url 地址
+     * @param contentType 请求类型
+     * @return
+     */
 	public static String sendPost(String url, ContentType contentType) {
 		return sendPost(url, new HashMap<>(), contentType);
 	}
 
-	/****
-	 *
-	 * sendPost:发送post请求
-	 *
-	 * @author luochao
-	 * @date 2018年1月29日 上午11:39:45
-	 * @param url 地址
-	 * @param map 参数
-	 * @param contentType 请求类型
-	 * @return
-	 */
+    /**
+     *
+     * sendPost:发送post请求
+     *
+     * @author luochao
+     * @date 2018年1月29日 上午11:39:45
+     * @param url 地址
+     * @param map 参数
+     * @param contentType 请求类型
+     * @return
+     */
 	public static String sendPost(String url, Map<String, String> map, ContentType contentType) {
 		HttpPost httppost = new HttpPost(url);
 		assembleHeader(httppost, contentType);
@@ -248,15 +251,15 @@ public final class HttpUtil {
 		return getString(response);
 	}
 
-	/***
-	 *
-	 * getJsonObjectResult:将返回值转换为jsonObject，兼容原来结果.
-	 *
-	 * @author luochao
-	 * @date 2018年1月29日 下午4:01:17
-	 * @param resultStr
-	 * @return
-	 */
+    /**
+     *
+     * getJsonObjectResult:将返回值转换为jsonObject，兼容原来结果.
+     *
+     * @author luochao
+     * @date 2018年1月29日 下午4:01:17
+     * @param resultStr
+     * @return
+     */
 	public static JSONObject getJsonObjectResult(String resultStr) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("success", true);
@@ -264,16 +267,16 @@ public final class HttpUtil {
 		return jsonObject;
 	}
 
-	/***
-	 *
-	 * assembleParam:组装参数.
-	 *
-	 * @author luochao
-	 * @date 2018年1月27日 下午12:59:54
-	 * @param map 参数
-	 * @param contentType 参数类型
-	 * @return
-	 */
+    /**
+     *
+     * assembleParam:组装参数.
+     *
+     * @author luochao
+     * @date 2018年1月27日 下午12:59:54
+     * @param map 参数
+     * @param contentType 参数类型
+     * @return
+     */
 	private static StringEntity assembleParam(Map<String, String> map, ContentType contentType) {
 		StringEntity stringEntity = null;
 		if (ContentType.APPLICATION_JSON.equals(contentType)) {
@@ -309,15 +312,15 @@ public final class HttpUtil {
 		}
 	}
 
-	/***
-	 *
-	 * getString:获取返回值，并关闭response.
-	 *
-	 * @author luochao
-	 * @date 2018年1月27日 下午12:34:28
-	 * @param response
-	 * @return
-	 */
+    /**
+     *
+     * getString:获取返回值，并关闭response.
+     *
+     * @author luochao
+     * @date 2018年1月27日 下午12:34:28
+     * @param response
+     * @return
+     */
 	private static String getString(CloseableHttpResponse response) {
 		if (response == null) {
 			return null;
@@ -336,15 +339,15 @@ public final class HttpUtil {
 		return resultStr;
 	}
 
-	/***
-	 *
-	 * toString:httpEntity转换为字符串.
-	 *
-	 * @author luochao
-	 * @date 2018年1月27日 下午1:34:33
-	 * @param httpEntity
-	 * @return
-	 */
+    /**
+     *
+     * toString:httpEntity转换为字符串.
+     *
+     * @author luochao
+     * @date 2018年1月27日 下午1:34:33
+     * @param httpEntity
+     * @return
+     */
 	private static String toString(HttpEntity httpEntity) {
 		String result = null;
 		try {

@@ -1,9 +1,10 @@
 package cn.wyb.personal.shiro;
 
-import cn.wyb.personal.model.po.ModulePO;
-import cn.wyb.personal.model.po.RolePO;
-import cn.wyb.personal.model.po.UserPO;
-import cn.wyb.personal.service.UserService;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -12,10 +13,10 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import cn.wyb.personal.model.po.ModulePO;
+import cn.wyb.personal.model.po.RolePO;
+import cn.wyb.personal.model.po.UserPO;
+import cn.wyb.personal.service.user.UserService;
 
 public class AuthRealm extends AuthorizingRealm {
 

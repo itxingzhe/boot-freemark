@@ -1,14 +1,15 @@
 package cn.wyb.personal.model.vo.Authority;
 
-import cn.wyb.personal.model.po.RolePO;
-import com.google.common.collect.Lists;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+
+import cn.wyb.personal.model.po.RolePO;
+
 /**
- * Authority: (请描述这个类).
+ * Authority: 权限实体类.
  *
  * @author wangyibin
  * @date 2018/8/14 15:24

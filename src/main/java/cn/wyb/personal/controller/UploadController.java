@@ -3,26 +3,15 @@ package cn.wyb.personal.controller;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.ws.spi.http.HttpHandler;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.ProgressListener;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,9 +21,10 @@ import org.springframework.web.servlet.ModelAndView;
 import cn.wyb.personal.common.enums.BaseExceptionEnum;
 import cn.wyb.personal.common.exception.BaseException;
 import cn.wyb.personal.common.result.CommResponse;
+import cn.wyb.personal.common.utils.FileUtils;
 
 /**
- * UploadController: (请描述这个类).
+ * UploadController: 文件上传下载控制层
  *
  * @author wangyibin
  * @date 2018/9/19 17:46
@@ -80,15 +70,15 @@ public class UploadController {
                         // 处理获取到的上传文件的文件名的路径部分，只保留文件名部分
                         filename = filename.substring(filename.lastIndexOf("\\") + 1);
                         // 得到上传文件的扩展名
-                        String fileExtName = filename.substring(filename.lastIndexOf(".") + 1);
+                        String fileExtName = filename.substring(filename.lastIndexOf("."));
                         // 如果需要限制上传的文件类型，那么可以通过文件的扩展名来判断上传的文件类型是否合法
                         logger.debug("上传的文件的扩展名是：" + fileExtName);
                         // 获取item中的上传文件的输入流
                         in = multipartFile.getInputStream();
                         // 得到文件保存的名称
-                        String saveFilename = makeFileName(filename);
+                        String saveFilename = FileUtils.makeFileName(filename);
                         // 得到文件的保存目录
-                        String realSavePath = getFileSavePathByFileName(saveFilename, savePath);
+                        String realSavePath = FileUtils.makePath(saveFilename, savePath);
                         // 创建一个文件输出流
                         out = new FileOutputStream(realSavePath + "\\" + saveFilename);
                         // 创建一个缓冲区
@@ -115,30 +105,17 @@ public class UploadController {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             if (out != null)
                 try {
                     out.close();
-                } catch (IOException e) { // TODO Auto-generated catch block
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
         }
         throw new BaseException(BaseExceptionEnum.COMMON_500, "文件上传失败！！！");
-    }
-
-    /**
-     * @Method: makeFileName
-     * @Description: 生成上传文件的文件名，文件名以：uuid+"_"+文件的原始名称
-     * @Anthor:孤傲苍狼
-     * @param filename 文件的原始名称
-     * @return uuid+"_"+文件的原始名称
-     */
-    private String makeFileName(String filename) { // 2.jpg
-        // 为防止文件覆盖的现象发生，要为上传文件产生一个唯一的文件名
-        return UUID.randomUUID().toString() + "_" + filename;
     }
 
     @RequestMapping("/showUploadFiles")
@@ -164,6 +141,7 @@ public class UploadController {
      * @param map 存储文件名的Map集合
      */
     public void listfile(File file, Map<String, String> map) {
+
         // 如果file代表的不是一个文件，而是一个目录
         if (!file.isFile()) {
             // 列出该目录下的所有文件和目录
@@ -176,10 +154,10 @@ public class UploadController {
                 }
             }
         } else {
+
             /**
              * 处理文件名，上传后的文件是以uuid_文件名的形式去重新命名的，去除文件名的uuid_部分
-             * file.getName().indexOf("_")检索字符串中第一次出现"_"字符的位置，如果文件名类似于：9349249849-88343-8344_阿_凡_达.avi
-             * 那么file.getName().substring(file.getName().indexOf("_")+1)处理之后就可以得到阿_凡_达.avi部分
+             * file.getName().indexOf("_")检索字符串中第一次出现"_"字符的位置
              */
             String realName = file.getName().substring(file.getName().indexOf("_") + 1);
             map.put(file.getName(), realName);
@@ -193,7 +171,7 @@ public class UploadController {
             // 上传的文件都是保存在/WEB-INF/upload目录下的子目录当中
             String fileSaveRootPath = request.getServletContext().getRealPath("/static/upload");
             // 通过文件名找出文件的所在目录
-            String path = getFileSavePathByFileName(fileName, fileSaveRootPath);
+            String path = FileUtils.makePath(fileName, fileSaveRootPath);
             // 得到要下载的文件
             File file = new File(path + "\\" + fileName);
             // 如果文件不存在
@@ -228,27 +206,6 @@ public class UploadController {
             // 关闭输出流
             out.close();
         }
-    }
-
-    /**
-     * @Method: findFileSavePathByFileName
-     * @Description: 通过文件名和存储上传文件根目录找出要下载的文件的所在路径
-     * @Anthor:孤傲苍狼
-     * @param filename 要下载的文件名
-     * @param saveRootPath 上传文件保存的根目录，也就是/WEB-INF/upload目录
-     * @return 要下载的文件的存储目录
-     */
-    public String getFileSavePathByFileName(String filename, String saveRootPath) {
-        int hashcode = filename.hashCode();
-        int dir1 = hashcode & 0xf; // 0--15
-        int dir2 = (hashcode & 0xf0) >> 4; // 0-15
-        String dir = saveRootPath + "\\" + dir1 + "\\" + dir2; // upload\2\3 upload\3\5
-        File file = new File(dir);
-        if (!file.exists()) {
-            // 创建目录
-            file.mkdirs();
-        }
-        return dir;
     }
 
 }
