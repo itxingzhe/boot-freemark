@@ -1,6 +1,7 @@
 package cn.wyb.personal.model.param;
 
 import cn.wyb.personal.model.vo.express.ExpressSendAndReceiveInformationVO;
+import io.swagger.annotations.ApiModel;
 
 /**
  * ExpressWaybillAddParam: (请描述这个类).
@@ -9,6 +10,7 @@ import cn.wyb.personal.model.vo.express.ExpressSendAndReceiveInformationVO;
  * @date 2018/10/11 13:59
  * @see
  */
+@ApiModel(value = "eee", description = "")
 public class ExpressWaybillAddParam {
 
     /**

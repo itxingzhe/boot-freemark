@@ -41,6 +41,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 	public List<AuthorityVO> queryData() {
 		List<ModulePO> pos = moduleMapper.queryData(new ModulePO());
 		List<AuthorityVO> vos = BeanConvertor.copyList(pos, AuthorityVO.class);
+        // 获取父级权限
 		List<AuthorityVO> list = Lists.newArrayList();
 		Iterator iterator = vos.iterator();
 		while (iterator.hasNext()) {
@@ -50,6 +51,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 				iterator.remove();
 			}
 		}
+        // 封装父级的子级权限
 		List<AuthorityVO> parends = list;
 		while (parends.size() > 0 && vos.size() > 0) {
 			parends = setChildren(parends, vos);

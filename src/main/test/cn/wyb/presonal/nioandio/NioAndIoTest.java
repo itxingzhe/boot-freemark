@@ -1,7 +1,5 @@
 package cn.wyb.presonal.nioandio;
 
-import cn.wyb.personal.model.po.UserPO;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,6 +8,10 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+
+import org.junit.Test;
+
+import cn.wyb.personal.model.po.UserPO;
 
 /**
  * NioAndIoTest: (请描述这个类).
@@ -20,7 +22,8 @@ import java.nio.file.StandardOpenOption;
  */
 public class NioAndIoTest {
 
-	public static void main(String[] args) {
+    @Test
+    public void test() {
 
 		long start = System.currentTimeMillis();
 		//test1();
@@ -28,6 +31,8 @@ public class NioAndIoTest {
 		try {
 			//test2();
 			//test3();
+            String[] args = new String[4];
+            args[0] = "a";
 			new UserPO();
 			String format = String.format("333%s", args);
 			System.out.println(format);

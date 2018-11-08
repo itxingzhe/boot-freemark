@@ -1,6 +1,6 @@
 package cn.wyb.personal.common.utils;
 
-import java.io.File;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -27,12 +27,378 @@ import com.google.common.collect.Maps;
  */
 public class FileUtils {
 
-    public static final String SUFFIX_XLS         = ".xls";
-    public static final String SUFFIX_XLSX        = ".xlsx";
-    public static final String SUFFIX_JPG         = ".jpg";
-    public static final String SUFFIX_PNG         = ".png";
-    public static final String SUFFIX_TXT         = ".txt";
-    public static final String SHEET_DEFAULT_NAME = "Sheet1";
+    public static final String SUFFIX_XLS                   = ".xls";
+    public static final String SUFFIX_XLSX                  = ".xlsx";
+    public static final String SUFFIX_JPG                   = ".jpg";
+    public static final String SUFFIX_PNG                   = ".png";
+    public static final String SUFFIX_TXT                   = ".txt";
+    public static final String SUFFIX_JAVA                  = ".java";
+    public static final String SHEET_DEFAULT_NAME           = "Sheet1";
+    public static final String PUNCTUATION_SLASH            = "/";
+    public static final String PUNCTUATION_SLASH_DOUBLE     = "//";
+    public static final String PUNCTUATION_BACKSLASH        = "\\";
+    public static final String PUNCTUATION_BACKSLASH_DOUBLE = "\\\\";
+    public static final String LINE_BREAK                   = "\r\n";
+
+    /**
+     * 获取class类所在的项目路径
+     *
+     * @author wangyibin
+     * @date 2018/11/7 13:55
+     * @param clazz
+     * @return4
+     */
+    public static String getPathByClazz(Class clazz) {
+        if (clazz == null) {
+            return null;
+        }
+        String path = clazz.getResource("/").getPath();
+        path = path.substring(1, path.indexOf("/target"));
+        path += "/src/main/java/";
+        String aPackage = clazz.getPackage().getName().replace(".", "/");
+        path += aPackage;
+        return path;
+    }
+
+    /**
+     * formatModuleAnnotation : 格式化注解为标准样式
+     *
+     * @author wangyibin
+     * @date 2018/11/6 11:11
+     * @param
+     * @return void
+     *
+     */
+    public static void formatModuleAnnotation(String rootPath) {
+
+        File rootFile = new File(rootPath);
+        if (!rootFile.exists()) {
+            return;
+        }
+        ArrayList<File> files = Lists.newArrayList();
+        getFiles(files, rootFile);
+        for (File file : files) {
+            if (file != null && file.getName().endsWith(SUFFIX_JAVA)) {
+                FileInputStream fis = null;
+                InputStreamReader isr = null;
+                // 用于包装InputStreamReader,提高处理性能。因为BufferedReader有缓冲的，而InputStreamReader没有。
+                BufferedReader br = null;
+                FileOutputStream fos = null;
+                OutputStreamWriter osw = null;
+                // 用于包装InputStreamReader,提高处理性能。因为BufferedReader有缓冲的，而InputStreamReader没有。
+                BufferedWriter bw = null;
+                try {
+                    String line = "";
+                    StringBuffer annotation = new StringBuffer();
+                    StringBuffer content = new StringBuffer();
+                    fis = new FileInputStream(file);
+                    // 从文件系统中的某个文件中获取字节
+                    // InputStreamReader 是字节流通向字符流的桥梁,
+                    isr = new InputStreamReader(fis);
+                    // 从字符输入流中读取文件中的内容,封装了一个new InputStreamReader的对象
+                    br = new BufferedReader(isr);
+                    boolean flag = Boolean.FALSE;
+                    String tab = "";
+                    while ((line = br.readLine()) != null) {
+                        if (line.trim().startsWith(PUNCTUATION_SLASH_DOUBLE)) {
+                            tab = line.substring(0, line.indexOf(PUNCTUATION_SLASH_DOUBLE));
+                            if (!flag) {
+                                line = line.replace(PUNCTUATION_SLASH_DOUBLE, "/**\r\n" + tab + " *");
+                                annotation.append(line);
+                                flag = Boolean.TRUE;
+                            } else {
+                                line = line.replace(PUNCTUATION_SLASH_DOUBLE, " * ");
+                                annotation.append(line);
+                                annotation.append(LINE_BREAK);
+                            }
+                        } else {
+                            if (annotation.length() > 0) {
+                                content.append(annotation);
+                                annotation.delete(0, annotation.length());
+                                content.append(LINE_BREAK);
+                                content.append(tab);
+                                content.append(" */");
+                                content.append(LINE_BREAK);
+                                flag = Boolean.FALSE;
+                            }
+                            if (line.indexOf(PUNCTUATION_SLASH_DOUBLE) > 0 && line.indexOf("\"//") < 0 && line.indexOf("\'//") < 0) {
+                                String code = line.substring(0, line.indexOf(PUNCTUATION_SLASH_DOUBLE));
+                                String anno = line.substring(line.indexOf(PUNCTUATION_SLASH_DOUBLE));
+                                if (anno.trim().length() > 2) {
+                                    tab = code.substring(0, code.length() - code.trim().length());
+                                    content.append(tab);
+                                    content.append("/**");
+                                    content.append(LINE_BREAK);
+                                    content.append(tab);
+                                    content.append(anno.replace(PUNCTUATION_SLASH_DOUBLE, " * "));
+                                    content.append(LINE_BREAK);
+                                    content.append(tab);
+                                    content.append(" */");
+                                    content.append(LINE_BREAK);
+                                }
+                                line = code;
+                            }
+                            content.append(line);
+                            content.append(LINE_BREAK);
+                        }
+                    }
+                    fos = new FileOutputStream(file);
+                    osw = new OutputStreamWriter(fos);
+                    bw = new BufferedWriter(osw);
+                    bw.write(content.toString());
+                } catch (FileNotFoundException e) {
+                    System.out.println("找不到指定文件");
+                } catch (IOException e) {
+                    System.out.println("读取文件失败");
+                } finally {
+                    closeAllIo(fis, isr, br, fos, osw, bw);
+
+                }
+            }
+        }
+    }
+
+    /**
+     * 为module中的类添加swagger 注解
+     *
+     * @author wangyibin
+     * @date 2018/11/7 14:19
+     * @param clazz 需要添加注解的类
+     * @param isPO 是否是po类
+     * @return
+     */
+    public static void addSwaggerAnnotationForModule(Class clazz, boolean isPO) {
+        if (clazz == null) {
+            return;
+        }
+        String path = getPathByClazz(clazz);
+        String fileName = getFileNameOfClass(clazz);
+        addSwaggerAnnotationForModule(path, fileName, isPO);
+    }
+
+    public static String getFileNameOfClass(Class clazz) {
+        if (clazz == null) {
+            return null;
+        }
+        String name = clazz.getName();
+        return name.substring(name.lastIndexOf(".") + 1) + ".java";
+    }
+
+    /**
+     * 为module中的类添加swagger 注解
+     *
+     * @author wangyibin
+     * @date 2018/11/7 14:19
+     * @param rootPath 文件所在根路径
+     * @param fileName 文件名
+     * @param isPO 是否是po类
+     * @return
+     */
+    public static void addSwaggerAnnotationForModule(String rootPath, String fileName, boolean isPO) {
+        if (rootPath == null && fileName == null) {
+            return;
+        }
+        ArrayList<File> files = Lists.newArrayList();
+        if (rootPath != null) {
+            File rootFile = new File(rootPath);
+            if (rootFile.exists()) {
+                getFiles(files, rootFile);
+            }
+        }
+        for (File file : files) {
+            if (file == null) {
+                continue;
+            }
+            if (fileName != null && !file.getName().equals(fileName)) {
+                continue;
+            }
+            FileInputStream fis = null;
+            InputStreamReader isr = null;
+            // 用于包装InputStreamReader,提高处理性能。因为BufferedReader有缓冲的，而InputStreamReader没有。
+            BufferedReader br = null;
+            FileOutputStream fos = null;
+            OutputStreamWriter osw = null;
+            BufferedWriter bw = null;
+            try {
+                String line = null;
+                StringBuffer annotation = new StringBuffer();
+                StringBuffer content = new StringBuffer();
+                fis = new FileInputStream(file);
+                // 从文件系统中的某个文件中获取字节
+                // InputStreamReader 是字节流通向字符流的桥梁,
+                isr = new InputStreamReader(fis);
+                // 从字符输入流中读取文件中的内容,封装了一个new InputStreamReader的对象
+                br = new BufferedReader(isr);
+                while ((line = br.readLine()) != null) {
+                    if (line.trim().startsWith("/**")) {
+                        StringBuffer amp = new StringBuffer("@ApiModelProperty(value = \"");
+                        if (line.trim().indexOf("*/") > 5) {
+                            String val = line.substring(line.indexOf("/**") + 3, line.indexOf("*/"));
+                            amp.append(val.trim());
+                            amp.append("\",dataType = \"");
+                            String nextLine = getNextLine(br, content, isPO);
+                            boolean flag = Boolean.TRUE;
+                            flag = beforeIsAnno(content, amp, nextLine, flag);
+                            if (flag) {
+                                content.append(line);
+                                content.append(LINE_BREAK);
+                            }
+                            content.append(nextLine);
+                            content.append(LINE_BREAK);
+                        } else if (line.trim().equals("/**")) {
+                            String annoc = getNextLine(br, content, isPO);
+                            String annoe = getNextLine(br, content, isPO);
+                            String nextLine = getNextLine(br, content, isPO);
+                            amp.append(annoc.trim().substring(1).trim());
+                            amp.append("\",dataType = \"");
+                            boolean flag = Boolean.TRUE;
+                            if (annoe.trim().equals("*/")) {
+                                flag = beforeIsAnno(content, amp, nextLine, flag);
+                            }
+                            if (flag) {
+                                content.append(line);
+                                content.append(LINE_BREAK);
+                                content.append(annoc);
+                                content.append(LINE_BREAK);
+                                content.append(annoe);
+                                content.append(LINE_BREAK);
+                            }
+                            content.append(nextLine);
+                            content.append(LINE_BREAK);
+                        }
+                    } else if (line.trim().startsWith(PUNCTUATION_SLASH_DOUBLE)) {
+                        StringBuffer amp = new StringBuffer("@ApiModelProperty(value = \"");
+                        amp.append(line.substring(3).trim());
+                        amp.append("\",dataType = \"");
+                        String nextLine = getNextLine(br, content, isPO);
+                        boolean flag = Boolean.TRUE;
+                        flag = beforeIsAnno(content, amp, nextLine, flag);
+                        if (flag) {
+                            content.append(line);
+                            content.append(LINE_BREAK);
+                        }
+                        content.append(nextLine);
+                        content.append(LINE_BREAK);
+
+                    } else {
+                        if (!isPO) {
+                            if (line.trim().startsWith("@Column") || line.trim().startsWith("@Sequence") || line.trim().startsWith("@Id")) {
+                                continue;
+                            }
+                        }
+                        if (line.trim().startsWith("public class")) {
+                            String trim = line.trim();
+                            String aClass = trim.substring(trim.indexOf("class") + 5).trim();
+                            String className = aClass.substring(0, aClass.indexOf(" "));
+                            className = className.substring(0, 1).toUpperCase() + className.substring(1);
+                            if (className.length() > 2) {
+                                content.append("@ApiModel(value = \"");
+                                content.append(className);
+                                content.append("\",description = \"\")");
+                                content.append(LINE_BREAK);
+                            }
+                        }
+                        content.append(line);
+                        content.append(LINE_BREAK);
+                    }
+                }
+                fos = new FileOutputStream(file);
+                osw = new OutputStreamWriter(fos);
+                bw = new BufferedWriter(osw);
+                bw.write(content.toString());
+            } catch (FileNotFoundException e) {
+                System.out.println("找不到指定文件");
+            } catch (IOException e) {
+                System.out.println("读取文件失败");
+            } finally {
+                closeAllIo(fis, isr, br, fos, osw, bw);
+            }
+
+        }
+    }
+
+    public static boolean beforeIsAnno(StringBuffer content, StringBuffer amp, String nextLine, boolean flag) {
+        String tab;
+        if (nextLine.trim().startsWith("private ")) {
+            String[] split = nextLine.trim().split(" ");
+            if (split.length > 2) {
+                tab = nextLine.substring(0, nextLine.indexOf("private"));
+                amp.append(split[1]);
+                amp.append("\")");
+                content.append(tab);
+                content.append(amp);
+                content.append(LINE_BREAK);
+                flag = Boolean.FALSE;
+            }
+        }
+        return flag;
+    }
+
+    public static void closeAllIo(FileInputStream fis, InputStreamReader isr, BufferedReader br, FileOutputStream fos,
+            OutputStreamWriter osw, BufferedWriter bw) {
+        try {
+            // 关闭的时候最好按照先后顺序关闭最后开的先关闭所以先关s,再关n,最后关m
+            if (br != null) {
+                br.close();
+            }
+            if (isr != null) {
+                isr.close();
+            }
+            if (fis != null) {
+                fis.close();
+            }
+            if (bw != null) {
+                bw.close();
+            }
+            if (osw != null) {
+                osw.close();
+            }
+            if (fos != null) {
+                fos.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getNextLine(BufferedReader br, StringBuffer content, boolean isPO) throws IOException {
+        String line = null;
+        while ((line = br.readLine()) != null) {
+            if (!isPO) {
+                if (line.trim().startsWith("@Column") || line.trim().startsWith("@Sequence") || line.trim().startsWith("@Id")) {
+                    continue;
+                }
+            }
+            if (line.trim().startsWith("@")) {
+                content.append(line);
+                content.append(LINE_BREAK);
+                continue;
+            }
+            if (line.trim().length() > 0) {
+                return line;
+            }
+        }
+        return line;
+    }
+
+    public static void getFiles(ArrayList<File> files, File path) {
+        if (path == null || files == null) {
+            return;
+        }
+        if (path.isFile()) {
+            files.add(path);
+        } else {
+            File[] tempList = path.listFiles();
+            for (int i = 0; i < tempList.length; i++) {
+                if (tempList[i].isFile()) {
+                    files.add(tempList[i]);
+                }
+                if (tempList[i].isDirectory()) {
+                    getFiles(files, tempList[i]);
+                }
+            }
+        }
+    }
 
     /**
      * makePath : 创建文件存储路径，为防止一个目录下面出现太多文件，要使用hash算法打散存储

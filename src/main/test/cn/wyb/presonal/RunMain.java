@@ -1,10 +1,12 @@
-package cn.wyb.personal;
+package cn.wyb.presonal;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -12,10 +14,36 @@ import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.junit.Test;
+
+import cn.wyb.personal.common.utils.FileUtils;
 
 public class RunMain {
 
-    public static void main(String[] args) throws InterruptedException {
+    @Test
+    public void test() throws InterruptedException, IOException {
+
+        String a = " 222 // ccccc // 22222   ";
+        String b = " 222 // ccccc  //  22222   ";
+        String[] split = a.split("//", 1);
+        String substring = a.substring(0, a.indexOf("//"));
+        String substring1 = a.substring(a.indexOf("//"));
+        String[] split1 = b.split(" ");
+        System.out.println(a.trim());
+        System.out.println(a);
+        String line = "public class RunMain {";
+        String trim = line.trim();
+        String aClass = trim.substring(trim.indexOf("class") + 5).trim();
+        String className = aClass.substring(0, aClass.indexOf(" "));
+        className = className.substring(0, 1).toUpperCase() + className.substring(1);
+        String path = FileUtils.getPathByClazz(null);
+        System.out.println(path);
+        File file = new File("E:");
+        boolean exists = file.exists();
+        System.out.println(exists);
+
+        // FileUtils.formatParamJavaCode("F:/test","LgAmountSystemParam.java",false);
+
         /*
          * double a = 333333333333333.33; int b = 333333333; Object c = b; int d =
          * (int)c; try { Field age = UserPO.class.getDeclaredField("age");
@@ -24,23 +52,55 @@ public class RunMain {
          * 
          * System.out.println(Double.valueOf(a).intValue());
          * System.out.println(c.getClass()); System.out.println(d);
+         *
          * System.out.println(Double.valueOf(a).intValue());
          */
 
-
         // Map map = (HashMap) Map.class.newInstance();
-        System.out.println(NewMap.class.getAnnotatedInterfaces());
-        System.out.println(NewMap.class.getAnnotatedSuperclass().getClass());
-        System.out.println(NewMap.class.getGenericInterfaces());
-        System.out.println(Map.class.isInterface());
-        System.out.println("map>>>>isAnonymousClass>>>>>" + Map.class.isAnonymousClass());
-        System.out.println("map>>>>isLocalClass>>>>>" + Map.class.isLocalClass());
-        System.out.println("map>>>>isMemberClass>>>>>" + Map.class.isMemberClass());
-        System.out.println("NewMap>>>>isAnonymousClass>>>>>" + NewMap.class.isAnonymousClass());
-        System.out.println("NewMap>>>>isLocalClass>>>>>" + NewMap.class.isLocalClass());
-        System.out.println("NewMap>>>>isMemberClass>>>>>" + NewMap.class.isMemberClass());
-        System.out.println("NewMap>>>>isMemberClass>>>>>" + NewMap.class.isMemberClass());
-
+        /*
+         * System.out.println(NewMap.class.getAnnotatedInterfaces());
+         * System.out.println(NewMap.class.getAnnotatedSuperclass().getClass());
+         * System.out.println(NewMap.class.getGenericInterfaces());
+         * System.out.println(Map.class.isInterface());
+         * System.out.println("map>>>>isAnonymousClass>>>>>" +
+         * Map.class.isAnonymousClass()); System.out.println("map>>>>isLocalClass>>>>>"
+         * + Map.class.isLocalClass()); System.out.println("map>>>>isMemberClass>>>>>" +
+         * Map.class.isMemberClass());
+         * System.out.println("NewMap>>>>isAnonymousClass>>>>>" +
+         * NewMap.class.isAnonymousClass());
+         * System.out.println("NewMap>>>>isLocalClass>>>>>" +
+         * NewMap.class.isLocalClass());
+         * System.out.println("NewMap>>>>isMemberClass>>>>>" +
+         * NewMap.class.isMemberClass());
+         * System.out.println("NewMap>>>>isMemberClass>>>>>" +
+         * NewMap.class.isMemberClass());
+         * 
+         * System.out.println("integer_max:" + Integer.MAX_VALUE);
+         * System.out.println("fload_max:" + Float.MAX_VALUE); DecimalFormat
+         * decimalFormat = new DecimalFormat("0.00"); String format =
+         * decimalFormat.format(Float.valueOf(Float.MAX_VALUE).doubleValue());
+         * System.out.println(format);
+         * 
+         * BigDecimal bd1 = BigDecimal.valueOf(3); BigDecimal bd2 =
+         * BigDecimal.valueOf(-6); System.out.println("正负相加：》》》" + bd1.add(bd2));
+         * System.out.println("相反数：》》》" + bd1.negate());
+         * 
+         * Long ll1 = new Long(3); Long ll2 = -ll1; System.out.println(ll1 + ".....");
+         * System.out.println(ll2 + ">>>>" + ll2.toString());
+         * 
+         * System.out.println(DateUtils.addDays(new Date(),1).toString());
+         * System.out.println(new Date().before(DateUtils.addDays(new Date(),33333)));
+         * 
+         * 
+         * LocalDateTime now = LocalDateTime.now(); LocalDateTime localDateTime2 =
+         * LocalDateTime.of(2015, 3, 31, 13, 55); LocalDateTime localDateTime =
+         * localDateTime2.plusMonths(1); Long bb = 3L; int cc = 3;
+         * 
+         * localDateTime = localDateTime.plusMonths(bb * cc);
+         * System.out.println(localDateTime);
+         * 
+         * bb = null; System.out.println(BigDecimal.valueOf(bb));
+         */
 
         /*
          * File file = new File("C:/Users/jm/Desktop/My Files/others/puser1.xls"); try {
@@ -164,6 +224,37 @@ public class RunMain {
          * DateUtils.DATE_FORMAT_FULL)); strDate = "2014-12-31 00:00:00"; isDate =
          * getDatetimeFormat(strDate); System.out.println("13>" + isDate);
          */
+
+    }
+
+    @Test
+    public void showURL() throws IOException {
+
+        // 第一种：获取类加载的根路径 D:\git\daotie\daotie\target\classes
+        File f = new File(this.getClass().getResource("/").getPath());
+        System.out.println(f);
+
+        // 获取当前类的所在工程路径; 如果不加“/” 获取当前类的加载目录 D:\git\daotie\daotie\target\classes\my
+        File f2 = new File(this.getClass().getResource("").getPath());
+        System.out.println(f2);
+
+        // 第二种：获取项目路径 D:\git\daotie\daotie
+        File directory = new File("");// 参数为空
+        String courseFile = directory.getCanonicalPath();
+        System.out.println(courseFile);
+
+        // 第三种： file:/D:/git/daotie/daotie/target/classes/
+        URL xmlpath = this.getClass().getClassLoader().getResource("");
+        System.out.println(xmlpath);
+
+        // 第四种： D:\git\daotie\daotie
+        System.out.println(System.getProperty("user.dir"));
+        /*
+         * 结果： C:\Documents and Settings\Administrator\workspace\projectName 获取当前工程路径
+         */
+
+        // 第五种： 获取所有的类路径 包括jar包的路径
+        System.out.println(System.getProperty("java.class.path"));
 
     }
 
