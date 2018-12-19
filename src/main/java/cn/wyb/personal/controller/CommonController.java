@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -17,12 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketHandler;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 
 import cn.wyb.personal.common.result.CommResponse;
 import cn.wyb.personal.common.utils.HttpUtil;
+import cn.wyb.personal.common.utils.UserUtils;
+import cn.wyb.personal.handler.MyWebSocketHandler;
 import cn.wyb.personal.model.po.UserPO;
 
 /**
@@ -31,6 +36,24 @@ import cn.wyb.personal.model.po.UserPO;
  **/
 @Controller
 public class CommonController {
+
+    // 注入发送消息的Handler类
+    @Resource(name = "myHandler")
+    private WebSocketHandler myHandler;
+
+    @RequestMapping("/sendMessage")
+    @ResponseBody
+    public CommResponse sendMessage(String messageText) {
+        MyWebSocketHandler webSocketHandler = (MyWebSocketHandler) myHandler;
+        TextMessage textMessage = new TextMessage(messageText);
+        boolean hasSend = webSocketHandler.sendMessageToUser(UserUtils.getLoginUserId(), textMessage);
+        System.out.println(hasSend);
+        if (hasSend) {
+            return CommResponse.success("成功接收");
+        } else {
+            return CommResponse.failure("接收失败");
+        }
+    }
 
 	@RequestMapping("/")
 	public String init(Model m, HttpServletRequest request) {
@@ -70,6 +93,11 @@ public class CommonController {
 	public String toMap() {
         return "/map/bmap";
 	}
+
+    @RequestMapping(value = "/common/bmap2", method = RequestMethod.GET)
+    public String toBmap() {
+        return "/map/bmap2";
+    }
 
 	@RequestMapping("common/ajaxFileUpload")
 	@ResponseBody
