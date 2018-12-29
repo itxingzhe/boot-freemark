@@ -10,8 +10,8 @@ public class PointStrVO {
 		this.y = y;
 	}
 
-	private String x;//经度值
-	private String y;//纬度值
+    private String x;// 经度值lng
+    private String y;// 纬度值lat
 
 	public String getX() {
 		return x;

@@ -1,4 +1,4 @@
-package cn.wyb.presonal.nioandio;
+package cn.wyb.personal.nioandio;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

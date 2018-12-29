@@ -1,11 +1,8 @@
-package cn.wyb.presonal;
+package cn.wyb.personal;
 
 import static cn.wyb.personal.common.utils.DateUtils.getDatetimeFormat;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -33,6 +30,8 @@ import org.apache.shiro.util.ByteSource;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.google.common.collect.Lists;
 
 import cn.wyb.personal.common.utils.AmapUtil;
 import cn.wyb.personal.common.utils.DateUtils;
@@ -47,12 +46,85 @@ public class RunMain {
     @Test
     public void test() {
 
+        LinkedList<String> linkedList = Lists.newLinkedList();
+        linkedList.add("dddd");
+        linkedList.add(2, "ccc");
+        System.out.println(linkedList);
+        System.out.println(linkedList.get(1));
+
+        Calendar calendar = Calendar.getInstance();
+        int over = Integer.MAX_VALUE - 2107054510;
+        System.out.println(over / 60 / 60 / 21);
+        ArrayList<Object> list = Lists.newArrayList();
+        list.add(1);
+        list.add(2);
+        list.addAll(null);
+    }
+
+    @Test
+    public void limitConcurrencyTest() throws InterruptedException {
         LimitConcurrencyTest limitConcurrencyTest = new LimitConcurrencyTest();
-        for (int i = 0; i < 100; i++) {
-            System.out.println(">>>>>>>>" + i + "<<<<<<<<<");
-            limitConcurrencyTest.rateLimiterTest();
-            // limitConcurrencyTest.semaphoreTest();
+
+        for (int i = 0; i < 3; i++) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < 100; i++) {
+                        limitConcurrencyTest.semaphoreTest();
+                    }
+                }
+            });
+            thread.start();
         }
+        Thread.sleep(6000L);
+    }
+
+    @Test
+    public void analysisJsonTest() {
+        File file = new File("C:/Users/jm/Documents/Tencent Files/1107085043/FileRecv/CTM/ctmdata.json");
+        if (file.exists()) {
+            String fileName = file.getName();
+            System.out.println(fileName);
+            FileInputStream fis = null;
+            InputStreamReader isr = null;
+            // 用于包装InputStreamReader,提高处理性能。因为BufferedReader有缓冲的，而InputStreamReader没有。
+            BufferedReader br = null;
+            try {
+                String line = null;
+                StringBuffer content = new StringBuffer();
+                fis = new FileInputStream(file);
+                isr = new InputStreamReader(fis);
+                br = new BufferedReader(isr);
+                while ((line = br.readLine()) != null) {
+                    content.append(line.trim());
+                }
+                String s = content.toString();
+                System.out.println(s);
+                JSONArray jsonObject = JSON.parseArray(s);
+                System.out.println(jsonObject);
+
+            } catch (FileNotFoundException e) {
+                System.out.println("找不到指定文件");
+            } catch (IOException e) {
+                System.out.println("读取文件失败");
+            } finally {
+                FileUtils.closeAllIo(fis, isr, br, null, null, null);
+            }
+        }
+    }
+
+    @Test
+    public void jsonTest() {
+        UserPO userPO = new UserPO();
+        userPO.setUname("dddd");
+        userPO.setAge(33);
+        UserPO user = new UserPO();
+        user.setUname("dddd");
+        user.setAge(33);
+        ArrayList<Object> list = Lists.newArrayList();
+        list.add(userPO);
+        list.add(user);
+        System.out.println(JSON.toJSONString(list));
 
     }
 

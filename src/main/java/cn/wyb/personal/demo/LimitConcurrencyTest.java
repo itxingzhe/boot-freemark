@@ -19,9 +19,9 @@ public class LimitConcurrencyTest {
 
     public static final SimpleDateFormat sdf       = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
 
-    public static final RateLimiter      limiter   = RateLimiter.create(50);                         // 允许每秒最多50个任务
+    public static final RateLimiter      limiter   = RateLimiter.create(5);                          // 允许每秒最多50个任务
 
-    public static final Semaphore        semaphore = new Semaphore(50, true);                        // 允许并发的任务量限制为50个，公平的分配资源
+    public static final Semaphore        semaphore = new Semaphore(5, true);                         // 允许并发的任务量限制为50个，公平的分配资源
 
     public void rateLimiterTest() {
         double acquire = limiter.acquire();// 请求令牌,超过许可会被阻塞
@@ -41,7 +41,7 @@ public class LimitConcurrencyTest {
 
     public void semaphoreTest() {
         try {
-            semaphore.acquire(); // 获取信号量,不足会阻塞
+            // semaphore.acquire(); // 获取信号量,不足会阻塞
             if (semaphore.tryAcquire()) {
                 System.out.println(
                         Thread.currentThread().getName() + " start at :" + sdf.format(new Date()) + "," + semaphore.availablePermits());
