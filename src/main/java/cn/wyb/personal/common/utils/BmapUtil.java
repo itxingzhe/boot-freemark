@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -30,7 +32,7 @@ public class BmapUtil {
     public static final String  POINT_SUGGESTION       = "/suggestion";
     private static final Double RE                     = 6378137.0;
 
-    // private static final LogHelper LOGGER = LogHelper.getLogger(BmapUtil.class);
+    private static final Logger log                    = LoggerFactory.getLogger(BmapUtil.class);
 
     /**
      * @Param2Map : param转Map
@@ -92,6 +94,7 @@ public class BmapUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        log.info("百度API调用结果：" + s);
         return s;
     }
 

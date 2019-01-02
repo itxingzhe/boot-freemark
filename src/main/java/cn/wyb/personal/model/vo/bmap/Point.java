@@ -2,6 +2,8 @@ package cn.wyb.personal.model.vo.bmap;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
+
 public class Point {
 
 	public Point(){}
@@ -11,7 +13,10 @@ public class Point {
 		this.lat = this.lat;
 	}
 
+    @NotNull(message = "经度值不能为空")
 	private Float lng;//经度值
+
+    @NotNull(message = "纬度值不能为空")
 	private Float lat;//纬度值
 
 	@Override

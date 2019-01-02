@@ -49,7 +49,6 @@ public class UserActionInterceptor implements HandlerInterceptor {
 			} else {
 				// 3.2 不一样，这里统一做退出登录处理；
 				SecurityUtils.getSubject().logout();
-
 			}
 		}
 		return false;

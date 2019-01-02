@@ -27,102 +27,101 @@ import cn.wyb.personal.model.po.UserPO;
 import cn.wyb.personal.service.user.UserService;
 
 /**
- * Create Time: 2018年04月26日 13:06
- * C@author wyb
+ * Create Time: 2018年04月26日 13:06 C@author wyb
  **/
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
-	//通过类型注入
-	@Autowired
-	// 通过名称注入
-	//@Qualifier("userService2")
-	private UserService userService;
+    // 通过类型注入
+    @Autowired
+    // 通过名称注入
+    // @Qualifier("userService2")
+    private UserService userService;
 
-	//通过名称注入
-	@Resource(name = "userService2")
-	private UserService userService2;
+    // 通过名称注入
+    @Resource(name = "userService2")
+    private UserService userService2;
 
-	@RequestMapping(value = "/init", method = RequestMethod.GET)
-	public ModelAndView init() {
-		return new ModelAndView("/user/list");
-	}
+    @RequestMapping(value = "/init", method = RequestMethod.GET)
+    public ModelAndView init() {
+        return new ModelAndView("/user/list");
+    }
 
-	@RequestMapping("/queryData")
-	@ResponseBody
-	public PageResult<UserPO> listData(UserParam param) {
-		userService.toInterface();
-		userService2.toInterface();
-		return userService.listData(param);
-	}
+    @RequestMapping("/queryData")
+    @ResponseBody
+    public PageResult<UserPO> listData(UserParam param) {
+        userService.toInterface();
+        userService2.toInterface();
+        return userService.listData(param);
+    }
 
-	@RequestMapping(value = "toLogin", method = RequestMethod.GET)
-	public String toLogin(Model m) {
-		m.addAttribute("user", userService.getUser(1));
-		m.addAttribute("token", "user-token");
-		return "user/toLogin";
-	}
+    @RequestMapping(value = "toLogin", method = RequestMethod.GET)
+    public String toLogin(Model m) {
+        m.addAttribute("user", userService.getUser(1));
+        m.addAttribute("token", "user-token");
+        return "user/toLogin";
+    }
 
-	@RequestMapping(value = "doLogin", method = RequestMethod.POST)
-	public String login(UserPO user, HttpSession session, HttpServletRequest request) {
+    @RequestMapping(value = "doLogin", method = RequestMethod.POST)
+    public String login(UserPO user, HttpSession session, HttpServletRequest request) {
 
-		UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
-		Subject subject = SecurityUtils.getSubject();
-		//完成登录
-		subject.login(usernamePasswordToken);
-			UserPO userIn = (UserPO) subject.getPrincipal();
-		session.setAttribute("userInfo", userIn);
-		SavedRequest savedRequest = WebUtils.getSavedRequest(request);
-		if(savedRequest != null && savedRequest.getMethod().equals(RequestMethod.GET.name())){
-			String url = savedRequest.getRequestUrl();
-			if(url != null && url.indexOf("/") >= 0 && !url.equals("/user/toLogin") && !url.equals("/user/logout")){
-				return url;
-			}
-		}
-		return "forward:/";
+        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+        Subject subject = SecurityUtils.getSubject();
+        // 完成登录
+        subject.login(usernamePasswordToken);
+        UserPO userIn = (UserPO) subject.getPrincipal();
+        session.setAttribute("userInfo", userIn);
+        SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+        if (savedRequest != null && savedRequest.getMethod().equals(RequestMethod.GET.name())) {
+            String url = savedRequest.getRequestUrl();
+            if (url != null && url.indexOf("/") >= 0 && !url.equals("/user/toLogin") && !url.equals("/user/logout")) {
+                return url;
+            }
+        }
+        return "forward:/";
 
-	}
+    }
 
-	@RequestMapping(value = "toRegister", method = RequestMethod.GET)
-	public String register(Model m) {
-		m.addAttribute("token", "user-token");
-		return "user/register";
-	}
+    @RequestMapping(value = "toRegister", method = RequestMethod.GET)
+    public String register(Model m) {
+        m.addAttribute("token", "user-token");
+        return "user/register";
+    }
 
-	@RequestMapping(value = "toUpdate", method = RequestMethod.GET)
-	public String toUpdate(Model m, Integer id) {
-		UserPO user = userService.getUser(id);
-		m.addAttribute("user", user);
-		return "user/toUpdate";
-	}
+    @RequestMapping(value = "toUpdate", method = RequestMethod.GET)
+    public String toUpdate(Model m, Integer id) {
+        UserPO user = userService.getUser(id);
+        m.addAttribute("user", user);
+        return "user/toUpdate";
+    }
 
-	//注解的使用
-	@MethodLog(remark = "新增用户")
-	@RequiresRoles("admin")
-	@RequiresPermissions("user_add")
-	@RequestMapping(value = "saveUser", method = RequestMethod.POST)
-	@ResponseBody
-	public CommResponse addUser(UserPO user) {
-		Integer row = userService.save(user);
-		return CommResponse.success(row);
-	}
+    // 注解的使用
+    @MethodLog(remark = "新增用户")
+    @RequiresRoles("admin")
+    @RequiresPermissions("user_add")
+    @RequestMapping(value = "saveUser", method = RequestMethod.POST)
+    @ResponseBody
+    public CommResponse addUser(UserPO user) {
+        Integer row = userService.save(user);
+        return CommResponse.success(row);
+    }
 
-	//注解的使用
-	@RequiresRoles("admin")
-	@RequiresPermissions("update")
-	@RequestMapping(value = "updateUser", method = RequestMethod.POST)
-	@ResponseBody
-	public CommResponse updateUser(UserPO user) {
-		Integer row = userService.update(user);
-		return CommResponse.success(row);
-	}
+    // 注解的使用
+    @RequiresRoles("admin")
+    @RequiresPermissions("update")
+    @RequestMapping(value = "updateUser", method = RequestMethod.POST)
+    @ResponseBody
+    public CommResponse updateUser(UserPO user) {
+        Integer row = userService.update(user);
+        return CommResponse.success(row);
+    }
 
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public ModelAndView logOut(HttpSession session) {
-		Subject subject = SecurityUtils.getSubject();
-		session.getAttribute("user");
-		subject.logout();
-		return new ModelAndView("user/toLogin");
-	}
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public ModelAndView logOut(HttpSession session) {
+        Subject subject = SecurityUtils.getSubject();
+        session.getAttribute("user");
+        subject.logout();
+        return new ModelAndView("user/toLogin");
+    }
 }

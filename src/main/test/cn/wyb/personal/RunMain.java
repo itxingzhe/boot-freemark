@@ -31,8 +31,10 @@ import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 
+import cn.wyb.personal.common.result.PageResult;
 import cn.wyb.personal.common.utils.AmapUtil;
 import cn.wyb.personal.common.utils.DateUtils;
 import cn.wyb.personal.common.utils.FileUtils;
@@ -125,6 +127,12 @@ public class RunMain {
         list.add(userPO);
         list.add(user);
         System.out.println(JSON.toJSONString(list));
+
+        String json = "{\"total\":15,\"pageNum\":0,\"rows\":[{\"uid\":1,\"username\":\"zhangsan\",\"password\":\"28dc4103b273f13f1629d0473e44ce38\",\"uname\":\"张伞伞\",\"age\":23,\"sex\":\"男\",\"address\":\"求是路3号\",\"version\":\"0\",\"roles\":[]},{\"uid\":2,\"username\":\"zhaoliu\",\"password\":\"4c24ba976846dc67e58c3a26dc9bffd9\",\"uname\":\"张三\",\"age\":23,\"sex\":\"男\",\"address\":\"求是路3号\",\"version\":\"1\",\"roles\":[]},{\"uid\":10,\"username\":\"lisi\",\"password\":\"39d75529bc43830d18800118cfd68756\",\"uname\":\"lisi\",\"age\":18,\"sex\":\"未知\",\"address\":\"保密\",\"version\":\"0\",\"roles\":[]},{\"uid\":11,\"username\":\"lalala\",\"password\":\"df3ea1160e9427e0a50b0c11bfc00b0e\",\"uname\":\"啦啦啦\",\"age\":23,\"sex\":\"保密\",\"address\":\"\",\"version\":\"0\",\"roles\":[]},{\"uid\":12,\"username\":\"wangwu\",\"password\":\"a3b7f19b44fa558422a1146ce8076a72\",\"uname\":\"王五\",\"age\":33,\"sex\":\"男\",\"address\":\"舟山渔山岛\",\"version\":\"0\",\"roles\":[]},{\"uid\":13,\"username\":\"lilei\",\"password\":\"4594fb06ee7fdfcb756fda4647e6d583\",\"uname\":\"李雷\",\"age\":23,\"sex\":\"男\",\"address\":\"杭州市余杭区\",\"version\":\"0\",\"roles\":[]},{\"uid\":14,\"username\":\"lilei\",\"password\":\"c05ce384dc74f04ec65b2d8546fe1034\",\"uname\":\"李雷\",\"age\":23,\"sex\":\"男\",\"address\":\"杭州市余杭区\",\"version\":\"0\",\"roles\":[]},{\"uid\":15,\"username\":\"hanmeimei\",\"password\":\"0e3118eacd4e3487a3998baac2cf505a\",\"uname\":\"韩梅梅\",\"age\":23,\"sex\":\"女\",\"address\":\"杭州西湖区\",\"version\":\"0\",\"roles\":[]},{\"uid\":16,\"username\":\"hanmeimei\",\"password\":\"5c93879ef45e8a941ec018ab8f0d21ef\",\"uname\":\"韩梅梅\",\"age\":23,\"sex\":\"女\",\"address\":\"杭州西湖区\",\"version\":\"0\",\"roles\":[]},{\"uid\":17,\"username\":\"hhhha\",\"password\":\"c2895d73aea7c9ac6e8ad7b52c204b8a\",\"uname\":\"哈哈哈哈\",\"age\":34,\"sex\":\"未知\",\"address\":\"未知\",\"version\":\"0\",\"roles\":[]},{\"uid\":18,\"username\":\"hhhha\",\"password\":\"a5637f81e96b69fa02b8f8622d9ba01f\",\"uname\":\"哈哈哈哈\",\"age\":34,\"sex\":\"未知\",\"address\":\"未知\",\"version\":\"0\",\"roles\":[]},{\"uid\":19,\"username\":\"heiehi\",\"password\":\"7b7ee25000dbe6fb0c0afb0c64d8d711\",\"uname\":\"嘿嘿\",\"age\":43,\"sex\":\"未知\",\"address\":\"未知\",\"version\":\"0\",\"roles\":[]},{\"uid\":20,\"username\":\"heiehi\",\"password\":\"9e707bed32ce0abb2dcb64e7fb4cb085\",\"uname\":\"嘿嘿\",\"age\":43,\"sex\":\"未知\",\"address\":\"未知\",\"version\":\"0\",\"roles\":[]},{\"uid\":21,\"username\":\"enene\",\"password\":\"fcd7909a295b233aaea6064d0879569e\",\"uname\":\"恩恩额\",\"age\":23,\"sex\":\"未知\",\"address\":\"未知\",\"version\":\"0\",\"roles\":[]},{\"uid\":22,\"username\":\"enene\",\"password\":\"2a17ef1f92e88d69fc7e3edfa5edf721\",\"uname\":\"恩恩额\",\"age\":23,\"sex\":\"未知\",\"address\":\"未知\",\"version\":\"0\",\"roles\":[]}]}";
+
+        JSONObject jsonObject = JSON.parseObject(json);
+        PageResult result = JSON.parseObject(json, PageResult.class);
+        System.out.println(jsonObject);
 
     }
 

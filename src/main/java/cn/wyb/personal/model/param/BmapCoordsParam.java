@@ -2,6 +2,13 @@ package cn.wyb.personal.model.param;
 
 public class BmapCoordsParam extends BmapApiBaseParam {
 
+    public BmapCoordsParam() {
+    }
+
+    public BmapCoordsParam(String coords) {
+        this.coords = coords;
+    }
+
 	/**
 	 * 需转换的源坐标，多组坐标以“；”分隔 （经度，纬度），最多100组
 	 */
@@ -28,6 +35,11 @@ public class BmapCoordsParam extends BmapApiBaseParam {
 	 * 6：bd09mc(百度米制经纬度坐标)
 	 */
 	private Integer to;
+
+    public BmapCoordsParam(String coords, Integer from) {
+        this.coords = coords;
+        this.from = from;
+    }
 
 	public String getCoords() {
 		return coords;
