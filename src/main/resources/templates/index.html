@@ -4,13 +4,98 @@
     <meta charset="UTF-8">
     <title>用户列表</title>
     <link type="text/css" rel="stylesheet" href="/css/index.css" >
+    <link type="text/css" rel="stylesheet" href="/css/common.css">
     <link type="text/css" rel="stylesheet" href="/jars/bootstrap/css/bootstrap.css" >
     <script type="text/javascript" src="/jars/jquery/jquery-3.3.1.js" ></script>
     <script type="text/javascript" src="/js/index.js" ></script>
     <script type="text/javascript" src="/js/common.js" ></script>
     <script type="text/javascript" src="/js/AjaxFileupload.js"></script>
+    <style>
+        .marquee {
+            width: 450px;
+            margin: 0 auto;
+            overflow: hidden;
+            white-space: nowrap;
+            box-sizing: border-box;
+            animation: marquee 5s linear infinite;
+        }
+
+        .marquee:hover {
+            animation-play-state: paused;
+            -webkit-animation-play-state: paused;
+        }
+
+        /* Make it move */
+        @keyframes marquee {
+            0% {
+                text-indent: 27.5em
+            }
+        <!-- 将段落的第一行缩进 * * 像素 -->
+            100% {
+                text-indent: -105em
+            }
+
+            /*0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }*/
+        }
+
+        .box {
+            width: 1500px;
+            height: 400px;
+            border: 1px solid;
+            box-shadow: 2px 2px 2px #000; /*属性向框添加一个或多个阴影。*/
+            overflow: hidden;
+            position: relative;
+        }
+
+        .box1, .box2 {
+            width: 1298px;
+            position: absolute;
+        }
+
+        .box2 {
+            left: 1298px;
+        }
+
+        img {
+            width: 432px;
+            height: 400px;
+            float: left;
+        }
+    </style>
 </head>
 <body>
+
+<marquee style="color: red;" behavior="scroll" direction="right" align="absmiddle" width="70%">
+    <!--
+        behavior：设置文本在 marquee 元素内如何滚动。可选值有 scroll(连续滚动)，slide(滑动一次) 和 alternate(往返滚动)。 如果未指定值，默认值为 scroll。
+        bgcolor：通过颜色名称或十六进制值设置背景颜色。
+        direction：设置 marquee 内文本滚动的方向。可选值有 left, right, up and down。如果未指定值，默认值为 left。
+        loop：设置 marquee 滚动的次数。如果未指定值，默认值为 −1，表示 marquee 将连续滚动.
+        scrollamount：设置每次滚动时移动的长度（以像素为单位）。默认值为 6。
+        scrolldelay：设置每次滚动时的时间间隔（以毫秒为单位）。默认值为 85。请注意， 除非指定 truespeed 值，否则将忽略任何小于 60 的值，并改为使用 60。
+        truespeed：默认情况下，会忽略小于60的scrolldelay值。如果存在truespeed，那些值不会被忽略。
+        vspace,hspace：表示运动区域边界的水平距离和垂直距离，以像素或百分比值设置垂直边距。
+        width,height：表示运动区域的宽度和高度，以像素或百分比值设置高度。
+        align：表示元素的垂直对齐方式，值可以是top，middle，bottom，默认为middle
+        onmouseover=this.stop() onmouseout=this.start()表示当鼠标以上区域的时候滚动停止，当鼠标移开的时候又继续滚动
+     -->
+    滚动展示公告：marquee标签展示公告内容。
+</marquee>
+<div class="marquee">css动画滚动展示公告：公告内容,animation : 动画名 时间 速度曲线 开始的时候延迟 播放次数 轮流反向播放。</div>
+<div class="box" id="box">
+    <div class="box1" id="box1">
+        <img src="img/close.png">
+        <img src="img/ginkgo_leaf.jpg">
+        <img src="img/1.jpg">
+    </div>
+</div>
     <div>
         <#if userInfo?exists>
         ${userInfo.uname} 欢迎您登陆
@@ -76,5 +161,24 @@
     <div>
         <a href="/common/test" target="_blank">去测试页</a>
     </div>
+<script type="text/javascript">
+    window.onload = function () {
+        var _box1 = document.getElementById("box1");
+        var _box2 = document.getElementById("box2");
+        debugger;
+        marquee("box");
+        /*var w = _box1.offsetWidth;
+        var x = 0;
+        var fun = function(){
+            _box1.style.left = x + 'px';
+            _box2.style.left = (x + w ) + 'px';
+            x--;
+            if((x + w) == 0){
+                x = 0;
+            }
+        }
+        setInterval(fun,1);*/
+    }
+</script>
 </body>
 </html>

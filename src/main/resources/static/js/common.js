@@ -31,8 +31,47 @@ ajaxFileUpload = function (param) {
             }
         }
     });
-
 };
+
+function marquee(domid, time) {
+    debugger;
+    var marq = document.getElementById(domid);
+    var text = marq.text;
+    var chil;
+    if (!!text) {
+        chil = document.createElement("div");
+        chil.innerText = text;
+        chil.offsetWidth = marq.clientWidth;
+        marq.innerText = "";
+        marq.appendChild(chil);
+    } else {
+        chil = marq.children("div");
+    }
+    var copyHtml = chil;
+    var htmlWidth = chil.clientWidth;
+    copyHtml.clientLeft = htmlWidth;
+    marq.appendChild(copyHtml);
+    var x = 0;
+    var fun = function () {
+        chil.style.left = x + 'px';
+        copyHtml.style.left = (x + htmlWidth) + 'px';
+        x--;
+        if ((x + htmlWidth) == 0) {
+            x = 0;
+        }
+    }
+    var m = time || 50;
+    var inte = setInterval(fun, m);
+
+    marq.onmouseover = function (ev) {
+        clearInterval(inte);
+    }
+
+    marq.onmouseout = function (ev) {
+        inte = setInterval(fun, m);
+    }
+
+}
 
 //获取标签下所有input标签的value
 function getData(dataDom, data, config) {

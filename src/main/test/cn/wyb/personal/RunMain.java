@@ -60,7 +60,8 @@ public class RunMain {
         ArrayList<Object> list = Lists.newArrayList();
         list.add(1);
         list.add(2);
-        list.addAll(null);
+        // list.addAll(null);
+
     }
 
     @Test
