@@ -33,44 +33,78 @@ ajaxFileUpload = function (param) {
     });
 };
 
-function marquee(domid, time) {
-    debugger;
-    var marq = document.getElementById(domid);
-    var text = marq.text;
+/**
+ * 走马灯、无缝滚动
+ *
+ * @author wangyibin
+ * @date 2019/1/7 15:17
+ * @param parentId 标签ID（默认值：marquee）
+ * @param direction 滚动方向（默认值：向左） 左：left；右：right；上：upward
+ * @param time 滚动一次所需时间，单位毫秒（默认值：50）
+ * @return
+ *
+ */
+function marquee(parentId, time, direction) {
+    parentId = parentId || "marquee";
+    direction = direction || "left";
+    var marq = document.getElementById(parentId);
+    var text = marq.innerText;
     var chil;
     if (!!text) {
         chil = document.createElement("div");
         chil.innerText = text;
-        chil.offsetWidth = marq.clientWidth;
+        chil.style.width = marq.clientWidth + "px";
+        var height = marq.offsetHeight + "px";
         marq.innerText = "";
+        marq.style.height = height;
         marq.appendChild(chil);
     } else {
-        chil = marq.children("div");
+        chil = marq.firstElementChild;
     }
-    var copyHtml = chil;
+    if ("left" == direction || "right" == direction) {
+        chil.style.position = "absolute";
+    }
+    chil.style.whiteSpace = "nowrap";
+    marq.style.position = "relative";
+    marq.style.overflow = "hidden";
+    var copyHtml = chil.cloneNode(true);
     var htmlWidth = chil.clientWidth;
-    copyHtml.clientLeft = htmlWidth;
+    if ("left" == direction || "right" == direction) {
+        copyHtml.style.left = htmlWidth + "px";
+    }
     marq.appendChild(copyHtml);
     var x = 0;
     var fun = function () {
-        chil.style.left = x + 'px';
-        copyHtml.style.left = (x + htmlWidth) + 'px';
-        x--;
-        if ((x + htmlWidth) == 0) {
-            x = 0;
+        if ("upward" == direction) {
+            if (marq.scrollTop >= chil.offsetHeight) {
+                marq.scrollTop = 0;
+            }
+            else {
+                marq.scrollTop = marq.scrollTop + 1;
+            }
+        } else {
+            if ("left" == direction) {
+                chil.style.left = x + 'px';
+                copyHtml.style.left = (x + htmlWidth) + 'px';
+            } else if ("right" == direction) {
+                chil.style.right = x + 'px';
+                copyHtml.style.right = (x + htmlWidth) + 'px';
+            }
+            x--;
+            if ((x + htmlWidth) == 0) {
+                x = 0;
+            }
         }
-    }
+    };
     var m = time || 50;
     var inte = setInterval(fun, m);
 
     marq.onmouseover = function (ev) {
         clearInterval(inte);
-    }
-
+    };
     marq.onmouseout = function (ev) {
         inte = setInterval(fun, m);
-    }
-
+    };
 }
 
 //获取标签下所有input标签的value

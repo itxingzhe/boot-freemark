@@ -71,7 +71,6 @@
     </style>
 </head>
 <body>
-
 <marquee style="color: red;" behavior="scroll" direction="right" align="absmiddle" width="70%">
     <!--
         behavior：设置文本在 marquee 元素内如何滚动。可选值有 scroll(连续滚动)，slide(滑动一次) 和 alternate(往返滚动)。 如果未指定值，默认值为 scroll。
@@ -95,6 +94,18 @@
         <img src="img/ginkgo_leaf.jpg">
         <img src="img/1.jpg">
     </div>
+</div>
+<div id="marquee" style="width: 1000px">css走马灯展示公告：公告内容,marquee : 通过js实现走马灯式展示公告内容，方法需要传入其父元素的ID。</div>
+<div id="textup">
+    <ul>
+        <li><a href="#" target="_blank">脚本之家欢迎您的到来</a></li>
+        <li><a href="#" target="_blank">只有努力才会有美好的明天</a></li>
+        <li><a href="#" target="_blank">没有人一开始就是高手，都是从菜鸟开始</a></li>
+        <li><a href="#" target="_blank">每一天都是新的需要好好珍惜</a></li>
+        <li><a href="#" target="_blank">怨天尤人是没有任何作用的</a></li>
+        <li><a href="#" target="_blank">今天你写代码了吗</a></li>
+        <li><a href="#" target="_blank">分享的胸怀和互助的精神最终成就了你</a></li>
+    </ul>
 </div>
     <div>
         <#if userInfo?exists>
@@ -163,21 +174,10 @@
     </div>
 <script type="text/javascript">
     window.onload = function () {
-        var _box1 = document.getElementById("box1");
-        var _box2 = document.getElementById("box2");
-        debugger;
-        marquee("box");
-        /*var w = _box1.offsetWidth;
-        var x = 0;
-        var fun = function(){
-            _box1.style.left = x + 'px';
-            _box2.style.left = (x + w ) + 'px';
-            x--;
-            if((x + w) == 0){
-                x = 0;
-            }
-        }
-        setInterval(fun,1);*/
+        marquee("box", 10);
+        marquee();
+        marquee("textup", 50, "upward");
+
     }
 </script>
 </body>

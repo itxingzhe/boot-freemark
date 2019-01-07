@@ -317,6 +317,18 @@ public class FileUtils {
         }
     }
 
+    /**
+     * beforeIsAnno : 判断前面是否是注解
+     *
+     * @author wangyibin
+     * @date 2019/1/7 15:02
+     * @param content
+     * @param amp
+     * @param nextLine
+     * @param flag
+     * @return boolean
+     * 
+     */
     public static boolean beforeIsAnno(StringBuffer content, StringBuffer amp, String nextLine, boolean flag) {
         String tab;
         if (nextLine.trim().startsWith("private ")) {
@@ -334,6 +346,20 @@ public class FileUtils {
         return flag;
     }
 
+    /**
+     * closeAllIo : 关闭IO流
+     *
+     * @author wangyibin
+     * @date 2019/1/7 15:18
+     * @param fis
+     * @param isr
+     * @param br
+     * @param fos
+     * @param osw
+     * @param bw
+     * @return void
+     * 
+     */
     public static void closeAllIo(FileInputStream fis, InputStreamReader isr, BufferedReader br, FileOutputStream fos,
             OutputStreamWriter osw, BufferedWriter bw) {
         try {
