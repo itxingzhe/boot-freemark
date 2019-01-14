@@ -3,6 +3,7 @@ package cn.wyb.personal.common.utils;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,27 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.ElementList;
+import com.itextpdf.tool.xml.XMLWorker;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.itextpdf.tool.xml.css.StyleAttrCSSResolver;
+import com.itextpdf.tool.xml.html.CssAppliers;
+import com.itextpdf.tool.xml.html.CssAppliersImpl;
+import com.itextpdf.tool.xml.html.Tags;
+import com.itextpdf.tool.xml.parser.XMLParser;
+import com.itextpdf.tool.xml.pipeline.css.CSSResolver;
+import com.itextpdf.tool.xml.pipeline.css.CssResolverPipeline;
+import com.itextpdf.tool.xml.pipeline.end.ElementHandlerPipeline;
+import com.itextpdf.tool.xml.pipeline.html.AbstractImageProvider;
+import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
+import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
+
+import cn.wyb.personal.model.vo.LgFaqVO;
+import cn.wyb.personal.pdf.MyFontsProvider;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 /**
  * FileUtils: 文件操作工具类
@@ -33,12 +55,104 @@ public class FileUtils {
     public static final String SUFFIX_PNG                   = ".png";
     public static final String SUFFIX_TXT                   = ".txt";
     public static final String SUFFIX_JAVA                  = ".java";
+    public static final String SUFFIX_PDF                   = ".pdf";
     public static final String SHEET_DEFAULT_NAME           = "Sheet1";
     public static final String PUNCTUATION_SLASH            = "/";
     public static final String PUNCTUATION_SLASH_DOUBLE     = "//";
     public static final String PUNCTUATION_BACKSLASH        = "\\";
     public static final String PUNCTUATION_BACKSLASH_DOUBLE = "\\\\";
     public static final String LINE_BREAK                   = "\r\n";
+    public static final String ENCODING_UTF8                = "UTF-8";
+    private static int         interval                     = -5;
+
+    public static void main(String[] args) throws FileNotFoundException {
+        LgFaqVO faq = new LgFaqVO();
+        faq.setTitle("聚运通支付");
+        faq.setText("<p>\n"
+                + "\t<a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a>\n"
+                + "</p>\n" + "<p>\n"
+                + "\t<a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线</a>\n"
+                + "</p>\n" + "<p>\n"
+                + "\t<img src=\"http://image.jumore.test/jfs1/000/18/E1/rBIBPVw2zESAZb-WAAHeuH5Yg5Y126.jpg\" title=\"1.jpg\" alt=\"1.jpg\" />\n"
+                + "</p>\n" + "<p>\n"
+                + "\t<a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">支付服务协议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协</a>\n"
+                + "</p>\n" + "<p>\n"
+                + "\t<a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a><a href=\"https://manage.jumoreyun.test/index?page=/faq/list#\">在线支付服务协议</a>\n"
+                + "</p>\n" + "<p>\n"
+                + "\t<span style=\"color:#4F4F4F;font-family:&quot;font-size:16px;background-color:#FFFFFF;\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;通过模版导出PDF的方法有很多，但是思路都大致相同，总结起来就是&nbsp;</span><span style=\"font-weight:700;color:#4F4F4F;font-family:&quot;font-size:16px;background-color:#FFFFFF;\">1&nbsp;</span><span style=\"color:#4F4F4F;font-family:&quot;font-size:16px;background-color:#FFFFFF;\">渲染模版&nbsp;</span><span style=\"font-weight:700;color:#4F4F4F;font-family:&quot;font-size:16px;background-color:#FFFFFF;\">2</span><span style=\"color:#4F4F4F;font-family:&quot;font-size:16px;background-color:#FFFFFF;\">&nbsp;导出模版。以为之前使用过freemarker，所以我这里<span style=\"background-color:#E53333;\">渲染模版的技术用的是freemarker，然后在使用itextpdf将渲染好的模版导出</span>。</span>\n"
+                + "</p>\n" + "<p>\n" + "\t<br />\n</p>");
+        String s = PdfUtils.convertToPdf("/static/ftl", "hello.html", faq.getTitle() + SUFFIX_PDF, faq);
+        /*
+         * PDFKit pdfKit = new PDFKit(); String s = pdfKit.exportToFile("hello.pdf",
+         * faq);
+         */
+        System.out.println(s);
+    }
+
+    public static ElementList parseHtml(final String html, final String imgPath) {
+        CSSResolver cssResolver = new StyleAttrCSSResolver();
+
+        MyFontsProvider fontProvider = new MyFontsProvider();// 中文字体设置
+        CssAppliers cssAppliers = new CssAppliersImpl(fontProvider);
+        HtmlPipelineContext htmlContext = new HtmlPipelineContext(cssAppliers);
+        htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
+        // 设置html中图片的路径
+        htmlContext.setImageProvider(new AbstractImageProvider() {
+            public String getImageRootPath() {
+                return imgPath;
+            }
+        });
+        htmlContext.autoBookmark(false);
+
+        ElementList elements = new ElementList();
+        ElementHandlerPipeline end = new ElementHandlerPipeline(elements, null);
+        HtmlPipeline htmlPipeline = new HtmlPipeline(htmlContext, end);
+        CssResolverPipeline cssPipeline = new CssResolverPipeline(cssResolver, htmlPipeline);
+        XMLWorker worker = new XMLWorker(cssPipeline, true);
+        XMLParser p = new XMLParser(worker);
+        try {
+            p.parse(new ByteArrayInputStream(html.getBytes()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return elements;
+    }
+
+    private static void convertToPDF(PdfWriter writer, Document document, String htmlString) throws Exception {
+        document.open();
+        MyFontsProvider fontProvider = new MyFontsProvider();
+        fontProvider.addFontSubstitute("lowagie", "garamond");
+        fontProvider.setUseUnicode(true);
+        CssAppliers cssAppliers = new CssAppliersImpl(fontProvider);
+        HtmlPipelineContext htmlContext = new HtmlPipelineContext(cssAppliers);
+        htmlContext.setTagFactory(Tags.getHtmlTagProcessorFactory());
+        XMLWorkerHelper.getInstance().getDefaultCssResolver(true);
+        // writer.setPageEvent(new BackGroundImage());
+        try {
+            XMLWorkerHelper.getInstance().parseXHtml(writer, document, new ByteArrayInputStream(htmlString.getBytes("UTF-8")),
+                    XMLWorkerHelper.class.getResourceAsStream("/default.css"), Charset.forName("UTF-8"), fontProvider);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            document.close();
+        }
+
+    }
+
+    public static void createFileByFreemarker() {
+        try {
+            Configuration config = new Configuration();
+            HashMap<Object, Object> map = Maps.newHashMap();
+            config.setDefaultEncoding("UTF-8");
+            config.setDirectoryForTemplateLoading(new File("/static/ftl"));
+            Template template = config.getTemplate("hello.html");
+            FileWriter fileWriter = new FileWriter(new File(""));
+            template.process(map, new FileWriter("F:\\bb.html"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 获取class类所在的项目路径
@@ -327,7 +441,7 @@ public class FileUtils {
      * @param nextLine
      * @param flag
      * @return boolean
-     * 
+     *
      */
     public static boolean beforeIsAnno(StringBuffer content, StringBuffer amp, String nextLine, boolean flag) {
         String tab;
@@ -358,7 +472,7 @@ public class FileUtils {
      * @param osw
      * @param bw
      * @return void
-     * 
+     *
      */
     public static void closeAllIo(FileInputStream fis, InputStreamReader isr, BufferedReader br, FileOutputStream fos,
             OutputStreamWriter osw, BufferedWriter bw) {
@@ -434,7 +548,7 @@ public class FileUtils {
      * @param filename 文件名，要根据文件名生成存储目录
      * @param savePath 文件存储路径
      * @return java.lang.String
-     * 
+     *
      */
     public static String makePath(String filename, String savePath) {
         // 得到文件名的hashCode的值，得到的就是filename这个字符串对象在内存中的地址
@@ -460,7 +574,7 @@ public class FileUtils {
      * @date 2018/10/15 16:23
      * @param filename 文件的原始名称
      * @return java.lang.String
-     * 
+     *
      */
     public static String makeFileName(String filename) {
         // 为防止文件覆盖的现象发生，要为上传文件产生一个唯一的文件名
@@ -502,7 +616,7 @@ public class FileUtils {
      * @date 2018/10/15 17:28
      * @param cell
      * @return java.lang.Object
-     * 
+     *
      */
     public static Object getCellValue(Cell cell) {
         Object value = null;
