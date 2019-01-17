@@ -46,6 +46,78 @@ import cn.wyb.personal.model.vo.bmap.PointStrVO;
 public class RunMain {
 
     @Test
+    public void testTest() {
+        int total = 100;
+        System.out.println(total + "");
+        int[] commodities = new int[] { 12, 2, 6, 25, 65, 13, 18, 33 };
+        // getMore(total,commodities);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("请输入参数");
+        Scanner sc = new Scanner(System.in);
+        String monthAndDay = sc.nextLine();
+        String say = sc.nextLine();
+        String[] monthAndDayArray = monthAndDay.split(" ");
+        int month = Integer.valueOf(monthAndDayArray[0]);
+        int day = Integer.valueOf(monthAndDayArray[1]);
+        String str1 = "ABCDEFGHI";
+        String str2 = "JKLMNOPQR";
+        String str3 = "STUVWXYZ ";
+        char[] c1 = str1.toCharArray();
+        char[] c2 = str2.toCharArray();
+        char[] c3 = str3.toCharArray();
+        ArrayList<Object> list = Lists.newArrayList();
+        list.add(c1);
+        list.add(c2);
+        list.add(c3);
+        list.toArray();
+        month = month % 3;
+        day = day % 9;
+        for (int x = 0; x < 3; x++) {
+            Object temp = list.get(0);
+
+        }
+
+    }
+
+    public static void ccc(String[] args) {
+        System.out.println("请输入参数");
+        Scanner sc = new Scanner(System.in);
+        String totalStr = sc.nextLine();
+        String commoditiesStr = sc.nextLine();
+        int total = Integer.valueOf(totalStr);
+        String[] split = commoditiesStr.split(" ");
+        int[] commodities = new int[split.length];
+        for (int x = 0; x < split.length; x++) {
+            commodities[x] = Integer.valueOf(split[x]);
+        }
+
+        for (int x = 0; x < commodities.length; x++) {
+            for (int y = commodities.length - 1; y > 0; y--) {
+                if (x > y) {
+                    break;
+                }
+                if (commodities[y] < commodities[x]) {
+                    commodities[x] = commodities[x] ^ commodities[y];
+                    commodities[y] = commodities[x] ^ commodities[y];
+                    commodities[x] = commodities[x] ^ commodities[y];
+                }
+            }
+        }
+        int pay = 0;
+        for (int x = 0; x < commodities.length; x++) {
+            pay += commodities[x];
+            if (pay > total) {
+                System.out.println(pay + "");
+                break;
+            } else {
+                // System.out.print(commodities[x] + " ");
+            }
+        }
+    }
+
+    @Test
     public void test() {
 
         LinkedList<String> linkedList = Lists.newLinkedList();
