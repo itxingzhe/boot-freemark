@@ -1,21 +1,7 @@
 package cn.wyb.personal.common.utils;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.nio.charset.Charset;
-import java.util.*;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.web.multipart.MultipartFile;
-
+import cn.wyb.personal.model.vo.LgFaqVO;
+import cn.wyb.personal.pdf.MyFontsProvider;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.itextpdf.text.Document;
@@ -34,11 +20,23 @@ import com.itextpdf.tool.xml.pipeline.end.ElementHandlerPipeline;
 import com.itextpdf.tool.xml.pipeline.html.AbstractImageProvider;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipeline;
 import com.itextpdf.tool.xml.pipeline.html.HtmlPipelineContext;
-
-import cn.wyb.personal.model.vo.LgFaqVO;
-import cn.wyb.personal.pdf.MyFontsProvider;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * FileUtils: 文件操作工具类
@@ -89,6 +87,15 @@ public class FileUtils {
         System.out.println(s);
     }
 
+    /**
+     * parseHtml : (请描述该方法).
+     * create by : WYB
+     * createTime : 2019/1/20 17:05
+     *
+     * @param html    :
+     * @param imgPath :
+     * @return : com.itextpdf.tool.xml.ElementList
+     */
     public static ElementList parseHtml(final String html, final String imgPath) {
         CSSResolver cssResolver = new StyleAttrCSSResolver();
 

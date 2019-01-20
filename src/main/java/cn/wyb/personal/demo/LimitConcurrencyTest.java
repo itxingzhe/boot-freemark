@@ -1,12 +1,12 @@
 package cn.wyb.personal.demo;
 
+import com.google.common.util.concurrent.RateLimiter;
+
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Semaphore;
-
-import com.google.common.util.concurrent.RateLimiter;
 
 /**
  * LimitConcurrencyTest: (请描述这个类).
@@ -23,6 +23,7 @@ public class LimitConcurrencyTest {
 
     public static final Semaphore        semaphore = new Semaphore(5, true);                         // 允许并发的任务量限制为50个，公平的分配资源
 
+
     public void rateLimiterTest() {
         double acquire = limiter.acquire();// 请求令牌,超过许可会被阻塞
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
@@ -33,6 +34,14 @@ public class LimitConcurrencyTest {
         System.out.println(Thread.currentThread().getName() + " start at :" + sdf.format(new Date()));
     }
 
+    /**
+     * rateLimiterTest : rateLimiter使用测试
+     * create by : WYB
+     * createTime : 2019/1/20 17:01
+     *
+     * @param limiter :
+     * @return : void
+     */
     public void rateLimiterTest(RateLimiter limiter) {
         double acquire = limiter.acquire();// 请求令牌,超过许可会被阻塞
         System.out.println("等待时间：" + acquire + "秒");

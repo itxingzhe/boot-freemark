@@ -16,42 +16,50 @@ public class AmapUtil {
 	private static final String AMAP_GEOCONV_PORT = "/v3/assistant/coordinate";
 	private static final String POINT_CONVERT = "/convert";
 
-	public static Map<String, String> Param2Map(Object param) {
-		HashMap<String, String> map = Maps.newHashMap();
-		String output = null;
-		if (param != null) {
-			Class clazz = param.getClass();
-			List<Field> fieldList = new ArrayList<>();
-			while (clazz != Object.class) {
-				fieldList.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
-				clazz = clazz.getSuperclass();
-			}
-			for (Field field : fieldList) {
-				field.setAccessible(true);
-				String name = field.getName();
-				if (StringUtils.isNotBlank(name)) {
-					try {
-						Object o = field.get(param);
-						if (o != null && StringUtils.isNotBlank(o.toString())) {
-							if ("output".equals(name)) {
-								output = o.toString();
-							}
-							map.put(name, o.toString());
-						}
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		if (StringUtils.isBlank(output)) {
-			output = "json";
-		}
-		output = "xml".equals(output.toLowerCase()) ? "xml" : "json";
-		map.put("output", output);
-		map.put("key", AMAP_AK);
-		return map;
-	}
+    /**
+     * Param2Map : param转为map
+     * create by : WYB
+     * createTime : 2019/1/20 17:02
+     *
+     * @param param :
+     * @return : java.util.Map<java.lang.String,java.lang.String>
+     */
+    public static Map<String, String> Param2Map(Object param) {
+        HashMap<String, String> map = Maps.newHashMap();
+        String output = null;
+        if (param != null) {
+            Class clazz = param.getClass();
+            List<Field> fieldList = new ArrayList<>();
+            while (clazz != Object.class) {
+                fieldList.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
+                clazz = clazz.getSuperclass();
+            }
+            for (Field field : fieldList) {
+                field.setAccessible(true);
+                String name = field.getName();
+                if (StringUtils.isNotBlank(name)) {
+                    try {
+                        Object o = field.get(param);
+                        if (o != null && StringUtils.isNotBlank(o.toString())) {
+                            if ("output".equals(name)) {
+                                output = o.toString();
+                            }
+                            map.put(name, o.toString());
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        if (StringUtils.isBlank(output)) {
+            output = "json";
+        }
+        output = "xml".equals(output.toLowerCase()) ? "xml" : "json";
+        map.put("output", output);
+        map.put("key", AMAP_AK);
+        return map;
+    }
 
 	public static List<PointStrVO> getCoordinateResponse(AmapCoordinateParam param) {
 		String url = AMAP_ROOT_URL + AMAP_GEOCONV_PORT + POINT_CONVERT;

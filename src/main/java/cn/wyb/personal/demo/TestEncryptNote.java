@@ -1,17 +1,17 @@
-package cn.wyb.personal;
+package cn.wyb.personal.demo;
 
 import java.util.Scanner;
 
 /**
- * TestMain: (请描述这个类).
+ * TestEncryptNote: 面试题字条加密
  *
  * @author wangyibin
  * @date 2019/1/17 18:57
  * @see
  */
-public class TestMain {
+public class TestEncryptNote {
 
-    public static void main(String[] arges) {
+    public static void main(String[] args) {
 
         String[] strs = new String[] { "ABCDEFGHI", "JKLMNOPQR", "STUVWXYZ*" }; // 定义一个字符串数组，存放三组字符串
         String str1 = strs[0]; // 分别放进三个字符串内
@@ -56,11 +56,8 @@ public class TestMain {
             strs[1] = str1;
             strs[2] = str2;
         }
-
         System.out.println(strs[0] + " " + strs[1] + " " + strs[2]);
-
         char[] ch = tempn.toCharArray();// 将输入的字符串转成字符数组
-
         for (int i = 0; i < strs.length; i++) {
             strs[i] = leftMoveIndex(strs[i], y); // 组内字符左移
         }

@@ -1,9 +1,11 @@
 package cn.wyb.personal.controller;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import cn.wyb.personal.annotation.MethodLog;
+import cn.wyb.personal.common.result.CommResponse;
+import cn.wyb.personal.common.result.PageResult;
+import cn.wyb.personal.model.param.UserParam;
+import cn.wyb.personal.model.po.UserPO;
+import cn.wyb.personal.service.user.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -19,12 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.wyb.personal.annotation.MethodLog;
-import cn.wyb.personal.common.result.CommResponse;
-import cn.wyb.personal.common.result.PageResult;
-import cn.wyb.personal.model.param.UserParam;
-import cn.wyb.personal.model.po.UserPO;
-import cn.wyb.personal.service.user.UserService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * Create Time: 2018年04月26日 13:06 C@author wyb
@@ -40,8 +38,8 @@ public class UserController {
     private UserService userService;
 
     // 通过名称注入
-    @Resource(name = "userService2")
-    private UserService userService2;
+//    @Resource(name = "userService2")
+//    private UserService userService2;
 
     @RequestMapping(value = "/init", method = RequestMethod.GET)
     public ModelAndView init() {
@@ -52,7 +50,7 @@ public class UserController {
     @ResponseBody
     public PageResult<UserPO> listData(UserParam param) {
         userService.toInterface();
-        userService2.toInterface();
+        //userService2.toInterface();
         return userService.listData(param);
     }
 

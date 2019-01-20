@@ -58,7 +58,9 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/js/**", "anon");
 		filterChainDefinitionMap.put("/img/**", "anon");
 		filterChainDefinitionMap.put("/jars/**", "anon");
+        filterChainDefinitionMap.put("/user/saveUser", "anon");
 		filterChainDefinitionMap.put("/user/doLogin", "anon");
+        filterChainDefinitionMap.put("/user/toRegister", "anon");
 		filterChainDefinitionMap.put("/user/logout*", "anon");
 		filterChainDefinitionMap.put("/**/error*", "anon");
 		//authc 表示需要认证才可以访问

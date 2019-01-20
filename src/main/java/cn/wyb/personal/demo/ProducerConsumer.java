@@ -1,4 +1,4 @@
-package cn.wyb.personal;
+package cn.wyb.personal.demo;
 
 import java.util.LinkedList;
 
