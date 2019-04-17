@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ServletUtils {
 
+  public static final String HEADER_X_REQUESTED_WITH_KEY = "X-Requested-With";
+  public static final String HEADER_X_REQUESTED_WITH_VALUE = "XMLHttpRequest";
+
   /**
    * 判断请求是否是ajax请求.
    *
@@ -18,10 +21,8 @@ public class ServletUtils {
    * @create by : wangyibin
    * @createTime : 2019/4/17 14:02
    */
-  private boolean isAjax(HttpServletRequest request) {
-    return (request.getHeader("X-Requested-With") != null
-        && "XMLHttpRequest"
-        .equals(request.getHeader("X-Requested-With").toString()));
+  private boolean isAjaxRequest(HttpServletRequest request) {
+    return (HEADER_X_REQUESTED_WITH_VALUE.equals(request.getHeader(HEADER_X_REQUESTED_WITH_KEY)));
   }
 
 
