@@ -41,7 +41,6 @@ function doLogin() {
     data: getData("#loginForm"),
     url: '/user/doLogin?t=' + t,
     success: function (data) {
-      debugger;
       if (!data.code) {
         $("body").html(data);
       } else if (data.code == 200) {
