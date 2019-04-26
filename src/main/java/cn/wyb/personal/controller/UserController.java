@@ -62,7 +62,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "doLogin", method = RequestMethod.POST)
-    public String login(UserPO user, HttpSession session, HttpServletRequest request) {
+    @ResponseBody
+    public CommResponse login(UserPO user, HttpSession session, HttpServletRequest request) {
 
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
         Subject subject = SecurityUtils.getSubject();
@@ -71,13 +72,14 @@ public class UserController {
         UserPO userIn = (UserPO) subject.getPrincipal();
         session.setAttribute("userInfo", userIn);
         SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+        String url = "/";
         if (savedRequest != null && savedRequest.getMethod().equals(RequestMethod.GET.name())) {
-            String url = savedRequest.getRequestUrl();
-            if (url != null && url.indexOf("/") >= 0 && !url.equals("/user/toLogin") && !url.equals("/user/logout")) {
-                return url;
+            String lastAccessPath = savedRequest.getRequestUrl();
+            if (lastAccessPath != null && lastAccessPath.indexOf("/") >= 0 && !lastAccessPath.equals("/user/toLogin") && !lastAccessPath.equals("/user/logout")) {
+                url = lastAccessPath;
             }
         }
-        return "forward:/";
+        return CommResponse.success(url);
 
     }
 
