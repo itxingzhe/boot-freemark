@@ -7,6 +7,8 @@ import cn.wyb.personal.common.utils.FileUtils;
 import cn.wyb.personal.demo.LimitConcurrencyTest;
 import cn.wyb.personal.model.param.AmapCoordinateParam;
 import cn.wyb.personal.model.po.UserPO;
+import cn.wyb.personal.model.vo.Specification;
+import cn.wyb.personal.model.vo.SpecificationProperty;
 import cn.wyb.personal.model.vo.bmap.PointStrVO;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -50,6 +52,39 @@ public class DemoTest {
         list.add(1);
         list.add(2);
         // list.addAll(null);
+
+    }
+
+    @Test
+    public void testSpecification() {
+        ArrayList<Specification> speList = Lists.newArrayList();
+        ArrayList<SpecificationProperty> s1 = Lists.newArrayList();
+        ArrayList<SpecificationProperty> s2 = Lists.newArrayList();
+        ArrayList<SpecificationProperty> s3 = Lists.newArrayList();
+
+        SpecificationProperty sp3 = new SpecificationProperty();
+        sp3.setName("5698");
+        sp3.setCanSell(true);
+        SpecificationProperty sp2 = new SpecificationProperty();
+        sp2.setName("白色");
+        sp2.setCanSell(true);
+        sp3.setSuperstratum(Lists.newArrayList(sp2));
+        SpecificationProperty sp1 = new SpecificationProperty();
+        sp1.setName("软胶");
+        sp1.setSuperstratum(s2);
+        sp1.setCanSell(true);
+        s1.add(sp1);
+        s2.add(sp2);
+        s3.add(sp3);
+        sp1.getSubstratum().add(sp2);
+        sp2.getSuperstratum().add(sp1);
+        sp2.getSubstratum().add(sp2);
+        sp3.getSuperstratum().add(sp2);
+        Specification spe1 = new Specification();
+        spe1.setName("材质");
+        spe1.setProperty(s1);
+
+
 
     }
 
