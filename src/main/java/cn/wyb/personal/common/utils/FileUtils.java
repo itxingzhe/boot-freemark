@@ -602,7 +602,7 @@ public class FileUtils {
         if (file == null) {
             return null;
         }
-        String fileName = file.getName();
+        String fileName = file.getOriginalFilename();
         Workbook workbook = null;
         try {
             if (fileName.endsWith(SUFFIX_XLS)) {

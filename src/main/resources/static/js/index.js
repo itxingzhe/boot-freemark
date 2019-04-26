@@ -4,8 +4,8 @@ $(function () {
     });
 
     $(".file_upload").on("click",function () {
-        var result = common.ajaxFileUpload({
-            url:"common/ajaxFileUpload",
+        var result = ajaxFileUpload({
+            url:"/file/uploadExcel",
             fileElementId:"uploadFile",
             data:{'status':0},
             success:function (data,status) {
