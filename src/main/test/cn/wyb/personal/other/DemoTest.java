@@ -98,7 +98,7 @@ public class DemoTest {
         List<Object> newList1 = Lists.newArrayListWithExpectedSize(size1 * size2);
         for (Object s1 : list1) {
           for (Object s2 : list2) {
-            newList1.add(s1 + ":" + s2);
+            newList1.add(s1 + "," + s2);
           }
         }
         resource.set(0, newList1);
