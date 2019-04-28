@@ -67,18 +67,20 @@ public class DemoTest {
     List<List> speList = Lists.newArrayList();
     ArrayList<String> s1 = Lists.newArrayList(new String[]{"黑", "白", "黄"});
     ArrayList<String> s2 = Lists.newArrayList(new String[]{"20寸", "26寸", "29寸"});
-    ArrayList<String> s3 = Lists.newArrayList(new String[]{"大", "中", "小"});
+    ArrayList<Integer> s3 = Lists.newArrayList(new Integer[]{3, 4, 5});
     ArrayList<String> s4 = Lists.newArrayList(new String[]{"20G", "32G"});
+    ArrayList<String> s5 = Lists.newArrayList(new String[]{"港行", "国行"});
     speList.add(s1);
     speList.add(s2);
     speList.add(s3);
     speList.add(s4);
+    speList.add(s5);
 
     List<Object> aNew = multigroupStringCombination(speList);
     System.out.println(JSON.toJSONString(aNew));
   }
 
-  public static List<Object> multigroupStringCombination(List<List> resource) {
+  public static List multigroupStringCombination(List<List> resource) {
     if (null == resource) {
       return null;
     } else if (resource.size() <= 1) {

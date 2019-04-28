@@ -3,7 +3,7 @@ package cn.wyb.personal;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Create Time: 2018年04月26日 13:03
@@ -11,6 +11,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
  **/
 @SpringBootApplication
 //@ServletComponentScan
+@EnableScheduling
 @MapperScan("cn.wyb.personal.dao")
 public class BootFreemakerApplication {
 
