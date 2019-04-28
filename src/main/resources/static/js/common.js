@@ -188,3 +188,35 @@ function initTable(opts) {
     };
     return $(opts.table).bootstrapTable(opts);
 }
+
+function haowan(label) {
+  var a_idx = 0;
+  $(label).click(function (e) {
+    var a = new Array("❤加油❤", "❤努力❤", "❤IT行者❤", "❤关注我❤", "❤CSDN微博❤", "❤点赞❤",
+        "❤打赏❤", "❤come on❤", "❤推荐一下❤", "❤支持一下❤", "❤关注我❤", "❤IT行者❤");
+    var $i = $("<span></span>").text(a[a_idx]);
+    a_idx = (a_idx + 1) % a.length;
+    var x = e.pageX,
+        y = e.pageY;
+    $i.css({
+      "z-index": 999999999999999999999999999999999999999999999999999999999999999999999,
+      "top": y - 20,
+      "left": x,
+      "position": "absolute",
+      "font-weight": "bold",
+      "color": "rgb(" + ~~(255 * Math.random()) + "," + ~~(255 * Math.random())
+          + "," + ~~(255 * Math.random()) + ")"
+    });
+    $("body").append($i);
+    $i.animate({
+          "top": y - 180,
+          "opacity": 0
+        },
+        1500,
+        function () {
+          $i.remove();
+        });
+  });
+}
+
+

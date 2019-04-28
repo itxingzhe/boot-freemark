@@ -17,6 +17,8 @@ $(function () {
       }
     });
   });
+
+  haowan("body");
 });
 
 function toRegister() {
