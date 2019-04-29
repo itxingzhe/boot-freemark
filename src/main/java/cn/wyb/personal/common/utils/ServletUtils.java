@@ -27,7 +27,7 @@ public class ServletUtils {
     return (HEADER_X_REQUESTED_WITH_VALUE.equals(request.getHeader(HEADER_X_REQUESTED_WITH_KEY)));
   }
 
-  public static String getServletIp() {
+  public static String getLocalServerIp() {
     String ip = "";
     try {
       //获取的是本地的IP地址 //PC-20140317PXKX/192.168.0.121
@@ -50,7 +50,7 @@ public class ServletUtils {
 
 
   public static void main(String[] args) {
-    getServletIp();
+    getLocalServerIp();
   }
 
 
