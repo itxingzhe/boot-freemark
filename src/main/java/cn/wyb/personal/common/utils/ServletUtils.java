@@ -27,6 +27,13 @@ public class ServletUtils {
     return (HEADER_X_REQUESTED_WITH_VALUE.equals(request.getHeader(HEADER_X_REQUESTED_WITH_KEY)));
   }
 
+  /**
+   * 获取本机IP地址.
+   *
+   * @return java.lang.String
+   * @create by : wangyibin
+   * @createTime : 2019/4/29 10:05
+   */
   public static String getLocalServerIp() {
     String ip = "";
     try {
