@@ -4,6 +4,7 @@ import static cn.wyb.personal.common.utils.DateUtils.getDatetimeFormat;
 
 import cn.wyb.personal.common.result.PageResult;
 import cn.wyb.personal.common.utils.AmapUtil;
+import cn.wyb.personal.common.utils.CommonUtils;
 import cn.wyb.personal.common.utils.DateUtils;
 import cn.wyb.personal.common.utils.FileUtils;
 import cn.wyb.personal.demo.LimitConcurrencyTest;
@@ -65,7 +66,7 @@ public class DemoTest {
   @Test
   public void testSpecification() {
     List<List> speList = Lists.newArrayList();
-    ArrayList<String> s1 = Lists.newArrayList(new String[]{"黑", "白", "黄"});
+    ArrayList<String> s1 = Lists.newArrayList(new String[]{"橙", "蓝", "黄"});
     ArrayList<String> s2 = Lists.newArrayList(new String[]{"20寸", "26寸", "29寸"});
     ArrayList<Integer> s3 = Lists.newArrayList(new Integer[]{3, 4, 5});
     ArrayList<String> s4 = Lists.newArrayList(new String[]{"20G", "32G"});
@@ -76,37 +77,10 @@ public class DemoTest {
     speList.add(s4);
     speList.add(s5);
 
-    List<Object> aNew = multigroupStringCombination(speList);
+    List<Object> aNew = CommonUtils.multigroupStringCombination(speList);
     System.out.println(JSON.toJSONString(aNew));
   }
 
-  public static List multigroupStringCombination(List<List> resource) {
-    if (null == resource) {
-      return null;
-    } else if (resource.size() <= 1) {
-      return resource.get(0);
-    } else {
-      List<Object> list1 = resource.get(0);
-      List<Object> list2 = resource.get(1);
-      if (list1 == null || list1.size() == 0) {
-        resource.remove(0);
-      } else if (list2 == null || list2.size() == 0) {
-        resource.remove(1);
-      } else {
-        int size1 = list1.size();
-        int size2 = list2.size();
-        List<Object> newList1 = Lists.newArrayListWithExpectedSize(size1 * size2);
-        for (Object s1 : list1) {
-          for (Object s2 : list2) {
-            newList1.add(s1 + "," + s2);
-          }
-        }
-        resource.set(0, newList1);
-        resource.remove(1);
-      }
-      return multigroupStringCombination(resource);
-    }
-  }
 
   @Test
   public void limitConcurrencyTest() throws InterruptedException {
