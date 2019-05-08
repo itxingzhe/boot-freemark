@@ -1,14 +1,22 @@
 package cn.wyb.personal.controller;
 
-import java.io.*;
+import cn.wyb.personal.common.enums.BaseExceptionEnum;
+import cn.wyb.personal.common.exception.BaseException;
+import cn.wyb.personal.common.result.CommResponse;
+import cn.wyb.personal.common.utils.FileUtils;
+import com.google.common.collect.Lists;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -17,11 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
-import cn.wyb.personal.common.enums.BaseExceptionEnum;
-import cn.wyb.personal.common.exception.BaseException;
-import cn.wyb.personal.common.result.CommResponse;
-import cn.wyb.personal.common.utils.FileUtils;
 
 /**
  * UploadController: 文件上传下载控制层
@@ -73,6 +76,11 @@ public class UploadController {
                         String fileExtName = filename.substring(filename.lastIndexOf("."));
                         // 如果需要限制上传的文件类型，那么可以通过文件的扩展名来判断上传的文件类型是否合法
                         logger.debug("上传的文件的扩展名是：" + fileExtName);
+                      if (!Lists.newArrayList(new String[]{".jpg", ".jpeg", ".png", ".gif"})
+                          .contains(fileExtName)) {
+                        logger.info("上传的文件不是图片，文件后缀为：{}", fileExtName);
+                        continue;
+                      }
                         // 获取item中的上传文件的输入流
                         in = multipartFile.getInputStream();
                         // 得到文件保存的名称
